@@ -1,0 +1,71 @@
+@require 'nib'
+@require vars
+@require '../../dijit/themes/claro/claro.css'
+@require '../../esri/css/esri.css'
+@require '../../bootstrap/dist/css/bootstrap.css'
+@require '../../dgrid/css/dgrid.css'
+@require './*'
+
+
+body,
+html
+    color $black
+    font-size 16px
+.app
+    .version
+        font-size .5em
+        letter-spacing 0
+        text-decoration none
+        vertical-align sub
+        &:hover
+            text-decoration underline
+
+    .stretched
+        bottom 0
+        left 0
+        right 0
+
+    .strict-height
+        max-height 10em
+        min-height 100px
+
+    .scrollable
+        overflow-y auto
+
+    .full-height
+        height 100%
+
+    .see-through
+        opacity .95
+
+    .below-banner
+        position absolute
+        top $below-banner
+
+    .navbar-default
+        background-color $white
+
+    .bg-panel
+        background-color $white
+        border-radius 1em
+        display flex
+        flex-flow column
+        justify-content space-between
+        margin .5em
+        position absolute
+        z-index $map-z-index + 2
+
+    .panel-footer
+        border-top 0
+        justify-content center
+        width 100%
+
+    .panel
+        margin-bottom 0
+
+    .close
+        font-size 32px
+        margin-right 10px
+
+    .form-inline
+        margin-left 1em

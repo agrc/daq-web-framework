@@ -1,0 +1,26 @@
+{
+  "name": "daq-web",
+  "version": "1.0.0",
+  "dependencies": {
+    "agrc-jasmine-matchers": "~0.1.0",
+    "bootstrap": "3.3.6",
+    "dgrid": "1.1.0",
+    "esri": "arcgis-js-api#3.18.0",
+    "jasmine-favicon-reporter": "*",
+    "stubmodule": "^0.6",
+    "jasmine-jsreporter": "^0.1.2",
+    "xstyle": "0.3.2",
+    "dgauges": "*"
+  },
+  "resolutions": {
+    "dojo": "v1.11.2/esri-3.18.0",
+    "dijit": "v1.11.2/esri-3.18.0",
+    "dojox": "v1.11.2/esri-3.18.0",
+    "dojo-themes": "1.11.2",
+    "esri": "3.18.0",
+    "dstore": "v1.1.1",
+    "util": "v1.11.2/esri-3.18.0",
+    "xstyle": "v0.3.2",
+    "dgrid": "1.1.0"
+  }
+}

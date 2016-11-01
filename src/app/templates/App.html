@@ -1,0 +1,49 @@
+<div>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <span class="navbar-brand">DAQ Web Framework
+          <a data-dojo-attach-point="version" class="version" href="ChangeLog.html"></a>
+        </span>
+      </div>
+      <div class="collapse navbar-collapse" id="navbar-collapse">
+        <ul class="nav navbar-nav navbar-right"></ul>
+      </div>
+    </div>
+  </nav>
+  <div data-dojo-attach-point="infowindow" class="bg-panel stretched below-banner hide">
+    <div data-dojo-attach-point="attributepanel" class="panel panel-info" style="flex:none">
+      <button type="button" class="close" data-dojo-attach-event="click:close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="panel-heading">Item Information</div>
+      <div class="panel-body strict-height scrollable" data-dojo-attach-point="infocontent"></div>
+    </div>
+    <div data-dojo-attach-point="gridcontent"></div>
+    <div class="panel-footer text-center" style="flex:none">
+      <button class="btn btn-primary" data-dojo-attach-event='click:close'>close</button>
+    </div>
+  </div>
+  <div id="map-div" class="below-banner stretched"></div>
+  <div class="toolbar-items see-through">
+      <button class="btn btn-primary" id="query" data-dojo-attach-event="click:activateTool"><i class="esri-icon-search"></i></button>
+      <button class="btn btn-primary"><i class="esri-icon-layer-list"></i></button>
+      <button class="btn btn-primary" id="buffer" data-dojo-attach-event="click:activateTool"><i class="esri-icon-map-pin"></i></button>
+  </div>
+  <div class="selected-tool-container panel panel-primary see-through" data-dojo-attach-point="toolbox">
+    <button type="button" class="close" data-dojo-attach-event="click:close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="panel-heading">Tool container</div>
+    <div data-dojo-attach-point="toolboxcontainer"></div>
+  </div>
+  <div class="toaster">
+    <div role="alert" id="toaster-container"></div>
+  <div>
+</div>

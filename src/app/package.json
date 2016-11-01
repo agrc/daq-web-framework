@@ -1,0 +1,8 @@
+{
+    "name": "daq.app",
+    "version": "1.0.0",
+    "main": "main",
+    "description": "daq web framework",
+    "homepage": "http://gis.utah.gov",
+    "dojoBuild": "app.profile.js"
+}

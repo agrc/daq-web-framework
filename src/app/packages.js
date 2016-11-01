@@ -1,0 +1,28 @@
+require({
+    packages: [
+        'app',
+        'dgrid',
+        'dgauges',
+        'dijit',
+        'dojo',
+        'dojox',
+        'dstore',
+        'esri',
+        'moment',
+        'put-selector',
+        'xstyle',
+        {
+            name: 'bootstrap',
+            location: './bootstrap',
+            main: 'dist/js/bootstrap'
+        }, {
+            name: 'jquery',
+            location: './jquery/dist',
+            main: 'jquery'
+        }, {
+            name: 'stubmodule',
+            location: './stubmodule',
+            main: 'src/stub-module'
+        }
+    ]
+});
