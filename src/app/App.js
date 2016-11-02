@@ -258,6 +258,7 @@ define([
 
             var ComposedGrid = declare([Grid, SingleQuery]);
             this.grid = new ComposedGrid({
+                class: 'dgrid-main',
                 loadingMessage: 'Loading data...',
                 noDataMessage: 'No results found.',
                 showFooter: true,
@@ -479,7 +480,11 @@ define([
                     }, this)
                 }).placeAt(this.toolboxcontainer, 'after');
             } else if ([evt.target.id, evt.target.parentElement.id].indexOf('buffer') > -1) {
-                this.activeTool = new Buffer({}).placeAt(this.toolboxcontainer, 'after');
+                this.activeTool = new Buffer({
+                    layers: this.map.graphicsLayerIds.map(function (id) {
+                        return this.map.getLayer(id);
+                    }, this)
+                }).placeAt(this.toolboxcontainer, 'after');
             } else {
                 return;
             }
