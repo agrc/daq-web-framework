@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<title>Buffer Tests</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../resources/App.css">
+<style type='text/css'>
+  body {
+      padding: 50px;
+  }
+</style>
+<script type='text/javascript' src="../../dojo/dojo.js"></script>
+<script type="text/javascript">
+    var widgetUnderTest;
+
+    require({
+        baseUrl: '../../',
+        packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle']
+    }, [
+        'app/Buffer',
+
+        'dojo/domReady!'
+    ], function (Module) {
+        widgetUnderTest = new Module({
+        }, 'node');
+
+        widgetUnderTest.startup();
+    });
+</script>
+</head>
+<body>
+  <div id="node"></div>
+</body>
