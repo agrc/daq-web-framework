@@ -60,7 +60,7 @@ define([
                 };
 
                 this.symbols.point = new SimpleMarkerSymbol({
-                    color: [240, 28, 190, 200],
+                    color: [240, 28, 190, 200], // eslint-disable-line no-magic-numbers
                     size: 7.5,
                     angle: 0,
                     xoffset: 0,
@@ -68,22 +68,22 @@ define([
                     type: 'esriSMS',
                     style: 'esriSMSCircle',
                     outline: {
-                        color: [0, 31, 63, 255],
+                        color: [0, 31, 63, 255], // eslint-disable-line no-magic-numbers
                         width: 0.5,
                         type: 'esriSLS',
                         style: 'esriSLSSolid'
                     }
                 });
                 this.symbols.line = new SimpleLineSymbol({
-                    color: [255, 0, 197, 255],
+                    color: [255, 0, 197, 255], // eslint-disable-line no-magic-numbers
                     width: 1.5,
                     type: 'esriSLS',
                     style: 'esriSLSDashDot'
                 });
                 this.symbols.poly = new SimpleFillSymbol({
-                    color: [240, 28, 190, 200],
+                    color: [240, 28, 190, 200], // eslint-disable-line no-magic-numbers
                     outline: {
-                        color: [0, 31, 63, 255],
+                        color: [0, 31, 63, 255], // eslint-disable-line no-magic-numbers
                         width: 0.5,
                         type: 'esriSLS',
                         style: 'esriSLSSolid'
