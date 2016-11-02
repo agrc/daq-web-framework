@@ -1,4 +1,3 @@
-@require 'nib'
 @require vars
 
 .map .tooltip
@@ -11,26 +10,3 @@
     position absolute
     width 100px
     z-index 9999
-
-.toolbar-items
-    align-items flex-end
-    bottom 16px
-    display flex
-    justify-content center
-    left calc(50% - (150px / 2))
-    position absolute
-    > button
-        margin .1em
-@media (max-width: 600px)
-    .toolbar-items
-        bottom calc(50% - (150px / 2))
-        flex-direction column
-        left 16px
-
-.selected-tool-container
-    max-width 33.33%
-    min-width 200px
-    position absolute
-    right 8px
-    top $below-banner + 8px
-    z-index $map-z-index + 1
