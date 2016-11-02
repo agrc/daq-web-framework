@@ -1,18 +1,15 @@
 @require vars
-
+.field-id
 .field-path
 .field-name
-        display none
+    display none
 .field-id
 .field-documentDate
     text-align center
 .field-branch
 .field-documentDate
-.field-id
-    width 10em
 .field-title
     width 99%
-
 .dgrid-row-table
     border-collapse collapse
     th
@@ -21,7 +18,14 @@
         vertical-align middle
 .dgrid-row-odd
     background-color lighten($dgrid-bg-color, 6)
-.dgrid
+.dgrid-main
     flex auto
     height 100%
     margin -1px
+    .field-id
+        width 10em
+.dgrid-buffer.dgrid-grid
+    bottom 25px
+    overflow-y auto
+    position absolute
+    top 182px
