@@ -131,7 +131,8 @@ define([
             MapController.initialize(this.map);
 
             this.own(
-                topic.subscribe(config.topics.addAi, lang.hitch(this, 'onAiAdded'))
+                topic.subscribe(config.topics.addAi, lang.hitch(this, 'onAiAdded')),
+                topic.subscribe(config.topics.identify, lang.hitch(this, 'showAttributes'))
             );
         },
         startup: function () {

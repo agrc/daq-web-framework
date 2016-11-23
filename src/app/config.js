@@ -16,7 +16,8 @@ define([], function () {
             graphics: {
                 highlight: '3',
                 clear: '4'
-            }
+            },
+            identify: '5'
         },
         urls: {
             webapi: 'http://localhost:5000',

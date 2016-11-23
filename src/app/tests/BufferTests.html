@@ -14,19 +14,48 @@
 
     require({
         baseUrl: '../../',
-        packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle']
+        packages: ['app', 'esri', 'dojo', 'dijit', 'dstore', 'dgrid', 'dojox']
     }, [
         'app/Buffer',
+        'dstore/Memory',
 
         'dojo/domReady!'
-    ], function (Module) {
+    ], (Module, Memory) => {
         widgetUnderTest = new Module({
         }, 'node');
 
         widgetUnderTest.startup();
+
+        document.getElementById("act").addEventListener('click', () => {
+          widgetUnderTest._initGrid();
+
+          var data = [];
+          var randomSize = 50;
+          for (var i = 0; i < randomSize; i++) {
+              data.push({
+                  ai: i,
+                  api: i,
+                  company: i,
+                  id: i
+              });
+          }
+
+          var store = new Memory({
+              data: data
+          });
+
+          widgetUnderTest.grid.set('collection', store);
+        });
     });
 </script>
 </head>
 <body>
-  <div id="node"></div>
+  <button id="act" class="btn btn-primary">Create Grid</button>
+  <div class="selected-tool-container panel panel-primary see-through">
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="panel-heading">Tool container</div>
+    <div id="node"></div>
+  </div>
 </body>

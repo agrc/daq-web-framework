@@ -4,12 +4,14 @@ define([
     'app/MapController',
 
     'dgrid/OnDemandGrid',
+    'dgrid/Selection',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
     'dojo/text!app/templates/Buffer.html',
     'dojo/throttle',
+    'dojo/topic',
     'dojo/_base/declare',
     'dojo/_base/lang',
 
@@ -24,12 +26,14 @@ define([
     MapController,
 
     Grid,
+    Selection,
 
     _TemplatedMixin,
     _WidgetBase,
 
     template,
     throttle,
+    topic,
     declare,
     lang,
 
@@ -53,39 +57,34 @@ define([
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
-            console.log('app.Buffer::postCreate', arguments);
+            console.info('app.Buffer::postCreate', arguments);
 
             this.inherited(arguments);
+            this.subscriptions = [];
         },
         activate: function () {
             // summary:
             //      wire events, and such
-            console.log('app.Buffer::activate', arguments);
+            console.info('app.Buffer::activate', arguments);
 
             this.active = !this.active;
 
             this.button.innerHTML = this.active ? 'Deactivate' : 'Activate';
 
             if (this.active) {
-                this.subscriptions = [];
                 this.subscriptions.push(MapController.map.on('mouse-move',
                                               throttle(lang.hitch(this, '_buffer'),
                                               this.delay)));
                 this.subscriptions.push(MapController.map.on('click', lang.hitch(this, '_intersect')));
             } else {
-                this.subscriptions.forEach(function removeSubscriptions(sub) {
-                    sub.remove();
-                });
-                GraphicsController.removeGraphic();
+                this._destroy();
             }
-
-            this.own(this.subscriptions);
         },
         _buffer: function (evt) {
             // summary:
             //      buffer mouse cursor
             // unit: meters | feet | kilometers | miles | nautical-miles | yards
-            console.log('app.Buffer:_buffer', arguments);
+            console.info('app.Buffer:_buffer', arguments);
 
             geometryEngineAsync.buffer(evt.mapPoint, this.buffer.value, 'meters', true)
                 .then(function highlight(geometry) {
@@ -96,19 +95,49 @@ define([
             // summary:
             //      description
             // param or return
-            console.log('app.Buffer:_intersect', arguments);
+            console.info('app.Buffer:_intersect', arguments);
 
             var data = [];
+            this._initGrid();
+
+            geometryEngineAsync.buffer(evt.mapPoint, this.buffer.value, 'meters', true)
+                .then(function getGraphicsFromLayers(geometry) {
+                    this.layers.forEach(function testGraphics(layer) {
+                        layer.graphics.forEach(function testGeometry(graphic) {
+                            if (geometryEngine.contains(geometry, graphic.geometry)) {
+                                data.push({
+                                    ai: graphic.attributes.AiNumber,
+                                    api: graphic.attributes.API,
+                                    company: graphic.attributes.COMPANY_NA,
+                                    id: graphic.attributes.FID,
+                                    graphic: graphic
+                                });
+                            }
+                        });
+                    });
+
+                    this.store = new Memory({
+                        data: data
+                    });
+
+                    this.grid.set('collection', this.store);
+                }.bind(this)
+            );
+        },
+        _initGrid: function () {
+            // summary:
+            //      description
+            // param or return
+            console.log('app.Buffer:_initGrid', arguments);
+
             if (!this.grid) {
-                this.grid = new Grid({
+                var ComposedGrid = declare([Grid, Selection]);
+                this.grid = new ComposedGrid({
                     className: 'dgrid-buffer dgrid-autoheight',
+                    selectionMode: 'single',
                     columns: {
                         ai: {
                             label: 'AI Number',
-                            sortable: true
-                        },
-                        api: {
-                            label: 'API',
                             sortable: true
                         },
                         company: {
@@ -122,31 +151,43 @@ define([
                     }
                 }, this.gridcontent);
 
+                this.grid.on('dgrid-select', function (event) {
+                    // Get the rows that were just selected
+                    var row = event.rows[0].data;
+                    var props = {
+                        graphic: row.graphic,
+                        attributes: row.graphic.attributes,
+                        layerId: row.graphic.layerId,
+                        url: row.graphic.url
+                    };
+
+                    topic.publish(config.topics.identify, props);
+                });
+
                 this.grid.startup();
             }
+        },
+        _destroy: function () {
+            // summary:
+            //      description
+            // param or return
+            console.info('app.Buffer:_destroy', arguments);
 
-            geometryEngineAsync.buffer(evt.mapPoint, this.buffer.value, 'meters', true)
-                .then(function getGraphicsFromLayers(geometry) {
-                    this.layers.forEach(function testGraphics(layer) {
-                        layer.graphics.forEach(function testGeometry(graphic) {
-                            if (geometryEngine.contains(geometry, graphic.geometry)) {
-                                data.push({
-                                    ai: graphic.attributes.AiNumber,
-                                    api: graphic.attributes.API,
-                                    company: graphic.attributes.COMPANY_NA,
-                                    id: graphic.attributes.FID
-                                });
-                            }
-                        });
-                    });
+            this.subscriptions.forEach(function removeSubscriptions(sub) {
+                sub.remove();
+            });
+            this.subscriptions = [];
+            GraphicsController.removeGraphic();
+        },
+        destroy: function () {
+            // summary:
+            //      description
+            // param or return
+            console.info('app.Buffer:destroy', arguments);
 
-                    this.store = new Memory({
-                        data: data
-                    });
+            this._destroy();
 
-                    this.grid.set('collection', this.store);
-                }.bind(this)
-            );
+            this.inherited(arguments);
         }
     });
 });
