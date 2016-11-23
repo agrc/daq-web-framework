@@ -227,6 +227,11 @@ define([
                     this.gridcontent = domConstruct.create('div', {}, this.attributepanel, 'after');
                 }
                 this.infocontent.innerHTML = '';
+            } else if (parent === this.toolbox) {
+                if (this.activeTool) {
+                    this.activeTool.destroy();
+                    this.activeTool = null;
+                }
             }
         },
         initGrid: function (props) {
@@ -469,6 +474,7 @@ define([
 
             if (this.activeTool) {
                 this.activeTool.destroy();
+                this.activeTool = null;
             }
 
             domClass.remove(this.toolbox, 'hide');
