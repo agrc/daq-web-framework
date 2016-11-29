@@ -93,12 +93,10 @@ namespace daq.Controllers
             }
         }
 
-        [HttpPost("~/api/external")]
-        public async Task<JsonResult> AddExternal(string serviceUrl, IFormFile attachment, int featureId, string token)
+        [HttpPost("~/api/upload/external")]
+        public async Task<JsonResult> External(string serviceUrl, IFormFile attachment, int featureId, string token)
         {
-            var file = attachment;
-
-            if (file?.Length < 1)
+            if ((attachment?.Length ?? 0) < 1)
             {
                 return Json(new Errorable
                 {
@@ -109,15 +107,15 @@ namespace daq.Controllers
                 });
             }
 
-            using (Stream document = file.OpenReadStream())
+            using (Stream document = attachment.OpenReadStream())
             using (MultipartFormDataContent formContent = new MultipartFormDataContent())
             {
                 try
                 {
                     var streamContent = new StreamContent(document);
                     streamContent.Headers.Add("Content-Type", "application/octet-stream");
-                    streamContent.Headers.Add("Content-Disposition", $"form-data; name=\"file\"; filename=\"{file.FileName}\"");
-                    formContent.Add(streamContent, "file", file.FileName);
+                    streamContent.Headers.Add("Content-Disposition", $"form-data; name=\"file\"; filename=\"{attachment.FileName}\"");
+                    formContent.Add(streamContent, "file", attachment.FileName);
                     formContent.Add(new StringContent("json"), "f");
                     // formContent.Add(new StringContent(token), "token");
                 }
