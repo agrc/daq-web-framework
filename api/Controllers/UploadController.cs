@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
-using daq.Formatters;
 using daq.Models;
 using daq.Services;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace daq.Controllers
@@ -37,9 +36,9 @@ namespace daq.Controllers
             var edoc = repository.Get(id);
             var filename = Path.GetFileName(edoc.Path);
             var file = string.Format("{0}{1}", BasePath, edoc.Path);
-            Stream document = System.IO.File.OpenRead(file);
 
             // upload to arcgis online
+            using (Stream document = System.IO.File.OpenRead(file))
             using (MultipartFormDataContent formContent = new MultipartFormDataContent())
             {
                 try
@@ -90,6 +89,51 @@ namespace daq.Controllers
                 }
 
                 var response = await Client.DeleteDocument($"{serviceUrl}/{featureId}{DeleteAttachmentUrl}", formContent);
+                return Json(response.Result);
+            }
+        }
+
+        [HttpPost("~/api/external")]
+        public async Task<JsonResult> AddExternal(string serviceUrl, IFormFile attachment, int featureId, string token)
+        {
+            var file = attachment;
+
+            if (file?.Length < 1)
+            {
+                return Json(new Errorable
+                {
+                    Error = new Error
+                    {
+                        Message = "The file is empty."
+                    }
+                });
+            }
+
+            using (Stream document = file.OpenReadStream())
+            using (MultipartFormDataContent formContent = new MultipartFormDataContent())
+            {
+                try
+                {
+                    var streamContent = new StreamContent(document);
+                    streamContent.Headers.Add("Content-Type", "application/octet-stream");
+                    streamContent.Headers.Add("Content-Disposition", $"form-data; name=\"file\"; filename=\"{file.FileName}\"");
+                    formContent.Add(streamContent, "file", file.FileName);
+                    formContent.Add(new StringContent("json"), "f");
+                    // formContent.Add(new StringContent(token), "token");
+                }
+                catch (ArgumentNullException)
+                {
+                    return Json(new Errorable
+                    {
+                        Error = new Error
+                        {
+                            Message = "Your arcgis online token expired. Please sign in again."
+                        }
+                    });
+                }
+
+                var response = await Client.UploadDocument($"{serviceUrl}/{featureId}{AttachmentUrl}", formContent);
+
                 return Json(response.Result);
             }
         }
