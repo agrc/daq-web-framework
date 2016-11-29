@@ -23,55 +23,81 @@ namespace daq.Services
 
         public async Task<ArcOnlineResponse<UploadResponse>> UploadDocument(string url, MultipartFormDataContent formContent)
         {
-            using (var response = await client.PostAsync(url, formContent).ConfigureAwait(false))
+            try
             {
-                try
+                using (var response = await client.PostAsync(url, formContent).ConfigureAwait(false))
                 {
-                    var result = await response.Content.ReadAsAsync<UploadResponse>(Formatters).ConfigureAwait(false);
-
-                    return new ArcOnlineResponse<UploadResponse>(response, result);
-                }
-                catch (Exception ex)
-                {
-                    return new ArcOnlineResponse<UploadResponse>(response, new Errorable
+                    try
                     {
-                        Error = new Error
+                        var result = await response.Content.ReadAsAsync<UploadResponse>(Formatters).ConfigureAwait(false);
+
+                        return new ArcOnlineResponse<UploadResponse>(response, result);
+                    }
+                    catch (Exception ex)
+                    {
+                        return new ArcOnlineResponse<UploadResponse>(response, new UploadResponse
                         {
-                            Details = new List<string> {
+                            Error = new Error
+                            {
+                                Details = new List<string> {
                                     ex.Message,
                                     await response.Content.ReadAsStringAsync().ConfigureAwait(false)
                                 }
-                        }
-                    } as UploadResponse);
+                            }
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                return new ArcOnlineResponse<UploadResponse>(null, new UploadResponse
+                {
+                    Error = new Error
+                    {
+                        Message = ex.Message
+                    }
+                });
             }
         }
 
         public async Task<ArcOnlineResponse<DeleteResponse>> DeleteDocument(string url, MultipartFormDataContent formContent)
         {
-            using (var response = await client.PostAsync(url, formContent).ConfigureAwait(false))
+            try
             {
-                try
+                using (var response = await client.PostAsync(url, formContent).ConfigureAwait(false))
                 {
-                    var result = await response.Content.ReadAsAsync<DeleteResponse>(Formatters).ConfigureAwait(false);
-                    result.DeleteAttachmentResult = result.DeleteAttachmentResults.Single();
-                    result.DeleteAttachmentResults = null;
-
-                    return new ArcOnlineResponse<DeleteResponse>(response, result);
-                }
-                catch (Exception ex)
-                {
-                    return new ArcOnlineResponse<DeleteResponse>(response, new Errorable
+                    try
                     {
-                        Error = new Error
+                        var result = await response.Content.ReadAsAsync<DeleteResponse>(Formatters).ConfigureAwait(false);
+                        result.DeleteAttachmentResult = result.DeleteAttachmentResults.Single();
+                        result.DeleteAttachmentResults = null;
+
+                        return new ArcOnlineResponse<DeleteResponse>(response, result);
+                    }
+                    catch (Exception ex)
+                    {
+                        return new ArcOnlineResponse<DeleteResponse>(response, new DeleteResponse
                         {
-                            Details = new List<string> {
+                            Error = new Error
+                            {
+                                Details = new List<string> {
                                     ex.Message,
                                     await response.Content.ReadAsStringAsync().ConfigureAwait(false)
                                 }
-                        }
-                    } as DeleteResponse);
+                            }
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                return new ArcOnlineResponse<DeleteResponse>(null, new DeleteResponse
+                {
+                    Error = new Error
+                    {
+                        Message = ex.Message
+                    }
+                });
             }
         }
 
@@ -84,31 +110,44 @@ namespace daq.Services
                 // new KeyValuePair<string, string>("token", ""),
             };
 
-            using (var content = new FormUrlEncodedContent(queryParams))
+            try
             {
-                query = await content.ReadAsStringAsync();
-                using (var response = await client.GetAsync($"{url}/queryAttachments?{query}").ConfigureAwait(false))
+                using (var content = new FormUrlEncodedContent(queryParams))
                 {
-                    try
+                    query = await content.ReadAsStringAsync();
+                    using (var response = await client.GetAsync($"{url}/queryAttachments?{query}").ConfigureAwait(false))
                     {
-                        var result = await response.Content.ReadAsAsync<AttachmentResponse>(Formatters).ConfigureAwait(false);
-
-                        return new ArcOnlineResponse<AttachmentResponse>(response, result);
-                    }
-                    catch (Exception ex)
-                    {
-                        return new ArcOnlineResponse<AttachmentResponse>(response, new Errorable
+                        try
                         {
-                            Error = new Error
+                            var result = await response.Content.ReadAsAsync<AttachmentResponse>(Formatters).ConfigureAwait(false);
+
+                            return new ArcOnlineResponse<AttachmentResponse>(response, result);
+                        }
+                        catch (Exception ex)
+                        {
+                            return new ArcOnlineResponse<AttachmentResponse>(response, new AttachmentResponse
                             {
-                                Details = new List<string> {
+                                Error = new Error
+                                {
+                                    Details = new List<string> {
                                     ex.Message,
                                     await response.Content.ReadAsStringAsync().ConfigureAwait(false)
                                 }
-                            }
-                        } as AttachmentResponse);
+                                }
+                            });
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                return new ArcOnlineResponse<AttachmentResponse>(null, new AttachmentResponse
+                {
+                    Error = new Error
+                    {
+                        Message = ex.Message
+                    }
+                });
             }
         }
     }
