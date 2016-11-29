@@ -240,6 +240,18 @@ define([
             //      setup the dgrid
             console.log('app.App:initGrid', arguments);
 
+            var container = document.createElement('div');
+            container.className = 'container';
+
+            var containerRow = document.createElement('div');
+            containerRow.className = 'row';
+
+            var left = document.createElement('div');
+            left.className = 'col-md-4 col-sm-12';
+
+            var right = document.createElement('div');
+            right.className = 'col-md-8 col-sm-12';
+
             var form = document.createElement('div');
             form.className = 'form-inline';
 
@@ -252,7 +264,7 @@ define([
 
             var input = document.createElement('input');
             input.setAttribute('type', 'text');
-            input.setAttribute('name', 'search');
+            input.setAttribute('id', 'search');
             input.setAttribute('autocomplete', 'nope');
             input.className = 'form-control';
             input.addEventListener('input', lang.hitch(this, 'filterGrid'));
@@ -260,7 +272,39 @@ define([
             group.appendChild(label);
             group.appendChild(document.createTextNode(' '));
             group.appendChild(input);
-            form.appendChild(group);
+            left.appendChild(group);
+
+            var uploadGroup = document.createElement('form');
+            uploadGroup.className = 'form-group';
+            uploadGroup.id = 'edoc-form';
+
+            var uploadLabel = document.createElement('label');
+            uploadLabel.setAttribute('for', 'attachment');
+            uploadLabel.innerHTML = 'External File';
+
+            var uploadInput = document.createElement('input');
+            uploadInput.setAttribute('type', 'file');
+            uploadInput.setAttribute('name', 'attachment');
+            uploadInput.setAttribute('id', 'attachment');
+            uploadInput.setAttribute('style', 'display: inline-block;');
+
+            var uploadSubmit = document.createElement('button');
+            uploadSubmit.innerHTML = 'attach';
+            uploadSubmit.dataset.action = 'external';
+            uploadSubmit.className = 'btn btn-default';
+
+            uploadGroup.appendChild(uploadLabel);
+            uploadGroup.appendChild(document.createTextNode(' '));
+            uploadGroup.appendChild(uploadInput);
+            uploadGroup.appendChild(document.createTextNode(' '));
+            uploadGroup.appendChild(uploadSubmit);
+
+            right.appendChild(uploadGroup);
+
+            containerRow.appendChild(left);
+            containerRow.appendChild(right);
+
+            form.appendChild(containerRow);
 
             var ComposedGrid = declare([Grid, SingleQuery]);
             this.grid = new ComposedGrid({
@@ -293,10 +337,12 @@ define([
                         sortable: false,
                         formatter: function (value, row) {
                             if (row.uploadId) {
-                                return '<button class="btn btn-danger" value=' + value + '>remove</button>';
+                                return '<button class="btn btn-danger" data-action="edoc" value="' +
+                                        value + '">remove</button>';
                             }
 
-                            return '<button class="btn btn-success" value=' + value + '>add</button>';
+                            return '<button class="btn btn-success" data-action="edoc" value="' +
+                                    value + '">add</button>';
                         }
                     }
                 }
@@ -344,10 +390,26 @@ define([
             console.info('app.App:onGridClick', arguments);
 
             var clicked = evt.target;
-
             if (clicked.tagName !== 'BUTTON') {
                 return;
             }
+
+            switch (clicked.dataset.action) {
+                case 'edoc':
+                    return this.processEdocItem(props, evt);
+                case 'external':
+                    return this.addAttachment(props, evt);
+                default:
+                    return;
+            }
+        },
+        processEdocItem: function (props, evt) {
+            // summary:
+            //      upload edoc documents
+            // click event
+            console.info('app.App:processEdocItem', arguments);
+
+            var clicked = evt.target;
 
             var row = this.grid.row(evt).data;
             var uploadId = row.uploadId;
@@ -451,7 +513,12 @@ define([
 
             // invert css and button text depending
             node.className = options.buttonCss;
-            node.innerHTML = options.buttonText;
+            if (node.tagName === 'BUTTON') {
+                node.innerHTML = options.buttonText;
+            } else {
+                node.setAttribute('value', options.buttonText);
+            }
+
             if (options.disabled) {
                 node.setAttribute('disabled', 'disabled');
             } else {
@@ -497,6 +564,60 @@ define([
             }
 
             this.activeTool.startup();
+        },
+        addAttachment: function (props, event) {
+            // summary:
+            //      send xhr post to api to save File
+            // submit event
+            console.info('app.App:addAttachment', arguments);
+
+
+            var clicked = event.target;
+
+            this.toggleStatus(clicked, {
+                buttonText: 'processing',
+                buttonCss: 'btn btn-warning',
+                disabled: true
+            });
+
+            var form = new FormData(document.getElementById('edoc-form'));
+            form.append('serviceUrl', props.url);
+            form.append('featureId', props.attributes.FID);
+            form.append('token', 'shh');
+
+            xhr(config.urls.webapi + '/api/upload/external', {
+                method: 'post',
+                data: form,
+                headers: {
+                    'X-Requested-With': null
+                },
+                handleAs: 'json'
+            }).then(lang.hitch(this, function (json) {
+                if (json.error) {
+                    this.toast(json.error.messages || 'something went wrong');
+                    this.toggleStatus(clicked, {
+                        buttonText: 'error, try again?',
+                        buttonCss: 'btn btn-danger',
+                        disabled: false
+                    });
+
+                    return;
+                }
+
+                this.toggleStatus(clicked, {
+                    buttonText: 'success',
+                    buttonCss: 'btn btn-success',
+                    disabled: false
+                });
+            }), lang.hitch(this, function (error) {
+                this.toggleStatus(clicked, {
+                    buttonText: 'error, try again?',
+                    buttonCss: 'btn btn-danger',
+                    disabled: false
+                });
+
+                this.toast(error);
+            }));
         }
     });
 });
