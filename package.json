@@ -16,7 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "dojo": "^1.11.2",
-    "eslint-plugin-html": "^1.5.5",
+    "eslint-plugin-html": "^1.7.0",
     "grunt": "^1.0.1",
     "grunt-bump": "^0.8.0",
     "grunt-contrib-clean": "^1.0.0",
@@ -37,7 +37,7 @@
     "grunt-ssh": "^0",
     "grunt-verbosity": "^1.0.1",
     "load-grunt-tasks": "^3.5.1",
-    "uglify-js": "^2.7.3"
+    "uglify-js": "^2.7.5"
   },
   "scripts": {
     "test": "grunt travis -v"
