@@ -7,8 +7,8 @@ define([
     'app/MapController',
     'app/Query',
 
-    'dgrid/extensions/SingleQuery',
-    'dgrid/Grid',
+    'dgrid1/extensions/SingleQuery',
+    'dgrid1/Grid',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',

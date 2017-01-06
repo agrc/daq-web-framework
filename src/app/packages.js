@@ -1,8 +1,9 @@
 require({
     packages: [
         'app',
-        'dgrid',
         'dgauges',
+        'dgrid',
+        'dgrid1',
         'dijit',
         'dojo',
         'dojox',
