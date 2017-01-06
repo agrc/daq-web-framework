@@ -31,3 +31,4 @@ src/spin.js/
 src/stubmodule/
 src/util/
 src/xstyle
+dist/
