@@ -19,15 +19,20 @@ var profile = {
                 'dojox/gfx/path',
                 'dojox/gfx/svg',
                 'dojox/gfx/svgext',
-                'dojox/gfx/shape'
+                'dojox/gfx/shape',
+                'esri/layers/ArcGISDynamicMapServiceLayer',
+                'esri/layers/LayerDrawingOptions'
             ],
             targetStylesheet: 'app/resources/App.css',
             includeLocales: ['en-us'],
             customBase: true,
             boot: true
         },
-        'ijit/widgets/authentication/UserAdmin': {
-            exclude: ['dojo/dojo']
+        'esri/layers/VectorTileLayerImpl': {
+            include: [
+                'esri/layers/VectorTileLayerImpl'
+            ],
+            includeLocales: ['en-us']
         }
     },
     packages: [{
@@ -66,10 +71,5 @@ var profile = {
     },
     userConfig: {
         packages: ['app', 'dijit', 'dojox', 'esri']
-    },
-    map: {
-        '*': {
-            'dojox/dgauges': 'dgauges'
-        }
     }
 };
