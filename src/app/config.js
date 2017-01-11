@@ -31,4 +31,10 @@ define(['dojo/has'], function (has) {
             poly: {}
         }
     };
+
+    if (has('agrc-build') === 'prod' || has('agrc-build') === 'stage') {
+        config.urls.webapi = '/daq';
+    }
+
+    return config;
 });
