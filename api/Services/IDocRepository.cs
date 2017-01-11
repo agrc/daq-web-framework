@@ -91,7 +91,7 @@ namespace daq.Services
         {
             using (var session = new SqlConnection(ConnectionString))
             {
-                return session.Query<EDocEntry>("SELECT r_folder_path + '/' + object_name + '.' + i_full_format as path FROM Combined_DAQ where ids IN @ids", new
+                return session.Query<EDocEntry>("SELECT r_folder_path + '/' + object_name + '.' + i_full_format as path FROM Combined_DAQ where ids IN @id", new
                 {
                     ids = ids
                 }).ToList();
