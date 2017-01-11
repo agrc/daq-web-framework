@@ -91,12 +91,15 @@ define([
                         topic.publish(config.topics.addAi, this.props);
                         this.destroy();
                     } else {
-                        topic.publish(config.topics.toast, data.updateResults[0].error);
+                        domAttr.remove(this.submit, 'disabled');
+                        topic.publish(config.topics.toast, data.updateResults[0].error.description);
                     }
                 } else {
+                    domAttr.remove(this.submit, 'disabled');
                     topic.pubish(config.topics.toast, data.error);
                 }
             }), function (err) {
+                domAttr.remove(this.submit, 'disabled');
                 topic.pubish(config.topics.toast, err);
             });
         },
