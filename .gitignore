@@ -33,3 +33,4 @@ src/util/
 src/xstyle
 dist/
 deploy/
+api/Web.Release.config
