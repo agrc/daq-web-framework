@@ -34,3 +34,4 @@ src/xstyle
 dist/
 deploy/
 api/Web.Release.config
+*.pubxml
