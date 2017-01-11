@@ -68,7 +68,7 @@ module.exports = function (grunt) {
         '!stubmodule/**',
         '!util/**'
     ];
-    var deployDir = 'SGID';
+    var deployDir = 'DAQ';
     var secrets;
     var sauceConfig = {
         urls: ['http://127.0.0.1:8000/_SpecRunner.html?catch=false'],
@@ -308,7 +308,7 @@ module.exports = function (grunt) {
                 sourceMap: true,
                 compress: {
                     drop_console: true, // eslint-disable-line camelcase
-                    passes: 2,
+                    passes: 3,
                     dead_code: true // eslint-disable-line camelcase
                 }
             },
@@ -322,6 +322,9 @@ module.exports = function (grunt) {
                 dest: 'dist/dojo/dojo.js'
             },
             prod: {
+                options: {
+                    sourceMap: false
+                },
                 files: [{
                     expand: true,
                     cwd: 'dist',
