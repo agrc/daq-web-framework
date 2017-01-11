@@ -58,7 +58,9 @@
     "include": [
       "wwwroot",
       "web.config",
-      "Views"
+      "**/*.cshtml",
+      "appsettings.json",
+      "appsettings.Production.json"
     ]
   },
   "scripts": {
