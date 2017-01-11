@@ -41,7 +41,7 @@ define([
             console.log('app.AiNumber:constructor', arguments);
 
             this.props = props;
-            this.feature = props.attributes.FID;
+            this.feature = props.attributes[config.fields.uniqueId];
             this.url = props.url;
         },
         postCreate: function () {
@@ -67,9 +67,8 @@ define([
             console.log('app.AiNumber:update', arguments);
 
             domAttr.set(this.submit, 'disabled', true);
-            var attributes = {
-                FID: this.feature
-            };
+            var attributes = {};
+            attributes[config.fields.uniqueId] = this.feature;
             attributes[config.fields.lock] = this.ai.value;
 
             xhr(this.url + '/updateFeatures', {

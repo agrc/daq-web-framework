@@ -106,10 +106,10 @@ define([
                         layer.graphics.forEach(function testGeometry(graphic) {
                             if (geometryEngine.contains(geometry, graphic.geometry)) {
                                 data.push({
-                                    ai: graphic.attributes.AiNumber,
+                                    ai: graphic.attributes[config.fields.lock],
                                     api: graphic.attributes.API,
-                                    company: graphic.attributes.COMPANY_NA,
-                                    id: graphic.attributes.FID,
+                                    company: graphic.attributes[config.fields.queryOne],
+                                    id: graphic.attributes[config.fields.uniqueId],
                                     graphic: graphic
                                 });
                             }

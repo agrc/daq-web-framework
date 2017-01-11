@@ -196,7 +196,7 @@ define([
 
             this.attributes.startup();
 
-            if (!attributes[config.fields.lock].trim()) {
+            if (!attributes[config.fields.lock] || !attributes[config.fields.lock].trim()) {
                 console.debug('lock field is empty. showing add lock data');
 
                 this.ai = new AiNumber(props).placeAt(this.gridcontent, 'before');
@@ -429,7 +429,7 @@ define([
 
             var data = lang.replace('id={edocId}&featureId={featureId}&uploadId={uploadId}&serviceUrl={url}', {
                 edocId: row.id,
-                featureId: props.attributes.FID,
+                featureId: props.attributes[config.fields.uniqueId],
                 uploadId: row.uploadId,
                 facilityId: row.name,
                 url: props.url,
@@ -582,7 +582,7 @@ define([
 
             var form = new FormData(document.getElementById('edoc-form'));
             form.append('serviceUrl', props.url);
-            form.append('featureId', props.attributes.FID);
+            form.append('featureId', props.attributes[config.fields.uniqueId]);
             form.append('token', 'shh');
 
             xhr(config.urls.webapi + '/api/upload/external', {

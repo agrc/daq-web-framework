@@ -1,14 +1,14 @@
-define([], function () {
-    var agol = 'http://utah.maps.arcgis.com';
+define(['dojo/has'], function (has) {
+    var agol = 'http://utahdeq.maps.arcgis.com';
 
-    return {
+    var config = {
         appName: 'daq-web',
         appId: 'Uri0b5yIFpHSFulo',
         version: '1.0.0',
         fields: {
-            uniqueId: 'FID',
-            lock: 'AiNumber',
-            queryOne: 'COMPANY_NA'
+            uniqueId: 'OBJECTID',
+            lock: 'AI_Number',
+            queryOne: 'Comp_Name'
         },
         topics: {
             addAi: '1',
@@ -21,7 +21,7 @@ define([], function () {
         },
         urls: {
             webapi: 'http://localhost:5000',
-            webMap: '4bc934d83b3d46609d56b9778541256c',
+            webMap: '6ad68af1ab6349579cc0af364b49dccd',
             agol: agol + '/sharing',
             agolHome: agol
         },
