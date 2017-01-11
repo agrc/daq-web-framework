@@ -121,8 +121,7 @@ module.exports = function (grunt) {
         },
         clean: {
             build: ['dist'],
-            deploy: ['deploy'],
-            api: ['./api/bin']
+            deploy: ['deploy']
         },
         compress: {
             main: {
@@ -133,17 +132,6 @@ module.exports = function (grunt) {
                     src: deployFiles,
                     dest: './',
                     cwd: 'dist/',
-                    expand: true
-                }]
-            },
-            stageapi: {
-                options: {
-                    archive: 'deploy/api.zip'
-                },
-                files: [{
-                    src: '**/*.*',
-                    dest: './',
-                    cwd: './api/bin/Production/netcoreapp1.1/publish/',
                     expand: true
                 }]
             }
@@ -189,12 +177,6 @@ module.exports = function (grunt) {
             },
             main: {
                 src: jsFiles
-            }
-        },
-        exec: {
-            prod: {
-                cwd: './api',
-                cmd: 'dotnet publish -c Production'
             }
         },
         imagemin: {
@@ -256,18 +238,6 @@ module.exports = function (grunt) {
         },
         secrets: secrets,
         sftp: {
-            stageapi: {
-                files: {
-                    './': 'deploy/api.zip'
-                },
-                options: {
-                    createDirectories: false,
-                    host: '<%= secrets.stage.host %>',
-                    username: '<%= secrets.stage.username %>',
-                    password: '<%= secrets.stage.password %>',
-                    path: './wwwroot/' + deployDir + '/api'
-                }
-            },
             stage: {
                 files: {
                     './': 'deploy/deploy.zip'
@@ -290,20 +260,15 @@ module.exports = function (grunt) {
                 }
             },
             options: {
-                createDirectories: false,
+                createDirectories: true,
                 path: './wwwroot/' + deployDir + '/',
                 srcBasePath: 'deploy/',
                 showProgress: true
             }
         },
         sshexec: {
-            stageapi: {
-                command: ['cd wwwroot/' + deployDir + '/api', 'unzip -oq api.zip', 'rm api.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.stage.host %>',
-                    username: '<%= secrets.stage.username %>',
-                    password: '<%= secrets.stage.password %>'
-                }
+            options: {
+
             },
             stage: {
                 command: ['cd wwwroot/' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
@@ -430,12 +395,5 @@ module.exports = function (grunt) {
         'eslint:main',
         'sauce',
         'build-stage'
-    ]);
-    grunt.registerTask('publish-api-stage', [
-        'clean:api',
-        'exec:prod',
-        'compress:stageapi',
-        'sftp:stageapi',
-        'sshexec:stageapi'
     ]);
 };
