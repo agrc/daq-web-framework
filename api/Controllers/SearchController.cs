@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using daq.Services;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace daq.Controllers
 {
@@ -16,10 +15,11 @@ namespace daq.Controllers
         public ArcOnlineHttpClient Client { get; set; }
         public IRepository Repository { get; set; }
 
-        [HttpGet("~/api/search/{facilityNumber}/{featureId}")]
-        public JsonResult Search(string facilityNumber, int featureId, string service)
+        [HttpGet("~/search/{facilityNumber}")]
+        public JsonResult Search(string facilityNumber)
         {
             var result = Repository.Get(facilityNumber);
+            // going to get documents fron a share not from http endpoint
             // var response = await Client.GetDocumentsFor(service, featureId).ConfigureAwait(false);
 
             return Json(result.ToList());
