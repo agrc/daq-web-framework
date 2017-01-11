@@ -76,7 +76,7 @@ define([
             // param or return
             console.log('module.id:query', arguments);
 
-            var activeLayer = this.layers[this.layer.value];
+            var activeLayer = this.layers[this.layer.selectedIndex];
 
             var query = new Query();
             query.where = lang.replace(this.cannedQueries[this.type.value], {
