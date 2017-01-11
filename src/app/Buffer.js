@@ -3,8 +3,8 @@ define([
     'app/GraphicsController',
     'app/MapController',
 
-    'dgrid/OnDemandGrid',
-    'dgrid/Selection',
+    'dgrid1/OnDemandGrid',
+    'dgrid1/Selection',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',

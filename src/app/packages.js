@@ -25,5 +25,10 @@ require({
             location: './stubmodule',
             main: 'src/stub-module'
         }
-    ]
+    ],
+    map: {
+        dgrid1: {
+            dgrid: 'dgrid1'
+        }
+    }
 });
