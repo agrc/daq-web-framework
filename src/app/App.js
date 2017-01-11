@@ -352,9 +352,7 @@ define([
 
             this.store = new RequestMemory({
                 target: config.urls.webapi + '/api/search/' +
-                            props.aiNumber + '/' +
-                            props.attributes.FID + '?service=' +
-                            props.url,
+                            props.aiNumber,
                 useRangeHeaders: false,
                 headers: {
                     'X-Requested-With': null,
