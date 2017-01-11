@@ -70,7 +70,7 @@ namespace daq
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseDeveloperExceptionPage();
             }
 
             app.UseCors("CorsPolicy");
