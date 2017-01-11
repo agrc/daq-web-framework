@@ -555,7 +555,11 @@ define([
                 this.activeTool = new Buffer({
                     layers: this.map.graphicsLayerIds.map(function (id) {
                         return this.map.getLayer(id);
-                    }, this)
+                    }, this).filter(function (layer) {
+                        return layer.fields.some(function (field) {
+                            return field.name === config.fields.lock;
+                        });
+                    })
                 }).placeAt(this.toolboxcontainer, 'after');
             } else {
                 return;
