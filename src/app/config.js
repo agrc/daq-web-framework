@@ -20,7 +20,7 @@ define(['dojo/has'], function (has) {
             identify: '5'
         },
         urls: {
-            webapi: 'http://localhost:5000',
+            webapi: 'http://localhost/daq',
             webMap: '6ad68af1ab6349579cc0af364b49dccd',
             agol: agol + '/sharing',
             agolHome: agol
