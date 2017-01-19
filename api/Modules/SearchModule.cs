@@ -1,4 +1,4 @@
-﻿using daq_api.Services;
+﻿using daq_api.Contracts;
 using Nancy;
 
 namespace daq_api.Modules

@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using daq_api.Contracts;
 using daq_api.Models;
 using Dapper;
 

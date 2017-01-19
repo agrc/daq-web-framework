@@ -1,4 +1,3 @@
-api/appsettings.Production.json
 .DS_Store
 .grunt/
 node_modules/
@@ -33,5 +32,8 @@ src/util/
 src/xstyle
 dist/
 deploy/
-api/Web.Release.config
-*.pubxml
+
+api/secrets.staging.config
+api/secrets.production.config
+api/connection.config
+api/secrets.development.config

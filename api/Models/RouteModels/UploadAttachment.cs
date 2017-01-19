@@ -1,6 +1,4 @@
-﻿using Nancy;
-
-namespace daq_api.Models.RouteModels
+﻿namespace daq_api.Models.RouteModels
 {
     public class UploadAttachment : Tokenizable
     {

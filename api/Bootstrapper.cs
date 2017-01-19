@@ -1,4 +1,6 @@
-﻿using daq_api.Services;
+﻿using System.Configuration;
+using daq_api.Contracts;
+using daq_api.Services;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Hosting.Aspnet;
@@ -12,6 +14,8 @@ namespace daq_api
         {
             base.ApplicationStartup(container, pipelines);
 
+            StaticConfiguration.DisableErrorTraces = false;
+
             pipelines.AfterRequest += (ctx) =>
             {
                 ctx.Response.Headers.Add("Access-Control-Allow-Origin", "*");
@@ -20,10 +24,21 @@ namespace daq_api
             };
 
             container.Register<ArcOnlineHttpClient>().AsSingleton();
-            container.Register<IRepository, EdocsRepository>().AsPerRequestSingleton();
-            container.Register<IEdocFolder, EdocFolderMock>().AsSingleton();
 
-            StaticConfiguration.DisableErrorTraces = false;
+#if DEBUG
+            container.Register<IShareMappable, DocumentumMockShare>().AsSingleton();
+            container.Register<IRepository, EdocsMockRepository>().AsPerRequestSingleton();
+#elif STAGING
+            container.Register<IShareMappable, DocumentumShare>().AsSingleton();
+            container.Register<IRepository, EdocsRepository>().AsPerRequestSingleton();
+#else
+            container.Register<IShareMappable, DocumentumShare>().AsSingleton();
+            StaticConfiguration.DisableErrorTraces = true;
+#endif
+
+            var folder = container.Resolve<IShareMappable>();
+            var driveLetter = ConfigurationManager.AppSettings["share_drive_letter"];
+            folder.CreateMap(driveLetter);
         }
     }
 }

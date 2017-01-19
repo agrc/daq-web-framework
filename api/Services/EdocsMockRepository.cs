@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using daq_api.Contracts;
 using daq_api.Models;
 
 namespace daq_api.Services
 {
-    public class RepositoryMock : IRepository
+    public class EdocsMockRepository : IRepository
     {
         readonly List<EDocEntry> _items = new List<EDocEntry> {
             new EDocEntry {

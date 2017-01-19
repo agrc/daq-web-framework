@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using daq_api.Models;
 
-namespace daq_api.Services
+namespace daq_api.Contracts
 {
     public interface IRepository
     {

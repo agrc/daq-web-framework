@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace daq_api.Services
+namespace daq_api.Models
 {
     public class ArcOnlineResponse<T>
     {

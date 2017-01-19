@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
-using System.Text.RegularExpressions;
+using daq_api.Contracts;
 using daq_api.Models;
 using daq_api.Models.RouteModels;
 using daq_api.Services;
@@ -20,53 +20,57 @@ namespace daq_api.Modules
         private const string DeleteAttachmentUrl = "/deleteAttachments";
         public IEnumerable<MediaTypeFormatter> Formatters { get; set; }
 
-        public UploadModule(IRepository repository, IEdocFolder edocFolder, ArcOnlineHttpClient client)
+        public UploadModule(IRepository repository, IShareMappable edocFolder, ArcOnlineHttpClient client)
         {
             Post["/upload", true] = async (_, ctx) =>
             {
                 var model = this.Bind<UploadAttachment>();
                 var edoc = repository.Get(model.Id);
                 var filename = Path.GetFileName(edoc.Path);
-                var file = edocFolder.Get(edoc.Path);
 
-                if (!File.Exists(file))
+                try
+                {
+                    var file = edocFolder.GetPathFrom(edoc.Path);
+
+                    // upload to arcgis online
+                    using (Stream document = File.OpenRead(file))
+                    using (var formContent = new MultipartFormDataContent())
+                    {
+                        try
+                        {
+                            var streamContent = new StreamContent(document);
+                            streamContent.Headers.Add("Content-Type", "application/octet-stream");
+                            streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", filename));
+                            formContent.Add(streamContent, "file", filename);
+                            formContent.Add(new StringContent("json"), "f");
+                            // formContent.Add(new StringContent(token), "token");
+                        }
+                        catch (ArgumentNullException)
+                        {
+                           return Response.AsJson(new Errorable
+                            {
+                                Error = new Error
+                                {
+                                    Message = "Your arcgis online token expired. Please sign in again."
+                                }
+                            });
+                        }
+
+                        var url = string.Format("{0}/{1}{2}", model.ServiceUrl, model.FeatureId, AttachmentUrl);
+                        var response = await client.UploadDocument(url, formContent);
+
+                        return Response.AsJson(response.Result);
+                    }
+                }
+                catch (Exception ex)
                 {
                     return Response.AsJson(new Errorable
                     {
                         Error = new Error
                         {
-                            Message = string.Format("This file does not exist on the eDocs file server. {0}", filename)
+                            Message = string.Format("Unknown error getting EDocs File. {0}", ex.Message)
                         }
                     });
-                }
-
-                // upload to arcgis online
-                using (Stream document = File.OpenRead(file))
-                using (var formContent = new MultipartFormDataContent())
-                {
-                    try
-                    {
-                        var streamContent = new StreamContent(document);
-                        streamContent.Headers.Add("Content-Type", "application/octet-stream");
-                        streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", filename));
-                        formContent.Add(streamContent, "file", filename);
-                        formContent.Add(new StringContent("json"), "f");
-                        // formContent.Add(new StringContent(token), "token");
-                    }
-                    catch (ArgumentNullException)
-                    {
-                        return Response.AsJson(new Errorable
-                        {
-                            Error = new Error
-                            {
-                                Message = "Your arcgis online token expired. Please sign in again."
-                            }
-                        });
-                    }
-
-                    var response = await client.UploadDocument(string.Format( "{0}/{1}{2}", model.ServiceUrl, model.FeatureId, AttachmentUrl), formContent);
-
-                    return Response.AsJson(response.Result);
                 }
             };
 
@@ -92,7 +96,8 @@ namespace daq_api.Modules
                         });
                     }
 
-                    var response = await client.DeleteDocument(string.Format("{0}/{1}{2}", model.ServiceUrl, model.FeatureId, DeleteAttachmentUrl), formContent);
+                    var url = string.Format("{0}/{1}{2}", model.ServiceUrl, model.FeatureId, DeleteAttachmentUrl);
+                    var response = await client.DeleteDocument(url, formContent);
                     
                     return Response.AsJson(response.Result);
                 }
@@ -136,7 +141,8 @@ namespace daq_api.Modules
                         });
                     }
 
-                    var response = await client.UploadDocument(string.Format("{0}/{1}{2}", model.ServiceUrl, model.FeatureId, AttachmentUrl), formContent);
+                    var url = string.Format("{0}/{1}{2}", model.ServiceUrl, model.FeatureId, AttachmentUrl);
+                    var response = await client.UploadDocument(url, formContent);
 
                     return Response.AsJson(response.Result);
                 }
