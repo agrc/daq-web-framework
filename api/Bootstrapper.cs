@@ -3,6 +3,7 @@ using daq_api.Contracts;
 using daq_api.Services;
 using Nancy;
 using Nancy.Bootstrapper;
+using Nancy.Conventions;
 using Nancy.Hosting.Aspnet;
 using Nancy.TinyIoc;
 
@@ -39,6 +40,16 @@ namespace daq_api
             var folder = container.Resolve<IShareMappable>();
             var driveLetter = ConfigurationManager.AppSettings["share_drive_letter"];
             folder.CreateMap(driveLetter);
+        }
+
+        protected override void ConfigureConventions(NancyConventions conventions)
+        {
+            base.ConfigureConventions(conventions);
+
+            // for font awesome
+            conventions.StaticContentsConventions.Add(
+                StaticContentConventionBuilder.AddDirectory("fonts", @"fonts")
+            );
         }
     }
 }

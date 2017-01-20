@@ -84,6 +84,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\main.css" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="Views\app.html" />
     <Content Include="Views\home.html" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -124,6 +129,11 @@
     <Content Include="packages.config" />
     <Content Include="connection.config" />
     <Content Include="connection.template.config" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\172.16.17.58.pubxml" />
     <Content Include="secrets.production.config" />
     <Content Include="secrets.staging.config" />
