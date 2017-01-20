@@ -7,15 +7,17 @@ namespace daq_api.Modules
     {
         public HomeModule()
         {
-            Get["/login"] = _ =>
+            Before += _ =>
             {
                 if (Context.CurrentUser == null)
                 {
-                    return View["home"];
+                    return Response.AsRedirect("/daq/api/login", RedirectResponse.RedirectType.Temporary);
                 }
 
-                return Response.AsRedirect("daq/api/", RedirectResponse.RedirectType.Temporary);
+                return null;
             };
+
+            Get["/"] = _ => View["index"];
         }
     }
 }

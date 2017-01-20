@@ -88,8 +88,8 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\main.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
-    <Content Include="Views\app.html" />
-    <Content Include="Views\home.html" />
+    <Content Include="Views\index.html" />
+    <Content Include="Views\login.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -108,10 +108,11 @@
     <Compile Include="Models\RouteModels\RemoveAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadExternal.cs" />
+    <Compile Include="Models\RouteModels\UserLogin.cs" />
     <Compile Include="Models\Tokenizable.cs" />
     <Compile Include="Models\UploadResponse.cs" />
-    <Compile Include="Modules\AppModule.cs" />
     <Compile Include="Modules\HomeModule.cs" />
+    <Compile Include="Modules\LoginModule.cs" />
     <Compile Include="Modules\SearchModule.cs" />
     <Compile Include="Modules\UploadModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
