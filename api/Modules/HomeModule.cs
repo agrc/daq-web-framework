@@ -1,4 +1,5 @@
 ﻿using Nancy;
+using Nancy.Responses;
 
 namespace daq_api.Modules
 {
@@ -6,7 +7,15 @@ namespace daq_api.Modules
     {
         public HomeModule()
         {
-            Get["/"] = _ => View["home"];
+            Get["/login"] = _ =>
+            {
+                if (Context.CurrentUser == null)
+                {
+                    return View["home"];
+                }
+
+                return Response.AsRedirect("daq/api/", RedirectResponse.RedirectType.Temporary);
+            };
         }
     }
 }

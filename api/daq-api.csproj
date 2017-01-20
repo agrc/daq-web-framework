@@ -105,6 +105,7 @@
     <Compile Include="Models\RouteModels\UploadExternal.cs" />
     <Compile Include="Models\Tokenizable.cs" />
     <Compile Include="Models\UploadResponse.cs" />
+    <Compile Include="Modules\AppModule.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Modules\SearchModule.cs" />
     <Compile Include="Modules\UploadModule.cs" />
