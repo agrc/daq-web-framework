@@ -10,6 +10,7 @@ using daq_api.Models.RouteModels;
 using daq_api.Services;
 using Nancy;
 using Nancy.ModelBinding;
+using Nancy.Security;
 
 namespace daq_api.Modules
 {
@@ -22,6 +23,8 @@ namespace daq_api.Modules
 
         public UploadModule(IRepository repository, IShareMappable edocFolder, ArcOnlineHttpClient client)
         {
+            this.RequiresAuthentication();
+
             Post["/upload", true] = async (_, ctx) =>
             {
                 var model = this.Bind<UploadAttachment>();

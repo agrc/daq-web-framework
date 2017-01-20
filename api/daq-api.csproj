@@ -48,6 +48,10 @@
       <HintPath>packages\Nancy.1.4.1\lib\net40\Nancy.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Nancy.Authentication.Forms, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Nancy.Authentication.Forms.1.4.1\lib\net40\Nancy.Authentication.Forms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Nancy.Hosting.Aspnet, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Nancy.Hosting.Aspnet.1.4.1\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
       <Private>True</Private>
@@ -94,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Contracts\IUserDatabase.cs" />
     <Compile Include="Formatters\PlainTextFormatter.cs" />
     <Compile Include="Models\AddAttachmentResult.cs" />
     <Compile Include="Models\AttachmentGroup.cs" />
@@ -108,7 +113,7 @@
     <Compile Include="Models\RouteModels\RemoveAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadExternal.cs" />
-    <Compile Include="Models\RouteModels\UserLogin.cs" />
+    <Compile Include="Models\RouteModels\User.cs" />
     <Compile Include="Models\Tokenizable.cs" />
     <Compile Include="Models\UploadResponse.cs" />
     <Compile Include="Modules\HomeModule.cs" />
@@ -125,6 +130,7 @@
     <Compile Include="Contracts\IShareMappable.cs" />
     <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="Services\EdocsMockRepository.cs" />
+    <Compile Include="Services\UserDatabaseMock.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
