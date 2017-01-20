@@ -21,18 +21,13 @@ var profile = {
                 'dojox/gfx/svgext',
                 'dojox/gfx/shape',
                 'esri/layers/ArcGISDynamicMapServiceLayer',
-                'esri/layers/LayerDrawingOptions'
+                'esri/layers/LayerDrawingOptions',
+                'esri/layers/VectorTileLayerImpl'
             ],
             targetStylesheet: 'app/resources/App.css',
             includeLocales: ['en-us'],
             customBase: true,
             boot: true
-        },
-        'esri/layers/VectorTileLayerImpl': {
-            include: [
-                'esri/layers/VectorTileLayerImpl'
-            ],
-            includeLocales: ['en-us']
         }
     },
     packages: [{
