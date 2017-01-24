@@ -18,25 +18,23 @@ namespace daq_api.Modules
                     return View["login"];
                 }
 
-                return Response.AsRedirect("~/daq/api", RedirectResponse.RedirectType.Temporary);
+                return Response.AsRedirect("~/daq", RedirectResponse.RedirectType.Temporary);
             };
 
             Get["/logout"] = _ => this.LogoutAndRedirect("~/login");
 
             Post["/login"] = _ =>
             {
-                var userGuid = userDatabase.ValidateUser((string)Request.Form.Username, (string) Request.Form.Password);
+                var username = (string)Request.Form.Username;
+                var password = (string) Request.Form.Password;
+                var userGuid = userDatabase.ValidateUser(username, password);
 
                 if (userGuid == null)
                 {
-                    return Context.GetRedirect("~/login?error=true&username=" + (string) Request.Form.Username);
+                    return Context.GetRedirect("~/login?error=true&username=" + username);
                 }
 
-                DateTime? expiry = null;
-                if (Request.Form.RememberMe.HasValue)
-                {
-                    expiry = DateTime.Now.AddDays(7);
-                }
+                var expiry = DateTime.Now.AddDays(7);
 
                 return this.LoginAndRedirect(userGuid.Value, expiry, "~/");
             };

@@ -351,7 +351,7 @@ define([
             this.grid.footerNode.appendChild(form);
 
             this.store = new RequestMemory({
-                target: config.urls.webapi + '/api/search/' +
+                target: config.urls.webapi + '/search/' +
                             props.aiNumber,
                 useRangeHeaders: false,
                 headers: {
@@ -434,7 +434,7 @@ define([
                 token: ''
             });
 
-            xhr(config.urls.webapi + '/api/upload', {
+            xhr(config.urls.webapi + '/upload', {
                 method: method,
                 data: data,
                 headers: {
@@ -587,7 +587,7 @@ define([
             form.append('featureId', props.attributes[config.fields.uniqueId]);
             form.append('token', 'shh');
 
-            xhr(config.urls.webapi + '/api/upload/external', {
+            xhr(config.urls.webapi + '/upload/external', {
                 method: 'post',
                 data: form,
                 headers: {
