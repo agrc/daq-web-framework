@@ -121,7 +121,8 @@ module.exports = function (grunt) {
         },
         clean: {
             build: ['dist'],
-            deploy: ['deploy']
+            deploy: ['deploy'],
+            api: ['api/Content/**/*', '!api/Content/*.css']
         },
         compress: {
             main: {
@@ -389,12 +390,13 @@ module.exports = function (grunt) {
         'sftp:prod'
     ]);
     grunt.registerTask('build-stage', [
+        'clean:api',
         'parallel:buildAssets',
         'dojo:api',
         'uglify:api'
     ]);
     grunt.registerTask('deploy-stage', [
-        'clean:deploy',
+        'clean:api',
         'compress:main',
         'sftp:stage',
         'sshexec:stage'
