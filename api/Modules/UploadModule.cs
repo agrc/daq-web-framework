@@ -33,6 +33,7 @@ namespace daq_api.Modules
 
                 try
                 {
+                    var token = await client.GetToken();
                     var file = edocFolder.GetPathFrom(edoc.Path);
 
                     // upload to arcgis online
@@ -46,7 +47,7 @@ namespace daq_api.Modules
                             streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", filename));
                             formContent.Add(streamContent, "file", filename);
                             formContent.Add(new StringContent("json"), "f");
-                            // formContent.Add(new StringContent(token), "token");
+                             formContent.Add(new StringContent(token), "token");
                         }
                         catch (ArgumentNullException)
                         {
@@ -84,9 +85,10 @@ namespace daq_api.Modules
                 {
                     try
                     {
+                        var token = await client.GetToken();
                         formContent.Add(new StringContent("json"), "f");
                         formContent.Add(new StringContent(model.UploadId.ToString()), "attachmentIds");
-                        // formContent.Add(new StringContent(token), "token");
+                        formContent.Add(new StringContent(token), "token");
                     }
                     catch (ArgumentNullException)
                     {
@@ -126,12 +128,14 @@ namespace daq_api.Modules
                 {
                     try
                     {
+                        var token = await client.GetToken();
+
                         var streamContent = new StreamContent(document);
                         streamContent.Headers.Add("Content-Type", "application/octet-stream");
                         streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", attachment.Name));
                         formContent.Add(streamContent, "file", attachment.Name);
                         formContent.Add(new StringContent("json"), "f");
-                        // formContent.Add(new StringContent(token), "token");
+                        formContent.Add(new StringContent(token), "token");
                     }
                     catch (ArgumentNullException)
                     {

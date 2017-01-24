@@ -98,9 +98,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Contracts\IArcOnlineCredentials.cs" />
     <Compile Include="Contracts\IUserDatabase.cs" />
     <Compile Include="Formatters\PlainTextFormatter.cs" />
     <Compile Include="Models\AddAttachmentResult.cs" />
+    <Compile Include="Models\AgoCredentials.cs" />
     <Compile Include="Models\AttachmentGroup.cs" />
     <Compile Include="Models\AttachmentResponse.cs" />
     <Compile Include="Models\AttachmentInfo.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="Models\RouteModels\UploadExternal.cs" />
     <Compile Include="Models\RouteModels\User.cs" />
     <Compile Include="Models\Tokenizable.cs" />
+    <Compile Include="Models\TokenResponse.cs" />
     <Compile Include="Models\UploadResponse.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Modules\LoginModule.cs" />
@@ -189,7 +192,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

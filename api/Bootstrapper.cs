@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using daq_api.Contracts;
+using daq_api.Models;
 using daq_api.Services;
 using Nancy;
 using Nancy.Authentication.Forms;
@@ -26,6 +27,7 @@ namespace daq_api
             };
 
             container.Register<ArcOnlineHttpClient>().AsSingleton();
+            container.Register<IArcOnlineCredentials, AgoCredentials>().AsSingleton();
 
 #if DEBUG
             container.Register<IShareMappable, DocumentumMockShare>().AsSingleton();
