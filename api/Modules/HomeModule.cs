@@ -1,4 +1,5 @@
 ﻿using Nancy;
+using Nancy.Security;
 
 namespace daq_api.Modules
 {
@@ -6,7 +7,9 @@ namespace daq_api.Modules
     {
         public HomeModule()
         {
-            Get["/"] = _ => View["home"];
+            this.RequiresAuthentication();
+
+            Get["/"] = _ => View["index"];
         }
     }
 }

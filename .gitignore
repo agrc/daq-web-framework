@@ -33,6 +33,22 @@ src/xstyle
 dist/
 deploy/
 
+api/content/app/
+api/content/bootstrap/
+api/content/dgrid/
+api/content/dgrid1/
+api/content/dijit/
+api/content/dojo/
+api/content/dojox/
+api/content/dstore/
+api/content/esri/
+api/content/jquery/
+api/content/moment/
+api/content/put-selector/
+api/content/stubmodule/
+api/content/xstyle
+api/content/build-report.txt
+
 api/secrets.staging.config
 api/secrets.production.config
 api/connection.config

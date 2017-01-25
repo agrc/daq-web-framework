@@ -1,5 +1,6 @@
 ﻿using daq_api.Contracts;
 using Nancy;
+using Nancy.Security;
 
 namespace daq_api.Modules
 {
@@ -7,6 +8,8 @@ namespace daq_api.Modules
     {
         public SearchModule(IRepository repo)
         {
+            this.RequiresAuthentication();
+
             Get["/search/{facilityNumber}"] = _ =>
             {
                 var facilityNumber = _.facilityNumber.ToString();

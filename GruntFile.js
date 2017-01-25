@@ -121,7 +121,8 @@ module.exports = function (grunt) {
         },
         clean: {
             build: ['dist'],
-            deploy: ['deploy']
+            deploy: ['deploy'],
+            api: ['api/Content/**/*', '!api/Content/*.css']
         },
         compress: {
             main: {
@@ -160,6 +161,13 @@ module.exports = function (grunt) {
                 options: {
                     // You can also specify options to be used in all your tasks
                     profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js']
+                }
+            },
+            api: {
+                options: {
+                    // You can also specify options to be used in all your tasks
+                    profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js'],
+                    releaseDir: '../api/Content'
                 }
             },
             options: {
@@ -321,6 +329,15 @@ module.exports = function (grunt) {
                 src: ['dist/dojo/dojo.js'],
                 dest: 'dist/dojo/dojo.js'
             },
+            api: {
+                options: {
+                    compress: {
+                        drop_console: false // eslint-disable-line camelcase
+                    }
+                },
+                src: ['api/content/dojo/dojo.js'],
+                dest: 'api/content/dojo/dojo.js'
+            },
             prod: {
                 options: {
                     sourceMap: false
@@ -373,14 +390,13 @@ module.exports = function (grunt) {
         'sftp:prod'
     ]);
     grunt.registerTask('build-stage', [
+        'clean:api',
         'parallel:buildAssets',
-        'dojo:stage',
-        'uglify:stage',
-        'copy:main',
-        'processhtml:main'
+        'dojo:api',
+        'uglify:api'
     ]);
     grunt.registerTask('deploy-stage', [
-        'clean:deploy',
+        'clean:api',
         'compress:main',
         'sftp:stage',
         'sshexec:stage'

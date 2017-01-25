@@ -1,6 +1,4 @@
-﻿<!DOCTYPE html>
-<style>
-    @import "../font-awesome/css/font-awesome.min.css";
+﻿@import "font-awesome.min.css";
 
 * {
   box-sizing: border-box;
@@ -136,25 +134,3 @@ input {
   max-width: 20rem;
   width: 90%;
 }
-
-</style>
-<body class="align">
-<div class="site__container">
-    <h1 class="text--center">Welcome to the DAQ Mobile Framework</h1>
-    <div class="grid__container">
-        <form asp-controller="home" asp-action="login" method="post" class="form form--login">
-            <div class="form__field">
-                <label class="fa fa-user" for="login__username"><span class="hidden">Username</span></label>
-                <input id="login__username" type="text" class="form__input" placeholder="Username" required>
-            </div>
-            <div class="form__field">
-                <label class="fa fa-lock" for="login__password"><span class="hidden">Password</span></label>
-                <input id="login__password" type="password" class="form__input" placeholder="Password" required>
-            </div>
-            <div class="form__field">
-                <input type="submit" value="Sign In">
-            </div>
-        </form>
-    </div>
-</div>
-</body>a

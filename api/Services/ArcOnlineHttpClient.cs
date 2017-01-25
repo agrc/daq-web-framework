@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
+using daq_api.Contracts;
 using daq_api.Formatters;
 using daq_api.Models;
 
@@ -12,10 +13,13 @@ namespace daq_api.Services
     public class ArcOnlineHttpClient
     {
         private readonly HttpClient _client;
+        private const string TokenUrl = "https://www.arcgis.com/sharing/rest/generateToken";
+        private readonly IArcOnlineCredentials _credentials;
 
-        public ArcOnlineHttpClient()
+        public ArcOnlineHttpClient(IArcOnlineCredentials credentials)
         {
             _client = new HttpClient();
+            _credentials = credentials;
             Formatters = new List<MediaTypeFormatter>
             {
                 new PlainTextFormatter()
@@ -155,6 +159,37 @@ namespace daq_api.Services
                         Message = ex.Message
                     }
                 });
+            }
+        }
+
+        public async Task<string> GetToken()
+        {
+            using (var formContent = new MultipartFormDataContent())
+            {
+                try
+                {
+                    formContent.Add(new StringContent(_credentials.Username), "username");
+                    formContent.Add(new StringContent(_credentials.Password), "password");
+                    formContent.Add(new StringContent("localhost"), "referer");
+                    formContent.Add(new StringContent("gettoken"), "request");
+                    formContent.Add(new StringContent("json"), "f");
+                }
+                catch (ArgumentNullException)
+                {
+                    return null;
+                }
+
+                try
+                {
+                    var response = await _client.PostAsync(TokenUrl, formContent).ConfigureAwait(false);
+                    var tokenResponse = await response.Content.ReadAsAsync<TokenResponse>(Formatters).ConfigureAwait(false);
+
+                    return tokenResponse.Token;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
         }
     }

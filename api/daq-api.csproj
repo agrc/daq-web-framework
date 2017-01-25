@@ -48,6 +48,10 @@
       <HintPath>packages\Nancy.1.4.1\lib\net40\Nancy.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Nancy.Authentication.Forms, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Nancy.Authentication.Forms.1.4.1\lib\net40\Nancy.Authentication.Forms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Nancy.Hosting.Aspnet, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Nancy.Hosting.Aspnet.1.4.1\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
       <Private>True</Private>
@@ -84,13 +88,33 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
-    <Content Include="Views\home.html" />
+    <Content Include="Content\app\resources\App.css" />
+    <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\dijit\themes\claro\form\images\error.png" />
+    <Content Include="Content\dijit\themes\claro\images\dialogCloseIcon.png" />
+    <Content Include="Content\dijit\themes\claro\images\tooltip.png" />
+    <Content Include="Content\dojo\dojo.js" />
+    <Content Include="Content\dojo\resources\blank.gif" />
+    <Content Include="Content\esri\dijit\images\ajax-loader.gif" />
+    <Content Include="Content\esri\dijit\images\popup.png" />
+    <Content Include="Content\esri\geometry\geometryenginewebworker.js" />
+    <Content Include="Content\esri\images\map\logo-med.png" />
+    <Content Include="Content\esri\images\map\logo-sm.png" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\main.css" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="Views\index.html" />
+    <Content Include="Views\login.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Contracts\IArcOnlineCredentials.cs" />
+    <Compile Include="Contracts\IUserDatabase.cs" />
     <Compile Include="Formatters\PlainTextFormatter.cs" />
     <Compile Include="Models\AddAttachmentResult.cs" />
+    <Compile Include="Models\AgoCredentials.cs" />
     <Compile Include="Models\AttachmentGroup.cs" />
     <Compile Include="Models\AttachmentResponse.cs" />
     <Compile Include="Models\AttachmentInfo.cs" />
@@ -103,9 +127,12 @@
     <Compile Include="Models\RouteModels\RemoveAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadExternal.cs" />
+    <Compile Include="Models\RouteModels\User.cs" />
     <Compile Include="Models\Tokenizable.cs" />
+    <Compile Include="Models\TokenResponse.cs" />
     <Compile Include="Models\UploadResponse.cs" />
     <Compile Include="Modules\HomeModule.cs" />
+    <Compile Include="Modules\LoginModule.cs" />
     <Compile Include="Modules\SearchModule.cs" />
     <Compile Include="Modules\UploadModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -118,11 +145,21 @@
     <Compile Include="Contracts\IShareMappable.cs" />
     <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="Services\EdocsMockRepository.cs" />
+    <Compile Include="Services\UserDatabaseMock.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="connection.config" />
     <Content Include="connection.template.config" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\172.16.17.58.pubxml" />
     <Content Include="secrets.production.config" />
     <Content Include="secrets.staging.config" />
@@ -161,7 +198,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>49477</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/daq/api</IISUrl>
+          <IISUrl>http://localhost/daq</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -171,7 +208,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
