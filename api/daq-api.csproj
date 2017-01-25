@@ -88,6 +88,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="Content\app\resources\App.css" />
+    <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\dijit\themes\claro\form\images\error.png" />
+    <Content Include="Content\dijit\themes\claro\images\dialogCloseIcon.png" />
+    <Content Include="Content\dijit\themes\claro\images\tooltip.png" />
+    <Content Include="Content\dojo\dojo.js" />
+    <Content Include="Content\dojo\resources\blank.gif" />
+    <Content Include="Content\esri\dijit\images\ajax-loader.gif" />
+    <Content Include="Content\esri\dijit\images\popup.png" />
+    <Content Include="Content\esri\geometry\geometryenginewebworker.js" />
+    <Content Include="Content\esri\images\map\logo-med.png" />
+    <Content Include="Content\esri\images\map\logo-sm.png" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\main.css" />
@@ -144,6 +156,10 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\172.16.17.58.pubxml" />
     <Content Include="secrets.production.config" />
     <Content Include="secrets.staging.config" />
