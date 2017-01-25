@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars*/
 var profile = {
-    basePath: './src',
     action: 'release',
     cssOptimize: 'comments',
     mini: true,
