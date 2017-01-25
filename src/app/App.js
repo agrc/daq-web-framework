@@ -162,6 +162,14 @@ define([
                 }
             }).then(lang.hitch(this, function (result) {
                 this.map = result.map;
+                var layers = utils.getLayerList(result);
+
+                while (!layers.every(function waitUntilLoad(layer) {
+                    return layer.layer.loaded;
+                })) {
+                    // wait?
+                }
+
                 if (this.map.loaded === true) {
                     this.setupConnections();
 
