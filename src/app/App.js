@@ -29,7 +29,9 @@ define([
     'dstore/Filter',
     'dstore/RequestMemory',
 
-    'esri/arcgis/utils'
+    'esri/arcgis/OAuthInfo',
+    'esri/arcgis/utils',
+    'esri/IdentityManager'
 ], function (
     AiNumber,
     Attributes,
@@ -61,7 +63,9 @@ define([
     Filter,
     RequestMemory,
 
-    utils
+    OAuthInfo,
+    utils,
+    esriId
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // summary:
@@ -153,6 +157,12 @@ define([
             // summary:
             //      Sets up the map
             console.info('app.App::initMap', arguments);
+
+            var info = new OAuthInfo({
+                appId: config.appId
+            });
+
+            esriId.registerOAuthInfos([info]);
 
             utils.arcgisurl = config.urls.agol;
             utils.createMap(config.urls.webMap, 'map-div', {
