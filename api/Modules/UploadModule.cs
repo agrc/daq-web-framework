@@ -8,8 +8,10 @@ using daq_api.Contracts;
 using daq_api.Models;
 using daq_api.Models.RouteModels;
 using daq_api.Services;
+using MimeTypes;
 using Nancy;
 using Nancy.ModelBinding;
+using MimeTypes = Nancy.MimeTypes;
 
 namespace daq_api.Modules
 {
@@ -28,6 +30,9 @@ namespace daq_api.Modules
                 var edoc = repository.Get(model.Id);
                 var filename = Path.GetFileName(edoc.Path);
 
+                var extension = Path.GetExtension(filename);
+                var contentType = MimeTypeMap.GetMimeType(extension);
+
                 try
                 {
                     var token = await client.GetToken();
@@ -40,7 +45,7 @@ namespace daq_api.Modules
                         try
                         {
                             var streamContent = new StreamContent(document);
-                            streamContent.Headers.Add("Content-Type", "application/octet-stream");
+                            streamContent.Headers.Add("Content-Type", contentType);
                             streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", filename));
                             formContent.Add(streamContent, "file", filename);
                             formContent.Add(new StringContent("json"), "f");
@@ -120,6 +125,9 @@ namespace daq_api.Modules
                     });
                 }
 
+                var extension = Path.GetExtension(attachment.Name);
+                var contentType = MimeTypeMap.GetMimeType(extension);
+
                 using (var document = attachment.Value)
                 using (var formContent = new MultipartFormDataContent())
                 {
@@ -128,7 +136,7 @@ namespace daq_api.Modules
                         var token = await client.GetToken();
 
                         var streamContent = new StreamContent(document);
-                        streamContent.Headers.Add("Content-Type", "application/octet-stream");
+                        streamContent.Headers.Add("Content-Type", contentType);
                         streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", attachment.Name));
                         formContent.Add(streamContent, "file", attachment.Name);
                         formContent.Add(new StringContent("json"), "f");
