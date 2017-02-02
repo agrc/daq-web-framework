@@ -29,7 +29,6 @@ define([
     'dstore/Filter',
     'dstore/RequestMemory',
 
-    'esri/arcgis/OAuthInfo',
     'esri/arcgis/utils',
     'esri/IdentityManager'
 ], function (
@@ -63,7 +62,6 @@ define([
     Filter,
     RequestMemory,
 
-    OAuthInfo,
     utils,
     esriId
 ) {
@@ -80,6 +78,11 @@ define([
 
         // map: agrc.widgets.map.Basemap
         map: null,
+
+
+        // token: string
+        //      the oauth token for arcgis online
+        token: null,
 
         constructor: function () {
             // summary:
@@ -158,11 +161,15 @@ define([
             //      Sets up the map
             console.info('app.App::initMap', arguments);
 
-            var info = new OAuthInfo({
-                appId: config.appId
-            });
+            var token = {
+                token: this.token,
+                expires: 120000,
+                server: config.urls.agol,
+                userId: 'DAQ OAuth App',
+                ssl: false
+            };
 
-            esriId.registerOAuthInfos([info]);
+            esriId.registerToken(token);
 
             utils.arcgisurl = config.urls.agol;
             utils.createMap(config.urls.webMap, 'map-div', {

@@ -1,5 +1,5 @@
 define(['dojo/has'], function (has) {
-    var agol = 'http://utahdeq.maps.arcgis.com';
+    var agol = 'http://www.arcgis.com';
 
     var config = {
         appName: 'daq-web',
