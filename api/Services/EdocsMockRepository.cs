@@ -11,7 +11,7 @@ namespace daq_api.Services
         readonly List<EDocEntry> _items = new List<EDocEntry> {
             new EDocEntry {
                 Title = "Brigham Young University Dry Cleaner-Inspection Memo",
-                Path = "/wwwroot/test/test.pdf",
+                Path = "DAQ\\Agency Interest\\10701-10800\\10791 - Utah Refractories Corporation- Brick Manufacturing - Lehi Plant\\Compliance\\DAQ-2010-002306.pdf",
                 DocumentDate = DateTime.Now,
                 Branch = "DAQ Branch",
                 Name = "10791",
@@ -19,7 +19,7 @@ namespace daq_api.Services
             },
             new EDocEntry {
                 Title = "Test",
-                Path = "/wwwroot/test/test2.pdf",
+                Path = "DAQ\\Agency Interest\\10701-10800\\10791 - Utah Refractories Corporation- Brick Manufacturing - Lehi Plant\\Compliance\\DAQ-2010-002306.pdf",
                 DocumentDate = DateTime.Now,
                 Branch = "DAQ Branch",
                 Name = "10791",
@@ -27,7 +27,7 @@ namespace daq_api.Services
             },
             new EDocEntry {
                 Title = "Brigham Young University - Loses again",
-                Path = "/wwwroot/test/test.pdf",
+                Path = "DAQ\\Agency Interest\\10701-10800\\10791 - Utah Refractories Corporation- Brick Manufacturing - Lehi Plant\\Compliance\\DAQ-2010-002306.pdf",
                 DocumentDate = DateTime.Now,
                 Branch = "DAQ Branch",
                 Name = "2",
@@ -35,7 +35,7 @@ namespace daq_api.Services
             },
             new EDocEntry {
                 Title = "Brigham Young University - Go Utes",
-                Path = "/wwwroot/test/test2.pdf",
+                Path = "DAQ\\Agency Interest\\10701-10800\\10791 - Utah Refractories Corporation- Brick Manufacturing - Lehi Plant\\Compliance\\DAQ-2010-002306.pdf",
                 DocumentDate = DateTime.Now,
                 Branch = "DAQ Branch",
                 Name = "2",
