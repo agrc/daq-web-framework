@@ -114,6 +114,7 @@
     <Compile Include="Models\EDocEntry.cs" />
     <Compile Include="Models\EdocSearchResultContainer.cs" />
     <Compile Include="Models\Errorable.cs" />
+    <Compile Include="Models\OauthTokenResponse.cs" />
     <Compile Include="Models\RouteModels\RemoveAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadExternal.cs" />
