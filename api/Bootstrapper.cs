@@ -3,7 +3,6 @@ using daq_api.Contracts;
 using daq_api.Models;
 using daq_api.Services;
 using Nancy;
-using Nancy.Authentication.Forms;
 using Nancy.Bootstrapper;
 using Nancy.Conventions;
 using Nancy.Hosting.Aspnet;
@@ -53,25 +52,6 @@ namespace daq_api
             conventions.StaticContentsConventions.Add(
                 StaticContentConventionBuilder.AddDirectory("fonts", @"fonts")
                 );
-        }
-
-        protected override void RequestStartup(TinyIoCContainer requestContainer, IPipelines pipelines, NancyContext context)
-        {
-            var formsAuthConfiguration =
-                new FormsAuthenticationConfiguration
-                {
-                    RedirectUrl = "~/login",
-                    UserMapper = requestContainer.Resolve<IUserMapper>()
-                };
-
-            FormsAuthentication.Enable(pipelines, formsAuthConfiguration);
-        }
-
-        protected override void ConfigureRequestContainer(TinyIoCContainer container, NancyContext context)
-        {
-            base.ConfigureRequestContainer(container, context);
-
-            container.Register<IUserMapper, UserDatabase>();
         }
     }
 }

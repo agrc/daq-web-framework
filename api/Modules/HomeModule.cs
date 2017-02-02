@@ -1,15 +1,18 @@
-﻿using Nancy;
-using Nancy.Security;
+﻿using daq_api.Services;
+using Nancy;
 
 namespace daq_api.Modules
 {
     public class HomeModule : NancyModule
     {
-        public HomeModule()
+        public HomeModule(ArcOnlineHttpClient client)
         {
-            this.RequiresAuthentication();
+            Get["/", true] = async (_, ctx) =>
+            {
+                var token = await client.GetToken();
 
-            Get["/"] = _ => View["index"];
+                return View["index", token];
+            };
         }
     }
 }

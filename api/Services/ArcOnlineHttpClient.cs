@@ -13,7 +13,7 @@ namespace daq_api.Services
     public class ArcOnlineHttpClient
     {
         private readonly HttpClient _client;
-        private const string TokenUrl = "https://www.arcgis.com/sharing/rest/generateToken";
+        private const string TokenUrl = "https://www.arcgis.com/sharing/rest/oauth2/token/";
         private readonly IArcOnlineCredentials _credentials;
 
         public ArcOnlineHttpClient(IArcOnlineCredentials credentials)
@@ -168,10 +168,10 @@ namespace daq_api.Services
             {
                 try
                 {
-                    formContent.Add(new StringContent(_credentials.Username), "username");
-                    formContent.Add(new StringContent(_credentials.Password), "password");
-                    formContent.Add(new StringContent("localhost"), "referer");
-                    formContent.Add(new StringContent("gettoken"), "request");
+                    formContent.Add(new StringContent(_credentials.Username), "client_id");
+                    formContent.Add(new StringContent(_credentials.Password), "client_secret");
+                    formContent.Add(new StringContent("2000"), "expiration");
+                    formContent.Add(new StringContent("client_credentials"), "grant_type");
                     formContent.Add(new StringContent("json"), "f");
                 }
                 catch (ArgumentNullException)
@@ -182,9 +182,9 @@ namespace daq_api.Services
                 try
                 {
                     var response = await _client.PostAsync(TokenUrl, formContent).ConfigureAwait(false);
-                    var tokenResponse = await response.Content.ReadAsAsync<TokenResponse>(Formatters).ConfigureAwait(false);
+                    var tokenResponse = await response.Content.ReadAsAsync<OauthTokenResponse>(Formatters).ConfigureAwait(false);
 
-                    return tokenResponse.Token;
+                    return tokenResponse.Access_Token;
                 }
                 catch (Exception)
                 {

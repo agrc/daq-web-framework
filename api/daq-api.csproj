@@ -48,10 +48,6 @@
       <HintPath>packages\Nancy.1.4.1\lib\net40\Nancy.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Nancy.Authentication.Forms, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Nancy.Authentication.Forms.1.4.1\lib\net40\Nancy.Authentication.Forms.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Nancy.Hosting.Aspnet, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Nancy.Hosting.Aspnet.1.4.1\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
       <Private>True</Private>
@@ -100,18 +96,12 @@
     <Content Include="Content\esri\geometry\geometryenginewebworker.js" />
     <Content Include="Content\esri\images\map\logo-med.png" />
     <Content Include="Content\esri\images\map\logo-sm.png" />
-    <Content Include="Content\font-awesome.css" />
-    <Content Include="Content\font-awesome.min.css" />
-    <Content Include="Content\main.css" />
-    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Views\index.html" />
-    <Content Include="Views\login.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Contracts\IArcOnlineCredentials.cs" />
-    <Compile Include="Contracts\IUserDatabase.cs" />
     <Compile Include="Formatters\PlainTextFormatter.cs" />
     <Compile Include="Models\AddAttachmentResult.cs" />
     <Compile Include="Models\AgoCredentials.cs" />
@@ -124,6 +114,7 @@
     <Compile Include="Models\EDocEntry.cs" />
     <Compile Include="Models\EdocSearchResultContainer.cs" />
     <Compile Include="Models\Errorable.cs" />
+    <Compile Include="Models\OauthTokenResponse.cs" />
     <Compile Include="Models\RouteModels\RemoveAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadExternal.cs" />
@@ -132,7 +123,6 @@
     <Compile Include="Models\TokenResponse.cs" />
     <Compile Include="Models\UploadResponse.cs" />
     <Compile Include="Modules\HomeModule.cs" />
-    <Compile Include="Modules\LoginModule.cs" />
     <Compile Include="Modules\SearchModule.cs" />
     <Compile Include="Modules\UploadModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -145,17 +135,11 @@
     <Compile Include="Contracts\IShareMappable.cs" />
     <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="Services\EdocsMockRepository.cs" />
-    <Compile Include="Services\UserDatabaseMock.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="connection.config" />
     <Content Include="connection.template.config" />
-    <Content Include="fonts\fontawesome-webfont.woff2" />
-    <Content Include="fonts\fontawesome-webfont.woff" />
-    <Content Include="fonts\fontawesome-webfont.ttf" />
-    <Content Include="fonts\fontawesome-webfont.eot" />
-    <Content Include="fonts\FontAwesome.otf" />
     <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />

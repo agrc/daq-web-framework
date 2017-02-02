@@ -1,9 +1,9 @@
 define(['dojo/has'], function (has) {
-    var agol = 'http://utahdeq.maps.arcgis.com';
+    var agol = 'http://www.arcgis.com';
 
     var config = {
         appName: 'daq-web',
-        appId: 'Uri0b5yIFpHSFulo',
+        appId: 'Rngn0PfKFjvT2p26',
         version: '1.0.0',
         fields: {
             uniqueId: 'OBJECTID',
