@@ -4,7 +4,7 @@ define(['dojo/has'], function (has) {
     var config = {
         appName: 'daq-web',
         appId: 'Rngn0PfKFjvT2p26',
-        version: '1.1.0',
+        version: '1.1.1',
         fields: {
             uniqueId: 'OBJECTID',
             lock: 'AI_Number',
