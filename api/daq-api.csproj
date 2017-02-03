@@ -90,6 +90,13 @@
     <Content Include=".gitignore" />
     <Content Include="Content\app\resources\App.css" />
     <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\dgrid1\util\has-css3.js" />
+    <Content Include="Content\dgrid1\util\misc.js" />
+    <Content Include="Content\dgrid1\util\touch.js" />
+    <Content Include="Content\dgrid\util\has-css3.js" />
+    <Content Include="Content\dgrid\util\misc.js" />
+    <Content Include="Content\dgrid\util\mouse.js" />
+    <Content Include="Content\dgrid\util\touch.js" />
     <Content Include="Content\dijit\themes\claro\form\images\error.png" />
     <Content Include="Content\dijit\themes\claro\images\dialogCloseIcon.png" />
     <Content Include="Content\dijit\themes\claro\images\tooltip.png" />
