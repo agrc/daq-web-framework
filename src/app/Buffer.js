@@ -164,6 +164,20 @@ define([
                     topic.publish(config.topics.identify, props);
                 });
 
+                this.grid.on('.dgrid-content .dgrid-row:mouseover', lang.hitch(this, function (event) {
+                    var row = this.grid.row(event);
+                    var graphic = row.data.graphic;
+
+                    GraphicsController.highlight(graphic);
+                }));
+
+                this.grid.on('.dgrid-content .dgrid-row:mouseoUT', lang.hitch(this, function (event) {
+                    var row = this.grid.row(event);
+                    var graphic = row.data.graphic;
+
+                    GraphicsController.removeGraphic(graphic);
+                }));
+
                 this.grid.startup();
             }
         },
