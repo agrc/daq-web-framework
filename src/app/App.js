@@ -138,7 +138,8 @@ define([
 
             this.own(
                 topic.subscribe(config.topics.addAi, lang.hitch(this, 'onAiAdded')),
-                topic.subscribe(config.topics.identify, lang.hitch(this, 'showAttributes'))
+                topic.subscribe(config.topics.identify, lang.hitch(this, 'showAttributes')),
+                topic.subscribe(config.topics.toast, lang.hitch(this, 'toast'))
             );
         },
         startup: function () {

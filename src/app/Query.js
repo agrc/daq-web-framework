@@ -94,7 +94,8 @@ define([
                     }
                 },
                 function (err) {
-                    topic.publish(config.topics.toast, err);
+                    topic.publish(config.topics.toast, (err.details[0] || err || '') +
+                        ' Make sure the layer you are querying has an AI Number field.');
                 }
             );
         },
