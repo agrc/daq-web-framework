@@ -160,6 +160,10 @@ define([
             //      Sets up the map
             console.info('app.App::initMap', arguments);
 
+            if (!this.token) {
+                return this.toast('There was an issue logging in. Please try again later.');
+            }
+
             var token = {
                 token: this.token,
                 expires: 120000,
