@@ -14,6 +14,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
 
+    'esri/layers/FeatureLayer',
     'esri/tasks/query'
 ], function (
     config,
@@ -31,6 +32,7 @@ define([
     declare,
     lang,
 
+    FeatureLayer,
     Query
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
@@ -74,9 +76,10 @@ define([
             // summary:
             //      description
             // param or return
-            console.log('module.id:query', arguments);
+            console.log('app.Query:query', arguments);
 
-            var activeLayer = this.layers[this.layer.selectedIndex];
+            this.activeLayer = this.layers[this.layer.selectedIndex];
+            this.activeLayer.setSelectionSymbol(config.symbols.point);
 
             var query = new Query();
             query.where = lang.replace(this.cannedQueries[this.type.value], {
@@ -84,11 +87,10 @@ define([
             });
             query.outFields = ['SHAPE'];
 
-            activeLayer.queryFeatures(query).then(
-                function (featureSet) {
-                    if (featureSet) {
-                        GraphicsController.highlight(featureSet.features);
-                        MapController.zoom(featureSet.features);
+            this.activeLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW).then(
+                function (graphics) {
+                    if (graphics) {
+                        MapController.zoom(graphics);
                     }
                 },
                 function (err) {
@@ -105,6 +107,17 @@ define([
             if (evt.keyCode === keys.ENTER) {
                 this.query();
             }
+        },
+        destroy: function () {
+            // summary:
+            //      overload destroy to clear selections
+            console.log('app.Query:destroy', arguments);
+
+            if (this.activeLayer) {
+                this.activeLayer.clearSelection();
+            }
+
+            this.inherited(arguments);
         }
     });
 });

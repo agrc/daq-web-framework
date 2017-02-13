@@ -134,7 +134,6 @@ define([
             }, this);
 
             GraphicsController.graphicsLayer = this.map.graphics;
-            this.map.graphics.on('click', lang.hitch(GraphicsController, 'removeGraphic'));
             MapController.initialize(this.map);
 
             this.own(

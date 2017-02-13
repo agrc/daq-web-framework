@@ -1,4 +1,11 @@
-define(['dojo/has'], function (has) {
+define([
+    'esri/symbols/SimpleMarkerSymbol',
+
+    'dojo/has'
+], function (
+        SimpleMarkerSymbol,
+        has
+) {
     var agol = 'http://www.arcgis.com';
 
     var config = {
@@ -26,7 +33,21 @@ define(['dojo/has'], function (has) {
             agolHome: agol
         },
         symbols: {
-            point: {},
+            point: new SimpleMarkerSymbol({
+                color: [177, 13, 201, 200], // eslint-disable-line no-magic-numbers
+                size: 7.5,
+                angle: 0,
+                xoffset: 0,
+                yoffset: 0,
+                type: 'esriSMS',
+                style: 'esriSMSCircle',
+                outline: {
+                    color: [0, 31, 63, 255], // eslint-disable-line no-magic-numbers
+                    width: 0.5,
+                    type: 'esriSLS',
+                    style: 'esriSLSSolid'
+                }
+            }),
             line: {},
             poly: {}
         }
