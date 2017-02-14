@@ -1,10 +1,13 @@
 define([
-    'esri/symbols/SimpleMarkerSymbol',
+    'dojo/has',
 
-    'dojo/has'
+    'esri/symbols/SimpleFillSymbol',
+    'esri/symbols/SimpleMarkerSymbol'
 ], function (
-        SimpleMarkerSymbol,
-        has
+    has,
+
+    SimpleFillSymbol,
+    SimpleMarkerSymbol
 ) {
     var agol = 'http://www.arcgis.com';
 
@@ -34,7 +37,7 @@ define([
         },
         symbols: {
             point: new SimpleMarkerSymbol({
-                color: [177, 13, 201, 200], // eslint-disable-line no-magic-numbers
+                color: [1, 255, 12, 200], // eslint-disable-line no-magic-numbers
                 size: 7.5,
                 angle: 0,
                 xoffset: 0,
@@ -49,12 +52,26 @@ define([
                 }
             }),
             line: {},
-            poly: {}
+            poly: new SimpleFillSymbol({
+                color: [240, 28, 190, 200], // eslint-disable-line no-magic-numbers
+                outline: {
+                    color: [0, 31, 63, 255], // eslint-disable-line no-magic-numbers
+                    width: 0.5,
+                    type: 'esriSLS',
+                    style: 'esriSLSSolid'
+                },
+                type: 'esriSFS',
+                style: 'esriSFSSolid'
+            })
         }
     };
 
     if (has('agrc-build') === 'prod' || has('agrc-build') === 'stage') {
         config.urls.webapi = '/daq';
+        config.apiKey = 'AGRC-AC122FA9671436';
+    } else {
+        // localhost
+        config.apiKey = 'AGRC-E5B94F99865799';
     }
 
     return config;
