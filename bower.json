@@ -7,7 +7,8 @@
     "esri": "arcgis-js-api#3.19.0",
     "jasmine-favicon-reporter": "*",
     "stubmodule": "^0.6",
-    "jasmine-jsreporter": "^0.1.2"
+    "jasmine-jsreporter": "^0.1.2",
+    "agrc": "agrc-widgets#^5.0.2"
   },
   "resolutions": {
     "dojo": "v1.11.2/esri-3.19.0",

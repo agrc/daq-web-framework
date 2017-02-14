@@ -1,4 +1,6 @@
 define([
+    'agrc/widgets/locate/TRSsearch',
+
     'app/AiNumber',
     'app/Attributes',
     'app/Buffer',
@@ -32,6 +34,8 @@ define([
     'esri/arcgis/utils',
     'esri/IdentityManager'
 ], function (
+    TRSsearch,
+
     AiNumber,
     Attributes,
     Buffer,
@@ -104,7 +108,7 @@ define([
 
             this.initMap();
 
-            GraphicsController.initialize(config);
+            GraphicsController.initialize(config, config.symbols);
 
             this.inherited(arguments);
         },
@@ -589,6 +593,11 @@ define([
                             return field.name === config.fields.lock;
                         });
                     })
+                }).placeAt(this.toolboxcontainer, 'after');
+            } else if ([evt.target.id, evt.target.parentElement.id].indexOf('trs') > -1) {
+                this.activeTool = new TRSsearch({
+                    map: this.map,
+                    apiKey: config.apiKey
                 }).placeAt(this.toolboxcontainer, 'after');
             } else {
                 return;

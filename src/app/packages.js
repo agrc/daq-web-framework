@@ -1,6 +1,7 @@
 require({
     packages: [
         'app',
+        'agrc',
         'dgauges',
         'dgrid',
         'dgrid1',

@@ -43,6 +43,19 @@ var profile = {
                 return /\.js$/.test(filename);
             }
         }
+    }, {
+        name: 'agrc',
+        location: 'agrc',
+        main: 'agrc',
+        trees: [
+          // don't bother with anything but TRS... spin.js :X
+          ['.', '.', /(\/\.)|(~$)|(map|MagicZoom|FindAddress|FindRouteMilePost|ZoomToCoords|layer|_SpecRunner.html)/]
+        ],
+        resourceTags: {
+            amd: function (filename, mid) {
+                return /\.js$/.test(filename);
+            }
+        }
     }],
     staticHasFeatures: {
         'dojo-trace-api': 0,
@@ -81,6 +94,6 @@ var profile = {
         'xstyle/css': 'xstyle/build/amd-css'
     },
     userConfig: {
-        packages: ['app', 'dijit', 'dojox', 'esri']
+        packages: ['app', 'agrc', 'dijit', 'dojox', 'esri']
     }
 };
