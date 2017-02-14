@@ -32,6 +32,7 @@ define([
     'dstore/RequestMemory',
 
     'esri/arcgis/utils',
+    'esri/dijit/LayerList',
     'esri/IdentityManager'
 ], function (
     TRSsearch,
@@ -67,6 +68,7 @@ define([
     RequestMemory,
 
     utils,
+    LayerList,
     esriId
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
@@ -187,9 +189,9 @@ define([
                 }
             }).then(lang.hitch(this, function (result) {
                 this.map = result.map;
-                var layers = utils.getLayerList(result);
+                this.layers = utils.getLayerList(result);
 
-                while (!layers.every(function waitUntilLoad(layer) {
+                while (!this.layers.every(function waitUntilLoad(layer) {
                     return layer.layer.loaded;
                 })) {
                     // wait?
@@ -598,6 +600,11 @@ define([
                 this.activeTool = new TRSsearch({
                     map: this.map,
                     apiKey: config.apiKey
+                }).placeAt(this.toolboxcontainer, 'after');
+            } else if ([evt.target.id, evt.target.parentElement.id].indexOf('layers') > -1) {
+                this.activeTool = new LayerList({
+                    map: this.map,
+                    layers: this.layers
                 }).placeAt(this.toolboxcontainer, 'after');
             } else {
                 return;
