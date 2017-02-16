@@ -33,7 +33,12 @@ define([
 
     'esri/arcgis/utils',
     'esri/dijit/LayerList',
-    'esri/IdentityManager'
+    'esri/IdentityManager',
+
+    'jquery',
+
+
+    'bootstrap'
 ], function (
     TRSsearch,
 
@@ -69,7 +74,9 @@ define([
 
     utils,
     LayerList,
-    esriId
+    esriId,
+
+    $
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // summary:
@@ -141,8 +148,15 @@ define([
 
             GraphicsController.graphicsLayer = this.map.graphics;
             MapController.initialize(this.map);
+            $('a[data-toggle="tab"]').on('shown.bs.tab', lang.hitch(this, function (e) {
+                if (e.target === this.edocsTab) {
+                    this.grid.startup();
+                }
+            }));
 
             this.own(
+                on(this.closeWindow, 'click', lang.hitch(this, 'close', this.infowindow)),
+                on(this.closeTool, 'click', lang.hitch(this, 'close', this.toolbox)),
                 topic.subscribe(config.topics.addAi, lang.hitch(this, 'onAiAdded')),
                 topic.subscribe(config.topics.identify, lang.hitch(this, 'showAttributes')),
                 topic.subscribe(config.topics.toast, lang.hitch(this, 'toast'))
@@ -234,7 +248,7 @@ define([
             if (!attributes[config.fields.lock] || !attributes[config.fields.lock].trim()) {
                 console.debug('lock field is empty. showing add lock data');
 
-                this.ai = new AiNumber(props).placeAt(this.gridcontent, 'before');
+                this.ai = new AiNumber(props).placeAt(this.infocontent, 'after');
 
                 this.ai.startup();
 
@@ -244,13 +258,11 @@ define([
             props.aiNumber = attributes[config.fields.lock];
             this.initGrid(props);
         },
-        close: function (evt) {
+        close: function (parent) {
             // summary:
             //      hides things
             // param or return
             console.log('app.App:close', arguments);
-
-            var parent = evt.target.parentElement.parentElement;
 
             domClass.add(parent, 'hide');
 
@@ -403,8 +415,6 @@ define([
             this.grid.on('dgrid-error', lang.hitch(this, 'toast'));
             this.grid.on('dgrid-error', lang.hitch(this.grid, 'destroy'));
             this.grid.set('collection', this.store);
-
-            this.grid.startup();
         },
         filterGrid: function (evt) {
             var filter = new Filter();

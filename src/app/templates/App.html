@@ -11,27 +11,35 @@
     </div>
   </nav>
   <div data-dojo-attach-point="infowindow" class="bg-panel stretched below-banner hide">
-    <div data-dojo-attach-point="attributepanel" class="panel panel-info" style="flex:none">
-      <button type="button" class="close" data-dojo-attach-event="click:close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <div class="panel-heading">Item Information</div>
-      <div class="panel-body strict-height scrollable" data-dojo-attach-point="infocontent"></div>
-    </div>
-    <div data-dojo-attach-point="gridcontent"></div>
-    <div class="panel-footer text-center" style="flex:none">
-      <button class="btn btn-primary" data-dojo-attach-event='click:close'>close</button>
+    <div data-dojo-attach-point="attributepanel" class="panel panel-info" style="display:flex;flex-direction:column">
+      <div class="panel-heading">Item Information
+        <button type="button" class="close" data-dojo-attach-point="closeWindow" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <ul id="attribute-tabs" class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#attributes" aria-controls="attributes" role="tab" data-toggle="tab">Feature Information</a></li>
+        <li role="presentation"><a data-dojo-attach-point="edocsTab" href="#edocs" aria-controls="edocs" role="tab" data-toggle="tab">EDoc Items</a></li>
+      </ul>
+      <div class="tab-content scrollable">
+       <div role="tabpanel" class="tab-pane active" id="attributes">
+          <div class="panel-body scrollable" data-dojo-attach-point="infocontent"></div>
+          </div>
+       <div role="tabpanel" class="tab-pane" id="edocs">
+          <div data-dojo-attach-point="gridcontent"></div>
+       </div>
+      </div>
     </div>
   </div>
   <div id="map-div" class="below-banner stretched"></div>
   <div class="toolbar-items see-through">
-      <button class="btn btn-primary" id="query" data-dojo-attach-event="click:activateTool"><i class="esri-icon-search"></i></button>
-      <button class="btn btn-primary" id="layers" data-dojo-attach-event="click:activateTool"><i class="esri-icon-layer-list"></i></button>
-      <button class="btn btn-primary" id="buffer" data-dojo-attach-event="click:activateTool"><i class="esri-icon-map-pin"></i></button>
-      <button class="btn btn-primary" id="trs" data-dojo-attach-event="click:activateTool"><i class="esri-icon-checkbox-unchecked"></i></button>
+    <button class="btn btn-primary" id="query" data-dojo-attach-event="click:activateTool"><i class="esri-icon-search"></i></button>
+    <button class="btn btn-primary" id="layers" data-dojo-attach-event="click:activateTool"><i class="esri-icon-layer-list"></i></button>
+    <button class="btn btn-primary" id="buffer" data-dojo-attach-event="click:activateTool"><i class="esri-icon-map-pin"></i></button>
+    <button class="btn btn-primary" id="trs" data-dojo-attach-event="click:activateTool"><i class="esri-icon-checkbox-unchecked"></i></button>
   </div>
   <div class="selected-tool-container panel panel-primary see-through" data-dojo-attach-point="toolbox">
-    <button type="button" class="close" data-dojo-attach-event="click:close" aria-label="Close">
+    <button type="button" class="close" data-dojo-attach-point="closeTool" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
     <div class="panel-heading">Tool container</div>
