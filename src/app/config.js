@@ -18,7 +18,7 @@ define([
         fields: {
             uniqueId: 'OBJECTID',
             lock: 'AI_Number',
-            queryOne: 'Comp_Name'
+            queryOne: 'CO_NAME'
         },
         topics: {
             addAi: '1',
@@ -31,7 +31,7 @@ define([
         },
         urls: {
             webapi: 'http://localhost/daq',
-            webMap: '6ad68af1ab6349579cc0af364b49dccd',
+            webMap: '54525aa512544213adf194303769b643',
             agol: agol + '/sharing',
             agolHome: agol
         },
