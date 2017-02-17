@@ -149,7 +149,8 @@ define([
             GraphicsController.graphicsLayer = this.map.graphics;
             MapController.initialize(this.map);
             $('a[data-toggle="tab"]').on('shown.bs.tab', lang.hitch(this, function (e) {
-                if (e.target === this.edocsTab) {
+                if (e.target === this.edocsTab && !this.grid) {
+                    this.initGrid();
                     this.grid.startup();
                 }
             }));
@@ -256,7 +257,7 @@ define([
             }
 
             props.aiNumber = attributes[config.fields.lock];
-            this.initGrid(props);
+            this.setupGridStore(props);
         },
         close: function (parent) {
             // summary:
@@ -272,9 +273,13 @@ define([
                 }
                 if (this.grid) {
                     this.grid.destroy();
-                    this.gridcontent = domConstruct.create('div', {}, this.attributepanel, 'after');
+                    var gridParent = document.getElementById('edocs');
+                    this.gridcontent = domConstruct.create('div', {}, gridParent, 'after');
+                    this.grid = null;
                 }
                 this.infocontent.innerHTML = '';
+
+                $('#attribute-tabs a:first').tab('show');
             } else if (parent === this.toolbox) {
                 if (this.activeTool) {
                     this.activeTool.destroy();
@@ -282,9 +287,25 @@ define([
                 }
             }
         },
-        initGrid: function (props) {
+        setupGridStore: function (props) {
             // summary:
             //      setup the dgrid
+            console.log('app.App:setupGridStore', arguments);
+
+            this.store = new RequestMemory({
+                target: config.urls.webapi + '/search/' +
+                            props.aiNumber,
+                useRangeHeaders: false,
+                headers: {
+                    'X-Requested-With': null,
+                    'Content-Type': 'text/plain'
+                }
+            });
+        },
+        initGrid: function () {
+            // summary:
+            //      setup the grid after the tab is focused
+            // undefined
             console.log('app.App:initGrid', arguments);
 
             var container = document.createElement('div');
@@ -397,21 +418,11 @@ define([
 
             this.grid.footerNode.appendChild(form);
 
-            this.store = new RequestMemory({
-                target: config.urls.webapi + '/search/' +
-                            props.aiNumber,
-                useRangeHeaders: false,
-                headers: {
-                    'X-Requested-With': null,
-                    'Content-Type': 'text/plain'
-                }
-            });
-
             aspect.before(this.grid, 'destroy', function () {
                 input.removeEventListener('input', this.filterGrid);
             }.bind(this));
 
-            this.grid.on('click', lang.hitch(this, 'onGridClick', props));
+            // this.grid.on('click', lang.hitch(this, 'onGridClick', props));
             this.grid.on('dgrid-error', lang.hitch(this, 'toast'));
             this.grid.on('dgrid-error', lang.hitch(this.grid, 'destroy'));
             this.grid.set('collection', this.store);
@@ -574,7 +585,7 @@ define([
             //
             console.log('app.app:onAiAdded', arguments);
 
-            this.initGrid(props);
+            this.setupGridStore(props);
             this.map.getLayer(this.map.graphicsLayerIds[props.layerId]).refresh();
         },
         activateTool: function (evt) {
