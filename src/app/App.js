@@ -274,7 +274,7 @@ define([
                 if (this.grid) {
                     this.grid.destroy();
                     var gridParent = document.getElementById('edocs');
-                    this.gridcontent = domConstruct.create('div', {}, gridParent, 'after');
+                    this.gridcontent = domConstruct.create('div', {}, gridParent, 'first');
                     this.grid = null;
                 }
                 this.infocontent.innerHTML = '';
@@ -376,7 +376,7 @@ define([
 
             var ComposedGrid = declare([Grid, SingleQuery]);
             this.grid = new ComposedGrid({
-                class: 'dgrid-main',
+                class: 'dgrid-main full-height',
                 loadingMessage: 'Loading data...',
                 noDataMessage: 'No results found.',
                 showFooter: true,

@@ -11,7 +11,7 @@
     </div>
   </nav>
   <div data-dojo-attach-point="infowindow" class="bg-panel stretched below-banner hide">
-    <div data-dojo-attach-point="attributepanel" class="panel panel-info" style="display:flex;flex-direction:column">
+    <div data-dojo-attach-point="attributepanel" class="panel panel-info full-height">
       <div class="panel-heading">Item Information
         <button type="button" class="close" data-dojo-attach-point="closeWindow" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -21,11 +21,11 @@
         <li role="presentation" class="active"><a href="#attributes" aria-controls="attributes" role="tab" data-toggle="tab">Feature Information</a></li>
         <li role="presentation"><a data-dojo-attach-point="edocsTab" href="#edocs" aria-controls="edocs" role="tab" data-toggle="tab">EDoc Items</a></li>
       </ul>
-      <div class="tab-content scrollable">
+      <div class="tab-content stretched scrollable below-tabs">
         <div role="tabpanel" class="tab-pane active" id="attributes">
           <div class="panel-body" data-dojo-attach-point="infocontent"></div>
-          </div>
-        <div role="tabpanel" class="tab-pane" id="edocs">
+        </div>
+        <div role="tabpanel" class="tab-pane full-height" id="edocs">
           <div data-dojo-attach-point="gridcontent"></div>
         </div>
       </div>
