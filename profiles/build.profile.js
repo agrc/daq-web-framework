@@ -22,9 +22,9 @@ var profile = {
                 'dojox/gfx/shape',
                 'esri/layers/ArcGISDynamicMapServiceLayer',
                 'esri/layers/LayerDrawingOptions',
-                'esri/layers/VectorTileLayerImpl'
+                'esri/layers/VectorTileLayerImpl',
+                'esri/layers/WebTiledLayer'
             ],
-            targetStylesheet: 'app/resources/App.css',
             includeLocales: ['en-us'],
             customBase: true,
             boot: true
@@ -90,10 +90,7 @@ var profile = {
         'host-browser': 1,
         'extend-dojo': 1
     },
-    plugins: {
-        'xstyle/css': 'xstyle/build/amd-css'
-    },
     userConfig: {
-        packages: ['app', 'agrc', 'dijit', 'dojox', 'esri']
+        packages: ['app', 'agrc', 'dijit', 'dojox', 'esri', 'dgrid1']
     }
 };
