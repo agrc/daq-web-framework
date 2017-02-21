@@ -14,7 +14,7 @@ define([
     var config = {
         appName: 'daq-web',
         appId: 'Rngn0PfKFjvT2p26',
-        version: '1.2.0',
+        version: '1.3.0',
         fields: {
             uniqueId: 'OBJECTID',
             lock: 'AI_Number',
