@@ -1,34 +1,3 @@
-var osx = 'OS X 10.10';
-var windows = 'Windows 8.1';
-var browsers = [{
-    // OSX
-    browserName: 'safari',
-    platform: osx
-}, {
-    // Windows
-    browserName: 'firefox',
-    platform: windows
-}, {
-    browserName: 'chrome',
-    platform: windows,
-    version: 'latest'
-}, {
-    browserName: 'microsoftedge',
-    platform: 'Windows 10'
-}, {
-    browserName: 'internet explorer',
-    platform: windows,
-    version: '11'
-}, {
-    browserName: 'internet explorer',
-    platform: 'Windows 8',
-    version: '10'
-}, {
-    browserName: 'internet explorer',
-    platform: 'Windows 7',
-    version: '9'
-}];
-
 module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
 
@@ -68,47 +37,6 @@ module.exports = function (grunt) {
         '!stubmodule/**',
         '!util/**'
     ];
-    var deployDir = 'DAQ';
-    var secrets;
-    var sauceConfig = {
-        urls: ['http://127.0.0.1:8000/_SpecRunner.html?catch=false'],
-        tunnelTimeout: 120,
-        build: process.env.TRAVIS_JOB_ID,
-        browsers: browsers,
-        testname: 'atlas',
-        maxRetries: 10,
-        maxPollRetries: 10,
-        public: 'public',
-        throttled: 5,
-        sauceConfig: {
-            'max-duration': 1800
-        },
-        statusCheckAttempts: 500
-    };
-    try {
-        secrets = grunt.file.readJSON('secrets.json');
-        sauceConfig.username = secrets.sauce_name;
-        sauceConfig.key = secrets.sauce_key;
-    } catch (e) {
-        // swallow for build server
-
-        // still print a message so you can catch bad syntax in the secrets file.
-        grunt.log.write(e);
-
-        secrets = {
-            stage: {
-                host: '',
-                username: '',
-                password: ''
-            },
-            prod: {
-                host: '',
-                username: '',
-                password: ''
-            }
-        };
-    }
-
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -239,62 +167,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        'saucelabs-jasmine': {
-            all: {
-                options: sauceConfig
-            }
-        },
-        secrets: secrets,
-        sftp: {
-            stage: {
-                files: {
-                    './': 'deploy/deploy.zip'
-                },
-                options: {
-                    host: '<%= secrets.stage.host %>',
-                    username: '<%= secrets.stage.username %>',
-                    password: '<%= secrets.stage.password %>'
-                }
-            },
-            prod: {
-                files: {
-                    './': 'deploy/deploy.zip'
-                },
-                options: {
-                    host: '<%= secrets.prod.host %>',
-                    username: '<%= secrets.prod.username %>',
-                    password: '<%= secrets.prod.password %>',
-                    path: './upload/' + deployDir
-                }
-            },
-            options: {
-                createDirectories: true,
-                path: './wwwroot/' + deployDir + '/',
-                srcBasePath: 'deploy/',
-                showProgress: true
-            }
-        },
-        sshexec: {
-            options: {
-
-            },
-            stage: {
-                command: ['cd wwwroot/' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.stage.host %>',
-                    username: '<%= secrets.stage.username %>',
-                    password: '<%= secrets.stage.password %>'
-                }
-            },
-            prod: {
-                command: ['cd wwwroot/' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.prod.host %>',
-                    username: '<%= secrets.prod.username %>',
-                    password: '<%= secrets.prod.password %>'
-                }
-            }
-        },
         stylus: {
             main: {
                 options: {
@@ -350,12 +222,6 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        verbosity: {
-            main: {
-                options: { mode: 'normal' },
-                tasks: ['saucelabs-jasmine']
-            }
-        },
         watch: {
             eslint: {
                 files: jsFiles,
@@ -386,8 +252,7 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('deploy-prod', [
         'clean:deploy',
-        'compress:main',
-        'sftp:prod'
+        'compress:main'
     ]);
     grunt.registerTask('build-stage', [
         'clean:api',
@@ -397,9 +262,7 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('deploy-stage', [
         'clean:api',
-        'compress:main',
-        'sftp:stage',
-        'sshexec:stage'
+        'compress:main'
     ]);
     grunt.registerTask('sauce', [
         'jasmine:main:build',
@@ -409,7 +272,6 @@ module.exports = function (grunt) {
     grunt.registerTask('travis', [
         'verbosity:main',
         'eslint:main',
-        'sauce',
         'build-stage'
     ]);
 };
