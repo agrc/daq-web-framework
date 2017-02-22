@@ -276,7 +276,7 @@ define([
                 return;
             }
 
-            if (!attributes[config.fields.lock] || !attributes[config.fields.lock].trim()) {
+            if (!attributes[config.fields.lock]) {
                 console.debug('lock field is empty. showing add lock data');
 
                 var aiProps = lang.clone(props);
