@@ -84,6 +84,7 @@ define([
                         attributes: attributes
                     }]),
                     rollbackOnFailure: true,
+                    token: this.token,
                     f: 'json'
                 }
             }).then(lang.hitch(this, function (data) {
