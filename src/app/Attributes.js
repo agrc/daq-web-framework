@@ -21,7 +21,7 @@ define([
         columns: 12,
         breakpoints: {
             0: 4,
-            1: 12,
+            1: 4,
             2: 6,
             3: 4,
             4: 3,
@@ -38,22 +38,25 @@ define([
         // Properties to be sent into constructor
         attributes: null,
 
+        aliases: null,
+
+
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             console.log('app.Attributes::postCreate', arguments);
 
             this.inherited(arguments);
-            this.ignoreAttributes.forEach(function (key) {
-                delete this.attributes[key];
-            }, this);
+            // this.ignoreAttributes.forEach(function (key) {
+            //     delete this.attributes[key];
+            // }, this);
 
             var columnSize = 12;
-            var length = Object.keys(this.attributes).length;
+            var length = Object.keys(this.aliases).length;
             var size = this.breakpoints[length % columnSize];
 
             var row;
-            Object.keys(this.attributes).forEach(function (key, i) {
+            this.aliases.forEach(function (item, i) {
                 if (i * size % this.columns === 0) {
                     row = domConstruct.create('div', {
                         className: 'row'
@@ -64,9 +67,9 @@ define([
                 }, row);
 
                 var heading = domConstruct.create('label', {}, cell, 'first');
-                heading.innerHTML = key;
+                heading.innerHTML = item.alias;
 
-                if (!this.attributes[key]) {
+                if (!this.attributes[item.field]) {
                     domConstruct.create('div', {
                         className: 'text-danger glyphicon glyphicon-minus',
                         style: 'display:block'
@@ -78,7 +81,7 @@ define([
                     className: 'text-muted'
                 }, heading, 'after');
 
-                p.innerHTML = this.attributes[key];
+                p.innerHTML = this.attributes[item.field];
             }, this);
         }
     });

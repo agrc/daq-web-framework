@@ -92,7 +92,6 @@ define([
         // map: agrc.widgets.map.Basemap
         map: null,
 
-
         // token: string
         //      the oauth token for arcgis online
         token: null,
@@ -145,6 +144,8 @@ define([
                     });
                 }
             }, this);
+
+            this._applyAliasProperty(this.aliasLookup);
 
             GraphicsController.graphicsLayer = this.map.graphics;
             MapController.initialize(this.map);
@@ -206,6 +207,28 @@ define([
                 this.map = result.map;
                 this.layers = utils.getLayerList(result);
 
+                this.aliasLookup = {};
+                var operationalLayers = result.itemInfo.itemData.operationalLayers;
+                operationalLayers.forEach(function buildAliasLookup(layer) {
+                    if (!layer.popupInfo) {
+                        return;
+                    }
+
+                    var visibleFields = layer.popupInfo.fieldInfos.filter(function keepVisible(item) {
+                        return item.visible;
+                    });
+
+                    this.aliasLookup[layer.id] = visibleFields.map(function reduceProp(prop) {
+                        var lookup = {};
+                        lookup[prop.fieldName] = prop.label;
+
+                        return {
+                            field: prop.fieldName,
+                            alias: prop.label
+                        };
+                    });
+                }, this);
+
                 while (!this.layers.every(function waitUntilLoad(layer) {
                     return layer.layer.loaded;
                 })) {
@@ -238,6 +261,7 @@ define([
 
             var attributes = props.graphic.attributes;
             props = {
+                aliases: props.graphic._layer.aliases || null, // eslint-disable-line
                 attributes: attributes,
                 layerId: props.layerId,
                 url: props.url
@@ -686,6 +710,17 @@ define([
 
                 this.toast(error);
             }));
+        },
+        _applyAliasProperty: function (lookup) {
+            // summary:
+            //      add an alias property to the layer for easier access
+            // none
+            console.log('app/App::_applyAliasProperty', arguments);
+
+            Object.keys(lookup).forEach(function applyAlias(id) {
+                var layer = this.map.getLayer(id);
+                layer.aliases = lookup[id];
+            }, this);
         }
     });
 });
