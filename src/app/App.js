@@ -270,6 +270,12 @@ define([
 
             this.attributes.startup();
 
+            if (Object.keys(attributes).indexOf(config.fields.lock) === -1) {
+                console.debug('layer does not have AI number. do not show ai widget.');
+
+                return;
+            }
+
             if (!attributes[config.fields.lock] || !attributes[config.fields.lock].trim()) {
                 console.debug('lock field is empty. showing add lock data');
 
