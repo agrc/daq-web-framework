@@ -34,6 +34,8 @@ define([
         url: '',
 
         // Properties to be sent into constructor
+        token: null,
+
         constructor: function (props) {
             // summary:
             //      constructor
@@ -96,11 +98,11 @@ define([
                     }
                 } else {
                     domAttr.remove(this.submit, 'disabled');
-                    topic.pubish(config.topics.toast, data.error);
+                    topic.publish(config.topics.toast, data.error);
                 }
             }), function (err) {
                 domAttr.remove(this.submit, 'disabled');
-                topic.pubish(config.topics.toast, err);
+                topic.publish(config.topics.toast, err);
             });
         },
         validate: function () {
