@@ -52,7 +52,12 @@ define([
             // }, this);
 
             var columnSize = 12;
-            var length = Object.keys(this.aliases).length;
+            if (!this.aliases) {
+                console.debug('no aliases defined. not showing any attributes');
+
+                return;
+            }
+            var length = this.aliases.length;
             var size = this.breakpoints[length % columnSize];
 
             var row;
