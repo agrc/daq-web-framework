@@ -18,7 +18,8 @@ define([
         fields: {
             uniqueId: 'OBJECTID',
             lock: 'AI_Number',
-            queryOne: 'CO_NAME'
+            queryOne: 'CO_NAME',
+            facilityId: 'facility_i'
         },
         topics: {
             addAi: '1',

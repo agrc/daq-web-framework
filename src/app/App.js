@@ -276,6 +276,8 @@ define([
                 return;
             }
 
+            this.identifyProps = props;
+
             if (!attributes[config.fields.lock]) {
                 console.debug('lock field is empty. showing add lock data');
 
@@ -284,6 +286,8 @@ define([
                 this.ai = new AiNumber(aiProps).placeAt(this.infocontent, 'after');
 
                 this.ai.startup();
+
+                this.identifyProps = aiProps;
 
                 return;
             }
@@ -454,7 +458,7 @@ define([
                 input.removeEventListener('input', this.filterGrid);
             }.bind(this));
 
-            // this.grid.on('click', lang.hitch(this, 'onGridClick', props));
+            this.grid.on('click', lang.hitch(this, 'onGridClick', this.identifyProps));
             this.grid.on('dgrid-error', lang.hitch(this, 'toast'));
             this.grid.on('dgrid-error', lang.hitch(this.grid, 'destroy'));
             this.grid.set('collection', this.store);
@@ -513,13 +517,18 @@ define([
                 overwrite: true
             });
 
-            var data = lang.replace('id={edocId}&featureId={featureId}&uploadId={uploadId}&serviceUrl={url}', {
+            var queryString = 'id={edocId}&' +
+                              'facilityId={facilityId}&' +
+                              'featureId={featureId}&' +
+                              'uploadId={uploadId}&' +
+                              'serviceUrl={url}';
+
+            var data = lang.replace(queryString, {
                 edocId: row.id,
                 featureId: props.attributes[config.fields.uniqueId],
                 uploadId: row.uploadId,
-                facilityId: row.name,
-                url: props.url,
-                token: ''
+                facilityId: props.attributes[config.fields.facilityId],
+                url: props.url
             });
 
             xhr(config.urls.webapi + '/upload', {

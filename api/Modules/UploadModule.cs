@@ -33,6 +33,8 @@ namespace daq_api.Modules
                 var extension = Path.GetExtension(filename);
                 var contentType = MimeTypeMap.GetMimeType(extension);
 
+                filename = FileRenamer.Rename(model, edoc, extension);
+
                 try
                 {
                     var token = await client.GetToken();
@@ -49,7 +51,7 @@ namespace daq_api.Modules
                             streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", filename));
                             formContent.Add(streamContent, "file", filename);
                             formContent.Add(new StringContent("json"), "f");
-                             formContent.Add(new StringContent(token), "token");
+                            formContent.Add(new StringContent(token), "token");
                         }
                         catch (ArgumentNullException)
                         {
