@@ -1,5 +1,6 @@
 define([
     'agrc/widgets/locate/TRSsearch',
+    'agrc/widgets/locate/ZoomToCoords',
 
     'app/AiNumber',
     'app/Attributes',
@@ -41,6 +42,7 @@ define([
     'bootstrap'
 ], function (
     TRSsearch,
+    ZoomToCoords,
 
     AiNumber,
     Attributes,
@@ -642,13 +644,15 @@ define([
 
             domClass.remove(this.toolbox, 'hide');
 
-            if ([event.target.id, event.target.parentElement.id].indexOf('query') > -1) {
+            var targets = [evt.target.id, evt.target.parentElement.id];
+
+            if (targets.indexOf('query') > -1) {
                 this.activeTool = new Query({
                     layers: this.map.graphicsLayerIds.map(function (id) {
                         return this.map.getLayer(id);
                     }, this)
                 }).placeAt(this.toolboxcontainer, 'after');
-            } else if ([evt.target.id, evt.target.parentElement.id].indexOf('buffer') > -1) {
+            } else if (targets.indexOf('buffer') > -1) {
                 this.activeTool = new Buffer({
                     layers: this.map.graphicsLayerIds.map(function (id) {
                         return this.map.getLayer(id);
@@ -658,15 +662,20 @@ define([
                         });
                     })
                 }).placeAt(this.toolboxcontainer, 'after');
-            } else if ([evt.target.id, evt.target.parentElement.id].indexOf('trs') > -1) {
+            } else if (targets.indexOf('trs') > -1) {
                 this.activeTool = new TRSsearch({
                     map: this.map,
                     apiKey: config.apiKey
                 }).placeAt(this.toolboxcontainer, 'after');
-            } else if ([evt.target.id, evt.target.parentElement.id].indexOf('layers') > -1) {
+            } else if (targets.indexOf('layers') > -1) {
                 this.activeTool = new LayerList({
                     map: this.map,
                     layers: this.layers
+                }).placeAt(this.toolboxcontainer, 'after');
+            } else if (targets.indexOf('coords') > -1) {
+                this.activeTool = new ZoomToCoords({
+                    map: this.map,
+                    zoomLevel: 16
                 }).placeAt(this.toolboxcontainer, 'after');
             } else {
                 return;

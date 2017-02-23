@@ -49,7 +49,7 @@ var profile = {
         main: 'agrc',
         trees: [
           // don't bother with anything but TRS... spin.js :X
-          ['.', '.', /(\/\.)|(~$)|(map|MagicZoom|FindAddress|FindRouteMilePost|ZoomToCoords|layer|_SpecRunner.html)/]
+          ['.', '.', /(\/\.)|(~$)|(map|MagicZoom|FindAddress|FindRouteMilePost|layer|_SpecRunner.html)/]
         ],
         resourceTags: {
             amd: function (filename, mid) {
