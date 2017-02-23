@@ -11,7 +11,6 @@ using daq_api.Services;
 using MimeTypes;
 using Nancy;
 using Nancy.ModelBinding;
-using MimeTypes = Nancy.MimeTypes;
 
 namespace daq_api.Modules
 {
