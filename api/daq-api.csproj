@@ -123,14 +123,12 @@
     <Compile Include="Models\DeleteResponse.cs" />
     <Compile Include="Models\Error.cs" />
     <Compile Include="Models\EDocEntry.cs" />
-    <Compile Include="Models\EdocSearchResultContainer.cs" />
     <Compile Include="Models\Errorable.cs" />
     <Compile Include="Models\OauthTokenResponse.cs" />
     <Compile Include="Models\RouteModels\RemoveAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadExternal.cs" />
     <Compile Include="Models\RouteModels\User.cs" />
-    <Compile Include="Models\Tokenizable.cs" />
     <Compile Include="Models\TokenResponse.cs" />
     <Compile Include="Models\UploadResponse.cs" />
     <Compile Include="Modules\HomeModule.cs" />

@@ -1,6 +1,6 @@
 ﻿namespace daq_api.Models.RouteModels
 {
-    public class RemoveAttachment : Tokenizable
+    public class RemoveAttachment
     {
         public string ServiceUrl { get; set; }
         public int UploadId { get; set; }
