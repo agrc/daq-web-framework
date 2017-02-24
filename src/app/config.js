@@ -21,6 +21,70 @@ define([
             queryOne: 'CO_NAME',
             facilityId: 'facility_i'
         },
+        queries: {
+            well: {
+                wellName: {
+                    field: 'WELL_NAME',
+                    type: 'string'
+                },
+                apiNumber: {
+                    field: 'F2015_DOGM_',
+                    type: 'number'
+                },
+                operatorName: {
+                    field: 'CO_NAME',
+                    type: 'string'
+                },
+                wellType: {
+                    field: 'Assigned_T',
+                    type: 'string'
+                },
+                jurisdiction: {
+                    field: 'Juris',
+                    type: 'string'
+                }
+            },
+            facility: {
+                facilityName: {
+                    field: 'facility_n',
+                    type: 'string'
+                },
+                operatorName: {
+                    field: 'Operator_N',
+                    type: 'string'
+                },
+                permitNumber: {
+                    field: 'facility_p',
+                    type: 'string'
+                },
+                aiNumber: {
+                    field: 'AI_Number',
+                    type: 'number'
+                },
+                jurisdiction: {
+                    field: 'facility_j',
+                    type: 'string'
+                },
+                inspector: {
+                    field: 'Inspector',
+                    type: 'string'
+                }
+            },
+            permit: {
+                facilityName: {
+                    field: 'Site_Name',
+                    type: 'string'
+                },
+                aiNumber: {
+                    field: 'SITE_ID',
+                    type: 'number'
+                },
+                permitNumber: {
+                    field: 'Permit_ID',
+                    type: 'string'
+                }
+            }
+        },
         topics: {
             addAi: '1',
             toast: '2',

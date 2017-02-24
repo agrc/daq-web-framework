@@ -42,8 +42,8 @@ define([
         baseClass: 'query panel-body',
 
         cannedQueries: {
-            ai: config.fields.lock + '={query}',
-            company: 'UPPER(' + config.fields.queryOne + ') LIKE UPPER(\'%{query}%\')'
+            number: '{term}={query}',
+            string: 'UPPER({term}) LIKE UPPER(\'%{query}%\')'
         },
 
         // Properties to be sent into constructor
@@ -58,10 +58,31 @@ define([
 
             this.setupConnections();
 
+            var layerType;
             this.layers.forEach(function (layer) {
+                var name = layer.name.toLowerCase();
+                if (name.indexOf('well') > -1) {
+                    layerType = 'well';
+                } else if (name.indexOf('facilit') > -1) {
+                    layerType = 'facility';
+                } else if (name.indexOf('permit') > -1) {
+                    layerType = 'permit';
+                } else {
+                    return;
+                }
+
                 this.layer.appendChild(domConstruct.toDom('<option value="' +
-                    layer.layerId + '">' + layer.name + '</option>'));
+                    layerType + '">' + layer.name));
             }, this);
+
+            var layerLookup = {};
+            this.layers.forEach(function (layer) {
+                layerLookup[layer.name] = layer;
+            }, this);
+
+            this.layers = layerLookup;
+
+            this.updateQueriesForLayer();
 
             this.inherited(arguments);
         },
@@ -78,11 +99,14 @@ define([
             // param or return
             console.log('app.Query:query', arguments);
 
-            this.activeLayer = this.layers[this.layer.selectedIndex];
+            this.activeLayer = this.layers[this.layer.options[this.layer.selectedIndex].text];
             this.activeLayer.setSelectionSymbol(config.symbols.point);
 
             var query = new Query();
-            query.where = lang.replace(this.cannedQueries[this.type.value], {
+            var queryInfo = config.queries[this.layer.value][this.type.value];
+            var queryString = this.cannedQueries[queryInfo.type];
+            query.where = lang.replace(queryString, {
+                term: queryInfo.field,
                 query: this.input.value
             });
             query.outFields = ['SHAPE'];
@@ -95,19 +119,53 @@ define([
                 },
                 function (err) {
                     topic.publish(config.topics.toast, (err.details[0] || err || '') +
-                        ' Make sure the layer you are querying has an AI Number field.');
+                        ' Make sure the layer you are querying contains the ' + queryInfo.field + ' field.');
                 }
             );
+        },
+        updateQueriesForLayer: function () {
+            // summary:
+            //      changes the available queries for the new layerId
+            //
+            console.log('app/Query:updateQueriesForLayer', arguments);
+
+            var queryKey = this.layer.value;
+            var queries = config.queries[queryKey];
+
+            this._rebuildQuerySelect(queries);
+        },
+        _rebuildQuerySelect: function (queries) {
+            // summary:
+            //      description
+            // param or return
+            console.log('app/Query:_rebuildQuerySelect', arguments);
+
+            domConstruct.empty(this.type);
+
+            Object.keys(queries).forEach(function (key) {
+                this.type.appendChild(domConstruct.toDom('<option value="' +
+                    key + '">' + this._toProperCase(key)));
+            }, this);
         },
         _submitOnEnter: function (evt) {
             // summary:
             //      calls query if enter was pressed
             //
-            console.log('app.Query:_submitOnEnter', arguments);
+            console.log('app/Query:_submitOnEnter', arguments);
 
             if (evt.keyCode === keys.ENTER) {
                 this.query();
             }
+        },
+        _toProperCase: function (str) {
+            // summary:
+            //      description
+            // param or return
+            console.log('app/Query::_toProperCase', arguments);
+
+            str = str.charAt(0).toUpperCase() + str.substring(1, str.length);
+
+            return str.replace(/([A-Z])/g, ' $1');
         },
         destroy: function () {
             // summary:
