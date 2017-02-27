@@ -9,6 +9,7 @@ define([
     'app/GraphicsController',
     'app/MapController',
     'app/Query',
+    'app/Bookmark',
 
     'dgrid1/extensions/SingleQuery',
     'dgrid1/Grid',
@@ -38,7 +39,6 @@ define([
 
     'jquery',
 
-
     'bootstrap'
 ], function (
     TRSsearch,
@@ -51,6 +51,7 @@ define([
     GraphicsController,
     MapController,
     Query,
+    Bookmarks,
 
     SingleQuery,
     Grid,
@@ -208,6 +209,7 @@ define([
             }).then(lang.hitch(this, function (result) {
                 this.map = result.map;
                 this.layers = utils.getLayerList(result);
+                this.bookmarks = result.itemInfo.itemData.bookmarks;
 
                 this.aliasLookup = {};
                 var operationalLayers = result.itemInfo.itemData.operationalLayers;
@@ -677,6 +679,12 @@ define([
                     map: this.map,
                     zoomLevel: 16
                 }).placeAt(this.toolboxcontainer, 'after');
+            } else if (targets.indexOf('bookmark') > -1) {
+                var wtfEsri = domConstruct.place('<div></div>', this.toolboxcontainer, 'after');
+                this.activeTool = new Bookmarks({
+                    map: this.map,
+                    bookmarks: this.bookmarks
+                }, wtfEsri);
             } else {
                 return;
             }
