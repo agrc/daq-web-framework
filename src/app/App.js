@@ -94,9 +94,9 @@ define([
         // map: agrc.widgets.map.Basemap
         map: null,
 
-        // token: string
+        // digest: string
         //      the oauth token for arcgis online
-        token: null,
+        digest: null,
 
         constructor: function () {
             // summary:
@@ -185,12 +185,12 @@ define([
             //      Sets up the map
             console.info('app.App::initMap', arguments);
 
-            if (!this.token) {
+            if (!this.digest) {
                 return this.toast('There was an issue logging in. Please try again later.');
             }
 
             var token = {
-                token: this.token,
+                token: this.digest,
                 expires: 120000,
                 server: config.urls.agol,
                 userId: 'DAQ OAuth App',
@@ -284,7 +284,7 @@ define([
                 console.debug('lock field is empty. showing add lock data');
 
                 var aiProps = lang.clone(props);
-                aiProps.token = this.token;
+                aiProps.token = this.digest;
                 this.ai = new AiNumber(aiProps).placeAt(this.infocontent, 'after');
 
                 this.ai.startup();
