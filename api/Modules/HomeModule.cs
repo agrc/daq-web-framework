@@ -13,6 +13,8 @@ namespace daq_api.Modules
 
                 return View["index", token];
             };
+
+            Get["/changelog"] = _ => View["changelog"];
         }
     }
 }
