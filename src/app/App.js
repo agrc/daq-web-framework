@@ -254,7 +254,7 @@ define([
             // summary:
             //      shows the attributes for the clicked point
             // param or return
-            console.log('app.App:showAttributes', arguments);
+            console.info('app.App:showAttributes', arguments);
 
             if (!props.graphic) {
                 return;
@@ -311,7 +311,7 @@ define([
             // summary:
             //      hides things
             // param or return
-            console.log('app.App:close', arguments);
+            console.info('app.App:close', arguments);
 
             domClass.add(parent, 'hide');
 
@@ -338,7 +338,7 @@ define([
         setupGridStore: function (props) {
             // summary:
             //      setup the dgrid
-            console.log('app.App:setupGridStore', arguments);
+            console.info('app.App:setupGridStore', arguments);
 
             this.store = new RequestMemory({
                 target: config.urls.webapi + '/search/' +
@@ -354,7 +354,7 @@ define([
             // summary:
             //      setup the grid after the tab is focused
             // undefined
-            console.log('app.App:initGrid', arguments);
+            console.info('app.App:initGrid', arguments);
 
             var container = document.createElement('div');
             container.className = 'container';
@@ -636,7 +636,7 @@ define([
             // summary:
             //      called when a new ai number is added
             //
-            console.log('app.app:onAiAdded', arguments);
+            console.info('app.app:onAiAdded', arguments);
 
             this.setupGridStore(props);
             this.map.getLayer(this.map.graphicsLayerIds[props.layerId]).refresh();
