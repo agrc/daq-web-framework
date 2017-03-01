@@ -54,7 +54,7 @@ define([
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
-            console.log('app.Query::postCreate', arguments);
+            console.info('app.Query::postCreate', arguments);
 
             this.setupConnections();
 
@@ -89,7 +89,7 @@ define([
         setupConnections: function () {
             // summary:
             //      wire events, and such
-            console.log('app.Query::setupConnections', arguments);
+            console.info('app.Query::setupConnections', arguments);
 
             on(this.input, 'keyup', lang.hitch(this, '_submitOnEnter'));
         },
@@ -97,7 +97,7 @@ define([
             // summary:
             //      description
             // param or return
-            console.log('app.Query:query', arguments);
+            console.info('app.Query:query', arguments);
 
             this.activeLayer = this.layers[this.layer.options[this.layer.selectedIndex].text];
             this.activeLayer.setSelectionSymbol(config.symbols.point);
@@ -133,7 +133,7 @@ define([
             // summary:
             //      changes the available queries for the new layerId
             //
-            console.log('app/Query:updateQueriesForLayer', arguments);
+            console.info('app/Query:updateQueriesForLayer', arguments);
 
             var queryKey = this.layer.value;
             var queries = config.queries[queryKey];
@@ -144,7 +144,7 @@ define([
             // summary:
             //      description
             // param or return
-            console.log('app/Query:_rebuildQuerySelect', arguments);
+            console.info('app/Query:_rebuildQuerySelect', arguments);
 
             domConstruct.empty(this.type);
 
@@ -157,7 +157,7 @@ define([
             // summary:
             //      calls query if enter was pressed
             //
-            console.log('app/Query:_submitOnEnter', arguments);
+            console.info('app/Query:_submitOnEnter', arguments);
 
             if (evt.keyCode === keys.ENTER) {
                 this.query();
@@ -167,7 +167,7 @@ define([
             // summary:
             //      description
             // param or return
-            console.log('app/Query::_toProperCase', arguments);
+            console.info('app/Query::_toProperCase', arguments);
 
             str = str.charAt(0).toUpperCase() + str.substring(1, str.length);
 
@@ -176,7 +176,7 @@ define([
         destroy: function () {
             // summary:
             //      overload destroy to clear selections
-            console.log('app.Query:destroy', arguments);
+            console.info('app.Query:destroy', arguments);
 
             if (this.activeLayer) {
                 this.activeLayer.clearSelection();
