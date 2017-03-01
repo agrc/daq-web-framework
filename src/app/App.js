@@ -260,9 +260,6 @@ define([
                 return;
             }
 
-            domClass.remove(this.infowindow, 'hide');
-            domClass.remove(this.attributepanel, 'hide');
-
             var attributes = props.graphic.attributes;
             props = {
                 aliases: props.graphic._layer.aliases || null, // eslint-disable-line
@@ -270,17 +267,24 @@ define([
                 layerId: props.layerId,
                 url: props.url
             };
+
+            this.identifyProps = props;
+
             this.attributes = new Attributes(lang.clone(props)).placeAt(this.infocontent, 'first');
+
+            domClass.remove(this.infowindow, 'hide');
+            domClass.remove(this.attributepanel, 'hide');
 
             this.attributes.startup();
 
+            var edocTab = $('#attribute-tabs a[href="#edocs"]');
+
             if (Object.keys(attributes).indexOf(config.fields.lock) === -1) {
                 console.debug('layer does not have AI number. do not show ai widget.');
+                edocTab.prop('disabled', true).addClass('disabled-tab');
 
                 return;
             }
-
-            this.identifyProps = props;
 
             if (!attributes[config.fields.lock]) {
                 console.debug('lock field is empty. showing add lock data');
@@ -293,10 +297,14 @@ define([
 
                 this.identifyProps = aiProps;
 
+                edocTab.prop('disabled', true).addClass('disabled-tab');
+
                 return;
             }
 
+            edocTab.prop('disabled', false).removeClass('disabled-tab');
             props.aiNumber = attributes[config.fields.lock];
+            this.identifyProps.aiNumber = props.aiNumber;
             this.setupGridStore(props);
         },
         close: function (parent) {
