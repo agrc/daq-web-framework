@@ -113,8 +113,14 @@ define([
 
             this.activeLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW).then(
                 function (graphics) {
-                    if (graphics) {
+                    if (graphics && graphics.length > 0) {
                         MapController.zoom(graphics);
+                        if (graphics.length === config.maxResult) {
+                            topic.publish(config.topics.toast,
+                                'The max number of features was returned. The results are a partial view.');
+                        }
+                    } else {
+                        topic.publish(config.topics.toast, 'No features found. Check your spelling.');
                     }
                 },
                 function (err) {
