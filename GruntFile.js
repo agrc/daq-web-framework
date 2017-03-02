@@ -43,7 +43,7 @@ module.exports = function (grunt) {
         bump: {
             options: {
                 files: bumpFiles,
-                commitFiles: bumpFiles.concat('api/Properties/AssemblyInfo.cs'),
+                commitFiles: bumpFiles.concat(['api/Properties/AssemblyInfo.cs', 'api/Views/Changelog.html']),
                 push: false
             }
         },
