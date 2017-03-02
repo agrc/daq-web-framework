@@ -35,14 +35,6 @@ define([
                 operatorName: {
                     field: 'CO_NAME',
                     type: 'string'
-                },
-                wellType: {
-                    field: 'Assigned_T',
-                    type: 'string'
-                },
-                jurisdiction: {
-                    field: 'Juris',
-                    type: 'string'
                 }
             },
             facility: {
@@ -61,10 +53,6 @@ define([
                 aiNumber: {
                     field: 'AI_Number',
                     type: 'number'
-                },
-                jurisdiction: {
-                    field: 'facility_j',
-                    type: 'string'
                 },
                 inspector: {
                     field: 'Inspector',
