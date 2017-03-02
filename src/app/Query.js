@@ -77,7 +77,7 @@ define([
 
             var layerLookup = {};
             this.layers.forEach(function (layer) {
-                layerLookup[layer.name] = layer;
+                layerLookup[layer.arcgisProps.title] = layer;
             }, this);
 
             this.layers = layerLookup;
