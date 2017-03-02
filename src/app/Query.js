@@ -72,7 +72,7 @@ define([
                 }
 
                 this.layer.appendChild(domConstruct.toDom('<option value="' +
-                    layerType + '">' + layer.name));
+                    layerType + '">' + layer.arcgisProps.title));
             }, this);
 
             var layerLookup = {};
