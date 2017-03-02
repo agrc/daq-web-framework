@@ -90,7 +90,10 @@ define([
             }).then(lang.hitch(this, function (data) {
                 if ('updateResults' in data) {
                     if (data.updateResults[0].success) {
-                        this.props.aiNumber = this.ai.value;
+                        this.props.aiNumber =
+                        this.props.attributes[config.fields.lock] =
+                        this.props.graphic.attributes[config.fields.lock] =
+                            this.ai.value;
                         topic.publish(config.topics.addAi, this.props);
                         this.destroy();
                     } else {

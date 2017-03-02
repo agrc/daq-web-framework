@@ -261,6 +261,8 @@ define([
             }
 
             var attributes = props.graphic.attributes;
+            var graphic = props.graphic;
+
             props = {
                 aliases: props.graphic._layer.aliases || null, // eslint-disable-line
                 attributes: attributes,
@@ -296,6 +298,7 @@ define([
                 this.ai.startup();
 
                 this.identifyProps = aiProps;
+                this.identifyProps.graphic = graphic;
 
                 edocTab.prop('disabled', true).addClass('disabled-tab');
 
@@ -303,6 +306,7 @@ define([
             }
 
             edocTab.prop('disabled', false).removeClass('disabled-tab');
+            // TODO: i don;t think this property needs to be around?
             props.aiNumber = attributes[config.fields.lock];
             this.identifyProps.aiNumber = props.aiNumber;
             this.setupGridStore(props);
@@ -640,6 +644,7 @@ define([
 
             this.setupGridStore(props);
             this.map.getLayer(this.map.graphicsLayerIds[props.layerId]).refresh();
+            $('#attribute-tabs a[href="#edocs"]').prop('disbled', false).removeClass('disabled-tab').tab('show');
         },
         activateTool: function (evt) {
             // summary:
