@@ -5,6 +5,7 @@ define([
     'dijit/_WidgetBase',
 
     'dojo/dom-attr',
+    'dojo/dom-class',
     'dojo/on',
     'dojo/request/xhr',
     'dojo/text!app/templates/AiNumber.html',
@@ -18,6 +19,7 @@ define([
     _WidgetBase,
 
     domAttr,
+    domClass,
     on,
     xhr,
     template,
@@ -40,16 +42,22 @@ define([
             // summary:
             //      constructor
             //
-            console.log('app.AiNumber:constructor', arguments);
+            console.log('app/AiNumber:constructor', arguments);
 
             this.props = props;
-            this.feature = props.attributes[config.fields.uniqueId];
+            this.feature = props.graphic.attributes[config.fields.uniqueId];
             this.url = props.url;
         },
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
-            console.info('app.AiNumber::postCreate', arguments);
+            console.info('app/AiNumber::postCreate', arguments);
+
+            if (this.props.graphic.attributes[config.fields.lock]) {
+                domClass.add(this.createNode, 'hidden');
+            } else {
+                domClass.add(this.updateNode, 'hidden');
+            }
 
             this.setupConnections();
 
@@ -58,15 +66,18 @@ define([
         setupConnections: function () {
             // summary:
             //      wire events, and such
-            console.info('app.AiNumber::setupConnections', arguments);
+            console.info('app/AiNumber::setupConnections', arguments);
 
-            on(this.ai, ['change, keyup, input'].join(), lang.hitch(this, this.validate));
+            this.own(
+                on(this.toggleUpdate, 'click', lang.hitch(this, this._showCreate)),
+                on(this.ai, ['change, keyup, input'].join(), lang.hitch(this, this.validate))
+            );
         },
         update: function () {
             // summary:
             //      sends the request to update the ai number in agol
             // param or return
-            console.log('app.AiNumber:update', arguments);
+            console.log('app/AiNumber:update', arguments);
 
             domAttr.set(this.submit, 'disabled', true);
             var attributes = {};
@@ -91,11 +102,9 @@ define([
                 if ('updateResults' in data) {
                     if (data.updateResults[0].success) {
                         this.props.aiNumber =
-                        this.props.attributes[config.fields.lock] =
                         this.props.graphic.attributes[config.fields.lock] =
                             this.ai.value;
                         topic.publish(config.topics.addAi, this.props);
-                        this.destroy();
                     } else {
                         domAttr.remove(this.submit, 'disabled');
                         topic.publish(config.topics.toast, data.updateResults[0].error.description);
@@ -113,7 +122,7 @@ define([
             // summary:
             //      enable the ai number button
             // param or return
-            console.log('app.AiNumber:validate', arguments);
+            console.log('app/AiNumber:validate', arguments);
 
             if (this.ai.value.length > 0) {
                 domAttr.remove(this.submit, 'disabled');
@@ -122,6 +131,15 @@ define([
             }
 
             domAttr.set(this.submit, 'disabled', true);
+        },
+        _showCreate: function () {
+            // summary:
+            //      hides the update and shows the create ai form-group
+            // none
+            console.log('app/AiNumber:_showCreate', arguments);
+
+            domClass.add(this.updateNode, 'hidden');
+            domClass.remove(this.createNode, 'hidden');
         }
     });
 });

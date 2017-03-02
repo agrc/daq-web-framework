@@ -102,7 +102,7 @@ define([
         constructor: function () {
             // summary:
             //      first function to fire after page loads
-            console.info('app.App::constructor', arguments);
+            console.info('app/App::constructor', arguments);
 
             config.app = this;
             this.childWidgets = [];
@@ -112,7 +112,7 @@ define([
         postCreate: function () {
             // summary:
             //      Fires when
-            console.info('app.App::postCreate', arguments);
+            console.info('app/App::postCreate', arguments);
 
             // set version number
             this.version.innerHTML = config.version;
@@ -126,7 +126,7 @@ define([
         setupConnections: function () {
             // summary:
             //      Fires when
-            console.info('app.App::setupConnections', arguments);
+            console.info('app/App::setupConnections', arguments);
 
             var featureLayers = this.map.graphicsLayerIds;
             featureLayers.forEach(function (layerId) {
@@ -170,7 +170,7 @@ define([
         startup: function () {
             // summary:
             //      Fires after postCreate when all of the child widgets are finished laying out.
-            console.info('app.App::startup', arguments);
+            console.info('app/App::startup', arguments);
 
             var that = this;
             array.forEach(this.childWidgets, function (widget) {
@@ -184,7 +184,7 @@ define([
         initMap: function () {
             // summary:
             //      Sets up the map
-            console.info('app.App::initMap', arguments);
+            console.info('app/App::initMap', arguments);
 
             if (!this.digest) {
                 return this.toast('There was an issue logging in. Please try again later.');
@@ -254,25 +254,22 @@ define([
             // summary:
             //      shows the attributes for the clicked point
             // param or return
-            console.info('app.App:showAttributes', arguments);
+            console.info('app/App:showAttributes', arguments);
 
             if (!props.graphic) {
                 return;
             }
 
-            var attributes = props.graphic.attributes;
-            var graphic = props.graphic;
-
             props = {
                 aliases: props.graphic._layer.aliases || null, // eslint-disable-line
-                attributes: attributes,
                 layerId: props.layerId,
-                url: props.url
+                url: props.url,
+                graphic: props.graphic
             };
 
             this.identifyProps = props;
 
-            this.attributes = new Attributes(lang.clone(props)).placeAt(this.infocontent, 'first');
+            this.attributes = new Attributes(props).placeAt(this.infocontent, 'first');
 
             domClass.remove(this.infowindow, 'hide');
             domClass.remove(this.attributepanel, 'hide');
@@ -281,41 +278,41 @@ define([
 
             var edocTab = $('#attribute-tabs a[href="#edocs"]');
 
-            if (Object.keys(attributes).indexOf(config.fields.lock) === -1) {
+            if (Object.keys(props.graphic.attributes).indexOf(config.fields.lock) === -1) {
                 console.debug('layer does not have AI number. do not show ai widget.');
                 edocTab.prop('disabled', true).addClass('disabled-tab');
 
                 return;
             }
 
-            if (!attributes[config.fields.lock]) {
+            var aiProps = props;
+            aiProps.token = this.digest;
+
+            if (props.graphic.attributes[config.fields.lock]) {
+                console.debug('lock field has value. giving update option.');
+
+                edocTab.prop('disabled', false).removeClass('disabled-tab');
+
+                // setup ai number for later calls
+                this.identifyProps.aiNumber = props.aiNumber = props.graphic.attributes[config.fields.lock];
+                this.setupGridStore(props);
+            } else {
                 console.debug('lock field is empty. showing add lock data');
 
-                var aiProps = lang.clone(props);
-                aiProps.token = this.digest;
-                this.ai = new AiNumber(aiProps).placeAt(this.infocontent, 'after');
-
-                this.ai.startup();
-
                 this.identifyProps = aiProps;
-                this.identifyProps.graphic = graphic;
+                this.identifyProps.graphic = props.graphic;
 
                 edocTab.prop('disabled', true).addClass('disabled-tab');
-
-                return;
             }
 
-            edocTab.prop('disabled', false).removeClass('disabled-tab');
-            // TODO: i don;t think this property needs to be around?
-            props.aiNumber = attributes[config.fields.lock];
-            this.identifyProps.aiNumber = props.aiNumber;
-            this.setupGridStore(props);
+            this.ai = new AiNumber(aiProps).placeAt(this.infocontent, 'after');
+            this.ai.startup();
         },
         close: function (parent) {
             // summary:
             //      hides things
             // param or return
-            console.info('app.App:close', arguments);
+            console.info('app/App:close', arguments);
 
             domClass.add(parent, 'hide');
 
@@ -329,6 +326,10 @@ define([
                     this.gridcontent = domConstruct.create('div', {}, gridParent, 'first');
                     this.grid = null;
                 }
+                if (this.attributes) {
+                    this.attributes.destroy();
+                }
+
                 this.infocontent.innerHTML = '';
 
                 $('#attribute-tabs a:first').tab('show');
@@ -342,7 +343,7 @@ define([
         setupGridStore: function (props) {
             // summary:
             //      setup the dgrid
-            console.info('app.App:setupGridStore', arguments);
+            console.info('app/App:setupGridStore', arguments);
 
             this.store = new RequestMemory({
                 target: config.urls.webapi + '/search/' +
@@ -358,7 +359,14 @@ define([
             // summary:
             //      setup the grid after the tab is focused
             // undefined
-            console.info('app.App:initGrid', arguments);
+            console.info('app/App:initGrid', arguments);
+
+            if (this.grid) {
+                this.grid.destroy();
+                var gridParent = document.getElementById('edocs');
+                this.gridcontent = domConstruct.create('div', {}, gridParent, 'first');
+                this.grid = null;
+            }
 
             var container = document.createElement('div');
             container.className = 'container';
@@ -493,7 +501,7 @@ define([
             // summary:
             //      global click handler for dgrid
             // click event
-            console.info('app.App:onGridClick', arguments);
+            console.info('app/App:onGridClick', arguments);
 
             var clicked = evt.target;
             if (clicked.tagName !== 'BUTTON') {
@@ -513,7 +521,7 @@ define([
             // summary:
             //      upload edoc documents
             // click event
-            console.info('app.App:processEdocItem', arguments);
+            console.info('app/App:processEdocItem', arguments);
 
             var clicked = evt.target;
 
@@ -602,7 +610,7 @@ define([
             // summary:
             //      toast a message
             // click event
-            console.info('app.App:toast', arguments);
+            console.info('app/App:toast', arguments);
 
             var fiveSeconds = 5000;
             var toaster = document.getElementById('toaster-container');
@@ -620,7 +628,7 @@ define([
             // summary:
             //      global click handler for dgrid
             // click event
-            console.info('app.App:toggleStatus', arguments);
+            console.info('app/App:toggleStatus', arguments);
 
             // invert css and button text depending
             node.className = options.buttonCss;
@@ -643,14 +651,16 @@ define([
             console.info('app.app:onAiAdded', arguments);
 
             this.setupGridStore(props);
-            this.map.getLayer(this.map.graphicsLayerIds[props.layerId]).refresh();
+            this.initGrid();
+
             $('#attribute-tabs a[href="#edocs"]').prop('disbled', false).removeClass('disabled-tab').tab('show');
+            this.grid.startup();
         },
         activateTool: function (evt) {
             // summary:
             //      description
             // param or return
-            console.info('app.App:activateTool', arguments);
+            console.info('app/App:activateTool', arguments);
 
             if (this.activeTool) {
                 this.activeTool.destroy();
@@ -708,7 +718,7 @@ define([
             // summary:
             //      send xhr post to api to save File
             // submit event
-            console.info('app.App:addAttachment', arguments);
+            console.info('app/App:addAttachment', arguments);
 
 
             var clicked = event.target;

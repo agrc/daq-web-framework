@@ -64,7 +64,7 @@ define([
             this.inherited(arguments);
             this.setupConnections();
             this.buildAttributeTable({
-                attributes: this.attributes,
+                graphic: this.graphic,
                 aliases: this.aliases
             });
         },
@@ -99,7 +99,7 @@ define([
                 var heading = domConstruct.create('label', {}, cell, 'first');
                 heading.innerHTML = item.alias;
 
-                if (!props.attributes[item.field]) {
+                if (!props.graphic.attributes[item.field]) {
                     domConstruct.create('div', {
                         className: 'text-danger glyphicon glyphicon-minus',
                         style: 'display:block'
@@ -111,7 +111,7 @@ define([
                     className: 'text-muted'
                 }, heading, 'after');
 
-                p.innerHTML = props.attributes[item.field];
+                p.innerHTML = props.graphic.attributes[item.field];
             }, this);
         }
     });

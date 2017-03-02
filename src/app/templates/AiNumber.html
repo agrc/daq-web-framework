@@ -1,9 +1,14 @@
-<div class="panel panel-danger">
-    <div class="panel-heading">AI Numbers are required! Please locate the AI number for this item.</div>
-        <div class="panel-body">
-            <div class="form-group">
-                <input type="number" data-dojo-attach-point="ai" class="input-lg form-control" placeholder="AI number"/>
-                <input type="submit" data-dojo-attach-point="submit" disabled class="btn btn-lg btn-primary" value="Add AI Number" data-dojo-attach-event="click:update"/>
-            </div>
-    </div>
+<div>
+  <div data-dojo-attach-point="updateNode" class="text-center">
+    <button data-dojo-attach-point="toggleUpdate" class="btn btn-default">Update AI#</button>
+  </div>
+  <div class="panel panel-danger" data-dojo-attach-point="createNode">
+      <div class="panel-heading">AI Numbers are required! Please locate the AI number for this item.</div>
+          <div class="panel-body">
+              <div class="form-group">
+                  <input type="number" data-dojo-attach-point="ai" class="input-lg form-control" placeholder="AI number"/>
+                  <input type="submit" data-dojo-attach-point="submit" disabled class="btn btn-lg btn-primary" value="Add AI Number" data-dojo-attach-event="click:update"/>
+              </div>
+      </div>
+  </div>
 </div>
