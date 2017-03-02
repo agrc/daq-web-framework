@@ -32,7 +32,7 @@ namespace daq_api.Services
         {
             using (var session = new SqlConnection(ConnectionString))
             {
-                return session.Query<EDocEntry>("SELECT r_folder_path + '/' + object_name + '.' + i_full_format as path FROM Combined_DAQ where id IN @ids", new
+                return session.Query<EDocEntry>("SELECT id, title, r_folder_path + '/' + object_name + '.' + i_full_format as path FROM Combined_DAQ where id IN @ids", new
                 {
                     ids
                 }).ToList();
@@ -43,7 +43,7 @@ namespace daq_api.Services
         {
             using (var session = new SqlConnection(ConnectionString))
             {
-                return session.Query<EDocEntry>("SELECT r_folder_path + '/' + object_name + '.' + i_full_format as path FROM Combined_DAQ where id = @id", new
+                return session.Query<EDocEntry>("SELECT id, title, r_folder_path + '/' + object_name + '.' + i_full_format as path FROM Combined_DAQ where id = @id", new
                 {
                     id
                 }).Single();
