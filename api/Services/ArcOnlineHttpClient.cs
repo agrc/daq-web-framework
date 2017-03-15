@@ -12,8 +12,8 @@ namespace daq_api.Services
 {
     public class ArcOnlineHttpClient
     {
-        private readonly HttpClient _client;
         private const string TokenUrl = "https://www.arcgis.com/sharing/rest/oauth2/token/";
+        private readonly HttpClient _client;
         private readonly IArcOnlineCredentials _credentials;
 
         public ArcOnlineHttpClient(IArcOnlineCredentials credentials)
@@ -110,43 +110,31 @@ namespace daq_api.Services
             }
         }
 
-        public async Task<ArcOnlineResponse<AttachmentResponse>> GetDocumentsFor(string url, int featureId)
+        public async Task<ArcOnlineResponse<AttachmentResponse>> GetAttachmentsFor(string url)
         {
-            string query;
-            var queryParams = new[]
-            {
-                new KeyValuePair<string, string>("objectIds", featureId.ToString()),
-                new KeyValuePair<string, string>("f", "json")
-                // new KeyValuePair<string, string>("token", ""),
-            };
-
             try
             {
-                using (var content = new FormUrlEncodedContent(queryParams))
+                using (var response = await _client.GetAsync(url).ConfigureAwait(false))
                 {
-                    query = await content.ReadAsStringAsync();
-                    using (var response = await _client.GetAsync(string.Format("{0}/queryAttachments?{1}", url, query)).ConfigureAwait(false))
+                    try
                     {
-                        try
-                        {
-                            var result = await response.Content.ReadAsAsync<AttachmentResponse>(Formatters).ConfigureAwait(false);
+                        var result = await response.Content.ReadAsAsync<AttachmentResponse>(Formatters).ConfigureAwait(false);
 
-                            return new ArcOnlineResponse<AttachmentResponse>(response, result);
-                        }
-                        catch (Exception ex)
+                        return new ArcOnlineResponse<AttachmentResponse>(response, result);
+                    }
+                    catch (Exception ex)
+                    {
+                        return new ArcOnlineResponse<AttachmentResponse>(response, new AttachmentResponse
                         {
-                            return new ArcOnlineResponse<AttachmentResponse>(response, new AttachmentResponse
+                            Error = new Error
                             {
-                                Error = new Error
+                                Details = new List<string>
                                 {
-                                    Details = new List<string>
-                                    {
-                                        ex.Message,
-                                        response.Content.ReadAsStringAsync().Result
-                                    }
+                                    ex.Message,
+                                    response.Content.ReadAsStringAsync().Result
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using daq_api.Contracts;
 using daq_api.Models;
 
@@ -30,7 +31,7 @@ namespace daq_api.Services
                 Path = "DAQ\\Agency Interest\\10701-10800\\10791 - Utah Refractories Corporation- Brick Manufacturing - Lehi Plant\\Compliance\\DAQ-2010-002306.pdf",
                 DocumentDate = DateTime.Now,
                 Branch = "DAQ Branch",
-                Name = "2",
+                Name = "77777",
                 Id = 3
             },
             new EDocEntry {
@@ -38,20 +39,20 @@ namespace daq_api.Services
                 Path = "DAQ\\Agency Interest\\10701-10800\\10791 - Utah Refractories Corporation- Brick Manufacturing - Lehi Plant\\Compliance\\DAQ-2010-002306.pdf",
                 DocumentDate = DateTime.Now,
                 Branch = "DAQ Branch",
-                Name = "2",
+                Name = "77777",
                 Id = 4
             }
         };
 
-        public IEnumerable<EDocEntry> Get(string facility)
+        public Task<IEnumerable<EDocEntry>> Get(string facility)
         {
-            return _items.Where(item => item.Name == facility);
+            return Task.FromResult(_items.Where(item => item.Name == facility));
         }
 
-        public IEnumerable<EDocEntry> Get(IEnumerable<int> ids)
-        {
-            return _items.Where(item => ids.Contains(item.Id));
-        }
+//        public IEnumerable<EDocEntry> Get(IEnumerable<int> ids)
+//        {
+//            return _items.Where(item => ids.Contains(item.Id));
+//        }
 
         public EDocEntry Get(int id)
         {

@@ -267,7 +267,7 @@ define([
                 graphic: props.graphic
             };
 
-            this.identifyProps = props;
+            this.gridClickProps = props;
 
             this.attributes = new Attributes(props).placeAt(this.infocontent, 'first');
 
@@ -294,13 +294,13 @@ define([
                 edocTab.prop('disabled', false).removeClass('disabled-tab');
 
                 // setup ai number for later calls
-                this.identifyProps.aiNumber = props.aiNumber = props.graphic.attributes[config.fields.lock];
+                this.gridClickProps.aiNumber = props.aiNumber = props.graphic.attributes[config.fields.lock];
                 this.setupGridStore(props);
             } else {
                 console.debug('lock field is empty. showing add lock data');
 
-                this.identifyProps = aiProps;
-                this.identifyProps.graphic = props.graphic;
+                this.gridClickProps = aiProps;
+                this.gridClickProps.graphic = props.graphic;
 
                 edocTab.prop('disabled', true).addClass('disabled-tab');
             }
@@ -346,8 +346,10 @@ define([
             console.info('app/App:setupGridStore', arguments);
 
             this.store = new RequestMemory({
-                target: config.urls.webapi + '/search/' +
-                            props.aiNumber,
+                target: config.urls.webapi + '/search/' + props.aiNumber +
+                        '/facility/' + props.graphic.attributes[config.fields.facilityId] +
+                        '/feature/' + props.graphic.attributes[config.fields.uniqueId] +
+                        '?url=' + encodeURIComponent(props.url),
                 useRangeHeaders: false,
                 headers: {
                     'X-Requested-With': null,
@@ -452,8 +454,8 @@ define([
                             return new Date(value).toLocaleDateString();
                         }
                     },
-                    path: {
-                        label: 'Path',
+                    file: {
+                        label: 'File',
                         sortable: false
                     },
                     title: {
@@ -464,7 +466,7 @@ define([
                         label: 'Action',
                         sortable: false,
                         formatter: function (value, row) {
-                            if (row.uploadId) {
+                            if (row.uploaded) {
                                 return '<button class="btn btn-danger" data-action="edoc" value="' +
                                         value + '">remove</button>';
                             }
@@ -482,7 +484,7 @@ define([
                 input.removeEventListener('input', this.filterGrid);
             }.bind(this));
 
-            this.grid.on('click', lang.hitch(this, 'onGridClick', this.identifyProps));
+            this.grid.on('click', lang.hitch(this, 'onGridClick', this.gridClickProps));
             this.grid.on('dgrid-error', lang.hitch(this, 'toast'));
             this.grid.on('dgrid-error', lang.hitch(this.grid, 'destroy'));
             this.grid.set('collection', this.store);
@@ -549,9 +551,9 @@ define([
 
             var data = lang.replace(queryString, {
                 edocId: row.id,
-                featureId: props.attributes[config.fields.uniqueId],
+                featureId: props.graphic.attributes[config.fields.uniqueId],
                 uploadId: row.uploadId,
-                facilityId: props.attributes[config.fields.facilityId],
+                facilityId: props.graphic.attributes[config.fields.facilityId],
                 url: props.url
             });
 
@@ -731,7 +733,7 @@ define([
 
             var form = new FormData(document.getElementById('edoc-form'));
             form.append('serviceUrl', props.url);
-            form.append('featureId', props.attributes[config.fields.uniqueId]);
+            form.append('featureId', props.graphic.attributes[config.fields.uniqueId]);
             form.append('token', 'shh');
 
             xhr(config.urls.webapi + '/upload/external', {

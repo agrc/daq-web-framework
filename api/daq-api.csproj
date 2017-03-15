@@ -145,7 +145,6 @@
     <Compile Include="Contracts\IShareMappable.cs" />
     <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="Services\EdocsMockRepository.cs" />
-    <Compile Include="Services\FileRenamer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -27,12 +27,11 @@ namespace daq_api.Modules
             {
                 var model = this.Bind<UploadAttachment>();
                 var edoc = repository.Get(model.Id);
+                edoc = new EDocEntry(edoc, model.FacilityId);
                 var filename = Path.GetFileName(edoc.Path);
 
                 var extension = Path.GetExtension(filename);
                 var contentType = MimeTypeMap.GetMimeType(extension);
-
-                filename = FileRenamer.Rename(model, edoc, extension);
 
                 try
                 {
@@ -47,8 +46,8 @@ namespace daq_api.Modules
                         {
                             var streamContent = new StreamContent(document);
                             streamContent.Headers.Add("Content-Type", contentType);
-                            streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", filename));
-                            formContent.Add(streamContent, "file", filename);
+                            streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", edoc.File));
+                            formContent.Add(streamContent, "file", edoc.File);
                             formContent.Add(new StringContent("json"), "f");
                             formContent.Add(new StringContent(token), "token");
                         }
