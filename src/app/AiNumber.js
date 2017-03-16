@@ -69,7 +69,7 @@ define([
             console.info('app/AiNumber::setupConnections', arguments);
 
             this.own(
-                on(this.toggleUpdate, 'click', lang.hitch(this, this._showCreate)),
+                on(this.toggleUpdate, 'click', lang.hitch(this, this._toggleUpdateButton)),
                 on(this.ai, ['change, keyup, input'].join(), lang.hitch(this, this.validate))
             );
         },
@@ -105,6 +105,7 @@ define([
                         this.props.graphic.attributes[config.fields.lock] =
                             this.ai.value;
                         topic.publish(config.topics.addAi, this.props);
+                        this._toggleUpdateButton(true);
                     } else {
                         domAttr.remove(this.submit, 'disabled');
                         topic.publish(config.topics.toast, data.updateResults[0].error.description);
@@ -132,11 +133,19 @@ define([
 
             domAttr.set(this.submit, 'disabled', true);
         },
-        _showCreate: function () {
+        _toggleUpdateButton: function (visible) {
             // summary:
             //      hides the update and shows the create ai form-group
+            // visible: boolean. could be an event so handle accordingly
             // none
-            console.log('app/AiNumber:_showCreate', arguments);
+            console.log('app/AiNumber:_toggleUpdateButton', arguments);
+
+            if (visible === true) {
+                domClass.remove(this.updateNode, 'hidden');
+                domClass.add(this.createNode, 'hidden');
+
+                return;
+            }
 
             domClass.add(this.updateNode, 'hidden');
             domClass.remove(this.createNode, 'hidden');
