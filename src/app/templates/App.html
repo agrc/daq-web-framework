@@ -33,18 +33,18 @@
   </div>
   <div id="map-div" class="below-banner stretched"></div>
   <div class="toolbar-items see-through">
-    <button class="btn btn-primary" id="layers" data-dojo-attach-event="click:activateTool"><i class="esri-icon-layer-list"></i></button>
-    <button class="btn btn-primary" id="query" data-dojo-attach-event="click:activateTool"><i class="esri-icon-search"></i></button>
-    <button class="btn btn-primary" id="buffer" data-dojo-attach-event="click:activateTool"><i class="esri-icon-radio-checked"></i></button>
-    <button class="btn btn-primary" id="trs" data-dojo-attach-event="click:activateTool"><i class="esri-icon-checkbox-unchecked"></i></button>
-    <button class="btn btn-primary" id="coords" data-dojo-attach-event="click:activateTool"><i class="esri-icon-map-pin"></i></button>
-    <button class="btn btn-primary" id="bookmark" data-dojo-attach-event="click:activateTool"><i class="esri-icon-labels"></i></button>
+    <button class="btn btn-primary" id="layers" title="Toggle Visibile Layers" data-dojo-attach-event="click:activateTool"><i class="esri-icon-layer-list"></i></button>
+    <button class="btn btn-primary" id="query" title="Select Items with Query" data-dojo-attach-event="click:activateTool"><i class="esri-icon-search"></i></button>
+    <button class="btn btn-primary" id="buffer" title="Select Items with Buffer Radius" data-dojo-attach-event="click:activateTool"><i class="esri-icon-radio-checked"></i></button>
+    <button class="btn btn-primary" id="trs" title="Zoom to Township Range Section" data-dojo-attach-event="click:activateTool"><i class="esri-icon-checkbox-unchecked"></i></button>
+    <button class="btn btn-primary" id="coords" title="Zoom to a Specific Coordinate" data-dojo-attach-event="click:activateTool"><i class="esri-icon-map-pin"></i></button>
+    <button class="btn btn-primary" id="bookmark" title="Zoom to Bookmarked Location" data-dojo-attach-event="click:activateTool"><i class="esri-icon-labels"></i></button>
   </div>
   <div class="selected-tool-container panel panel-primary see-through" data-dojo-attach-point="toolbox">
     <button type="button" class="close" data-dojo-attach-point="closeTool" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
-    <div class="panel-heading">Tool container</div>
+    <div class="panel-heading" data-dojo-attach-point="toolboxheader">Tool container</div>
     <div data-dojo-attach-point="toolboxcontainer"></div>
   </div>
   <div class="toaster">

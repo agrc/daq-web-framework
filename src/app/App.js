@@ -679,6 +679,7 @@ define([
                         return this.map.getLayer(id);
                     }, this)
                 }).placeAt(this.toolboxcontainer, 'after');
+                this.toolboxheader.innerHTML = 'Select Items with Query';
             } else if (targets.indexOf('buffer') > -1) {
                 this.activeTool = new Buffer({
                     layers: this.map.graphicsLayerIds.map(function (id) {
@@ -689,28 +690,35 @@ define([
                         });
                     })
                 }).placeAt(this.toolboxcontainer, 'after');
+                this.toolboxheader.innerHTML = 'Select Items with Buffer Radius';
             } else if (targets.indexOf('trs') > -1) {
                 this.activeTool = new TRSsearch({
                     map: this.map,
                     apiKey: config.apiKey
                 }).placeAt(this.toolboxcontainer, 'after');
+                this.toolboxheader.innerHTML = 'Zoom to Township Range Section';
             } else if (targets.indexOf('layers') > -1) {
                 this.activeTool = new LayerList({
                     map: this.map,
                     layers: this.layers
                 }).placeAt(this.toolboxcontainer, 'after');
+                this.toolboxheader.innerHTML = 'Toggle Visible Layers';
             } else if (targets.indexOf('coords') > -1) {
                 this.activeTool = new ZoomToCoords({
                     map: this.map,
                     zoomLevel: 16
                 }).placeAt(this.toolboxcontainer, 'after');
+                this.toolboxheader.innerHTML = 'Zoom to a Specific Coordinate';
             } else if (targets.indexOf('bookmark') > -1) {
                 var wtfEsri = domConstruct.place('<div></div>', this.toolboxcontainer, 'after');
                 this.activeTool = new Bookmarks({
                     map: this.map,
                     bookmarks: this.bookmarks
                 }, wtfEsri);
+                this.toolboxheader.innerHTML = 'Zoom to Bookmarked Location';
             } else {
+                this.toolboxheader.innerHTML = 'Tool Container';
+
                 return;
             }
 
