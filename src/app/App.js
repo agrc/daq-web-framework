@@ -697,6 +697,14 @@ define([
                     apiKey: config.apiKey
                 }).placeAt(this.toolboxcontainer, 'after');
                 this.toolboxheader.innerHTML = 'Zoom to Township Range Section';
+
+                this.activeTool.onZoom = function (graphic) {
+                    GraphicsController.highlight(graphic, config.symbols.trs);
+                };
+
+                aspect.before(this.activeTool, 'destroy', function () {
+                    GraphicsController.removeGraphic();
+                });
             } else if (targets.indexOf('layers') > -1) {
                 this.activeTool = new LayerList({
                     map: this.map,

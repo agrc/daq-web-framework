@@ -2,11 +2,13 @@ define([
     'dojo/has',
 
     'esri/symbols/SimpleFillSymbol',
+    'esri/symbols/SimpleLineSymbol',
     'esri/symbols/SimpleMarkerSymbol'
 ], function (
     has,
 
     SimpleFillSymbol,
+    SimpleLineSymbol,
     SimpleMarkerSymbol
 ) {
     var agol = 'http://www.arcgis.com';
@@ -116,6 +118,17 @@ define([
                 },
                 type: 'esriSFS',
                 style: 'esriSFSSolid'
+            }),
+            trs: new SimpleFillSymbol({
+                color: [0, 0, 0, 64], // eslint-disable-line no-magic-numbers
+                outline: {
+                    color: [255, 65, 54, 200], // eslint-disable-line no-magic-numbers
+                    width: 3,
+                    type: 'esriSLS',
+                    style: 'esriSLSShortDot'
+                },
+                type: 'esriSFS',
+                style: 'esriSFSNull'
             })
         }
     };
