@@ -23,7 +23,8 @@ var profile = {
                 'esri/layers/ArcGISDynamicMapServiceLayer',
                 'esri/layers/LayerDrawingOptions',
                 'esri/layers/VectorTileLayerImpl',
-                'esri/layers/WebTiledLayer'
+                'esri/layers/WebTiledLayer',
+                'esri/dijit/Legend'
             ],
             includeLocales: ['en-us'],
             customBase: true,
