@@ -707,6 +707,7 @@ define([
                 });
             } else if (targets.indexOf('layers') > -1) {
                 this.activeTool = new LayerList({
+                    showLegend: true,
                     map: this.map,
                     layers: this.layers
                 }).placeAt(this.toolboxcontainer, 'after');
