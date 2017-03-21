@@ -1,4 +1,6 @@
 define([
+    './GridFilter',
+
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
@@ -27,6 +29,11 @@ define([
             console.info('app/GridFooter:postCreate', arguments);
 
             this.childWidgets = [];
+
+            this.childWidgets.push(new GridFilter({
+                grid: this.parent.grid,
+                store: this.parent.store
+            }).placeAt(this.containerLeft, 'first'));
             this.inherited(arguments);
         },
         startup: function () {
