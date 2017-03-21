@@ -31,7 +31,6 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
 
-    'dstore/Filter',
     'dstore/RequestMemory',
 
     'esri/arcgis/utils',
@@ -74,7 +73,6 @@ define([
     declare,
     lang,
 
-    Filter,
     RequestMemory,
 
     utils,
@@ -158,6 +156,7 @@ define([
                 if (e.target === this.edocsTab && !this.grid) {
                     this.initGrid();
                     this.grid.startup();
+                    this.footer.startup();
                 }
             }));
 
@@ -372,72 +371,6 @@ define([
                 this.grid = null;
             }
 
-            var container = document.createElement('div');
-            container.className = 'container';
-
-            var containerRow = document.createElement('div');
-            containerRow.className = 'row';
-
-            var left = document.createElement('div');
-            left.className = 'col-md-4 col-sm-12';
-
-            var right = document.createElement('div');
-            right.className = 'col-md-8 col-sm-12';
-
-            var form = document.createElement('div');
-            form.className = 'form-inline';
-
-            var group = document.createElement('div');
-            group.className = 'form-group';
-
-            var label = document.createElement('label');
-            label.setAttribute('for', 'search');
-            label.innerHTML = 'Filter Grid';
-
-            var input = document.createElement('input');
-            input.setAttribute('type', 'text');
-            input.setAttribute('id', 'search');
-            input.setAttribute('autocomplete', 'nope');
-            input.className = 'form-control';
-            input.addEventListener('input', lang.hitch(this, 'filterGrid'));
-
-            group.appendChild(label);
-            group.appendChild(document.createTextNode(' '));
-            group.appendChild(input);
-            left.appendChild(group);
-
-            var uploadGroup = document.createElement('form');
-            uploadGroup.className = 'form-group';
-            uploadGroup.id = 'edoc-form';
-
-            var uploadLabel = document.createElement('label');
-            uploadLabel.setAttribute('for', 'attachment');
-            uploadLabel.innerHTML = 'External File';
-
-            var uploadInput = document.createElement('input');
-            uploadInput.setAttribute('type', 'file');
-            uploadInput.setAttribute('name', 'attachment');
-            uploadInput.setAttribute('id', 'attachment');
-            uploadInput.setAttribute('style', 'display: inline-block;');
-
-            var uploadSubmit = document.createElement('button');
-            uploadSubmit.innerHTML = 'attach';
-            uploadSubmit.dataset.action = 'external';
-            uploadSubmit.className = 'btn btn-default';
-
-            uploadGroup.appendChild(uploadLabel);
-            uploadGroup.appendChild(document.createTextNode(' '));
-            uploadGroup.appendChild(uploadInput);
-            uploadGroup.appendChild(document.createTextNode(' '));
-            uploadGroup.appendChild(uploadSubmit);
-
-            right.appendChild(uploadGroup);
-
-            containerRow.appendChild(left);
-            containerRow.appendChild(right);
-
-            form.appendChild(containerRow);
-
             var ComposedGrid = declare([Grid, SingleQuery]);
             this.grid = new ComposedGrid({
                 class: 'dgrid-main full-height',
@@ -480,26 +413,19 @@ define([
                 }
             }, this.gridcontent);
 
-            this.grid.footerNode.appendChild(form);
+            this.footer = new GridFooter({
+                parent: this
+            });
+            this.grid.footerNode.appendChild(this.footer.domNode);
 
             aspect.before(this.grid, 'destroy', function () {
-                input.removeEventListener('input', this.filterGrid);
+                this.footer.destroy();
             }.bind(this));
 
             this.grid.on('click', lang.hitch(this, 'onGridClick', this.gridClickProps));
             this.grid.on('dgrid-error', lang.hitch(this, 'toast'));
             this.grid.on('dgrid-error', lang.hitch(this.grid, 'destroy'));
             this.grid.set('collection', this.store);
-        },
-        filterGrid: function (evt) {
-            var filter = new Filter();
-            filter = filter.match('title', new RegExp(evt.target.value, 'i'));
-
-            if (evt.target.value === '') {
-                filter = {};
-            }
-
-            this.grid.set('collection', this.store.filter(filter));
         },
         onGridClick: function (props, evt) {
             // summary:
