@@ -9,9 +9,9 @@ require([
 ) {
     describe('app/GridFilter', function () {
         var widget;
-        var destroy = function (widget) {
-            widget.destroyRecursive();
-            widget = null;
+        var destroy = function (item) {
+            item.destroyRecursive();
+            item = null;
         };
 
         beforeEach(function () {
