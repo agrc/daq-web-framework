@@ -10,6 +10,7 @@ define([
     './GraphicsController',
     './GridFooter',
     './MapController',
+    './ToggleButtonStatus',
     './Query',
 
     'dgrid1/extensions/SingleQuery',
@@ -55,6 +56,7 @@ define([
     GraphicsController,
     GridFooter,
     MapController,
+    ToggleButtonStatus,
     Query,
 
     SingleQuery,
@@ -481,7 +483,7 @@ define([
             var uploadId = row.uploadId;
             var method = uploadId ? 'DELETE' : 'POST';
 
-            this.toggleStatus(clicked, {
+            ToggleButtonStatus.toggle(clicked, {
                 buttonText: 'processing',
                 buttonCss: 'btn btn-warning',
                 disabled: true,
@@ -518,7 +520,7 @@ define([
             }).then(lang.hitch(this, function (json) {
                 if (json.error) {
                     this.toast(json.error.messages || 'something went wrong');
-                    this.toggleStatus(clicked, {
+                    ToggleButtonStatus.toggle(clicked, {
                         buttonText: 'error',
                         buttonCss: 'btn btn-danger',
                         disabled: false
@@ -531,7 +533,7 @@ define([
                 }
 
                 if ('addAttachmentResult' in json && json.addAttachmentResult.success === true) {
-                    this.toggleStatus(clicked, {
+                    ToggleButtonStatus.toggle(clicked, {
                         buttonText: 'remove',
                         buttonCss: 'btn btn-danger',
                         disabled: false
@@ -540,7 +542,7 @@ define([
                     row.uploadId = json.addAttachmentResult.objectId;
                     this.store.put(row, { overwrite: true });
                 } else if ('deleteAttachmentResult' in json && json.deleteAttachmentResult.success === true) {
-                    this.toggleStatus(clicked, {
+                    ToggleButtonStatus.toggle(clicked, {
                         buttonText: 'add',
                         buttonCss: 'btn btn-success',
                         disabled: false
@@ -550,7 +552,7 @@ define([
                     this.store.put(row, { overwrite: true });
                 }
             }), lang.hitch(this, function (error) {
-                this.toggleStatus(clicked, {
+                ToggleButtonStatus.toggle(clicked, {
                     buttonText: 'error, try again?',
                     buttonCss: 'btn btn-danger',
                     disabled: false
