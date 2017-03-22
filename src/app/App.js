@@ -466,7 +466,9 @@ define([
                 case 'edoc':
                     return this.processEdocItem(props, evt);
                 case 'external':
-                    return this.addAttachment(props, evt);
+                    this.footer.gridProps = props;
+
+                    return;
                 default:
                     return;
             }
@@ -649,60 +651,6 @@ define([
             }
 
             this.activeTool.startup();
-        },
-        addAttachment: function (props, event) {
-            // summary:
-            //      send xhr post to api to save File
-            // submit event
-            console.info('app/App:addAttachment', arguments);
-
-
-            var clicked = event.target;
-
-            this.toggleStatus(clicked, {
-                buttonText: 'processing',
-                buttonCss: 'btn btn-warning',
-                disabled: true
-            });
-
-            var form = new FormData(document.getElementById('edoc-form'));
-            form.append('serviceUrl', props.url);
-            form.append('featureId', props.graphic.attributes[config.fields.uniqueId]);
-            form.append('token', 'shh');
-
-            xhr(config.urls.webapi + '/upload/external', {
-                method: 'post',
-                data: form,
-                headers: {
-                    'X-Requested-With': null
-                },
-                handleAs: 'json'
-            }).then(lang.hitch(this, function (json) {
-                if (json.error) {
-                    this.toast(json.error.messages || 'something went wrong');
-                    this.toggleStatus(clicked, {
-                        buttonText: 'error, try again?',
-                        buttonCss: 'btn btn-danger',
-                        disabled: false
-                    });
-
-                    return;
-                }
-
-                this.toggleStatus(clicked, {
-                    buttonText: 'success',
-                    buttonCss: 'btn btn-success',
-                    disabled: false
-                });
-            }), lang.hitch(this, function (error) {
-                this.toggleStatus(clicked, {
-                    buttonText: 'error, try again?',
-                    buttonCss: 'btn btn-danger',
-                    disabled: false
-                });
-
-                this.toast(error);
-            }));
         },
         _applyAliasProperty: function (lookup) {
             // summary:

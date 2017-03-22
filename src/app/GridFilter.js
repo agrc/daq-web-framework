@@ -28,16 +28,16 @@ define([
             //      Overrides method of same name in dijit._Widget.
             console.info('app/GridFilter:postCreate', arguments);
 
-            this.setupConnections();
+            // this.setupConnections();
 
             this.inherited(arguments);
         },
-        setupConnections: function () {
-            // summary:
-            //      wire events, and such
-            console.info('app/GridFilter:setupConnections', arguments);
-
-        },
+        // setupConnections: function () {
+        //     // summary:
+        //     //      wire events, and such
+        //     console.info('app/GridFilter:setupConnections', arguments);
+        //
+        // },
         filterGrid: function (evt) {
             // summary:
             //      description

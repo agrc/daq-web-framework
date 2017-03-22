@@ -1,5 +1,6 @@
 define([
     './GridFilter',
+    './ExternalFileManager',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -8,6 +9,7 @@ define([
     'dojo/_base/declare'
 ], function (
     GridFilter,
+    ExternalFileManager,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -34,6 +36,10 @@ define([
                 grid: this.parent.grid,
                 store: this.parent.store
             }).placeAt(this.containerLeft, 'first'));
+            this.childWidgets.push(new ExternalFileManager({
+                props: this.parent.gridClickProps
+            }).placeAt(this.containerRight, 'first'));
+
             this.inherited(arguments);
         },
         startup: function () {
