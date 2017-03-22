@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using daq_api.Contracts;
@@ -57,15 +58,21 @@ namespace daq_api.Modules
                     return Response.AsJson(result);
                 }
 
-                var filenames = response.Result.AttachmentGroups[0].AttachmentInfos.ToDictionary(key => key.Name, value => value.Id);
+                var filenames = response.Result.AttachmentGroups[0].AttachmentInfos.ToDictionary(key => string.Format("{0}?{1}", key.Name, key.Id), value => value.Id);
 
                 return Response.AsJson(result.Select(mapped =>
                 {
                     var updated = new EDocEntry(mapped, facilityId);
-                    updated.Uploaded = filenames.ContainsKey(updated.File);
+                    var uploads = filenames.Where(key =>
+                    {
+                        var name = key.Key.Split('?')[0];
+                        return string.Compare(name, updated.File, StringComparison.InvariantCultureIgnoreCase) == 0;
+                    }).ToList();
+
+                    updated.Uploaded = uploads.Any();
                     if (updated.Uploaded)
                     {
-                        updated.UploadId = filenames[updated.File];
+                        updated.UploadId = uploads.First().Value;
                     }
 
                     return updated;
