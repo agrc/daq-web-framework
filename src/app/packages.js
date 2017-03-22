@@ -12,6 +12,10 @@ require({
         'esri',
         'moment',
         'put-selector',
+        {
+            name: 'toaster',
+            location: './toaster/dist'
+        },
         'xstyle',
         {
             name: 'bootstrap',
