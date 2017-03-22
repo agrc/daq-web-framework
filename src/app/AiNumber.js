@@ -108,15 +108,24 @@ define([
                         this._toggleUpdateButton(true);
                     } else {
                         domAttr.remove(this.submit, 'disabled');
-                        topic.publish(config.topics.toast, data.updateResults[0].error.description);
+                        topic.publish(config.topics.toast, {
+                            message: data.updateResults[0].error.description,
+                            type: 'danger'
+                        });
                     }
                 } else {
                     domAttr.remove(this.submit, 'disabled');
-                    topic.publish(config.topics.toast, data.error);
+                    topic.publish(config.topics.toast, {
+                        message: data.error,
+                        type: 'danger'
+                    });
                 }
             }), function (err) {
                 domAttr.remove(this.submit, 'disabled');
-                topic.publish(config.topics.toast, err);
+                topic.publish(config.topics.toast, {
+                    message: err,
+                    type: 'danger'
+                });
             });
         },
         validate: function () {

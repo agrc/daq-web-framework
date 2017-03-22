@@ -116,16 +116,24 @@ define([
                     if (graphics && graphics.length > 0) {
                         MapController.zoom(graphics);
                         if (graphics.length === config.maxResult) {
-                            topic.publish(config.topics.toast,
-                                'The max number of features was returned. The results are a partial view.');
+                            topic.publish(config.topics.toast, {
+                                message: 'The max number of features was returned. The results are a partial view.',
+                                type: 'warning'
+                            });
                         }
                     } else {
-                        topic.publish(config.topics.toast, 'No features found. Check your spelling.');
+                        topic.publish(config.topics.toast, {
+                            message: 'No features found. Check your spelling.',
+                            type: 'info'
+                        });
                     }
                 },
                 function (err) {
-                    topic.publish(config.topics.toast, (err.details[0] || err || '') +
-                        ' Make sure the layer you are querying contains the ' + queryInfo.field + ' field.');
+                    topic.publish(config.topics.toast, {
+                        message: (err.details[0] || err || '') +
+                        ' Make sure the layer you are querying contains the ' + queryInfo.field + ' field.',
+                        type: 'warning'
+                    });
                 }
             );
         },

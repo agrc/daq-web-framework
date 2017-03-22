@@ -39,6 +39,9 @@ define([
 
     'jquery',
 
+    'toaster/Toaster',
+
+
     'bootstrap'
 ], function (
     TRSsearch,
@@ -79,7 +82,9 @@ define([
     LayerList,
     esriId,
 
-    $
+    $,
+
+    Toaster
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // summary:
@@ -116,6 +121,11 @@ define([
 
             // set version number
             this.version.innerHTML = config.version;
+
+            var toaster = new Toaster.default({ // eslint-disable-line new-cap
+                topic: config.topics.toast
+            }, domConstruct.create('div', {}, document.body));
+            toaster.startup();
 
             this.initMap();
 
@@ -164,8 +174,7 @@ define([
                 on(this.closeWindow, 'click', lang.hitch(this, 'close', this.infowindow)),
                 on(this.closeTool, 'click', lang.hitch(this, 'close', this.toolbox)),
                 topic.subscribe(config.topics.addAi, lang.hitch(this, 'onAiAdded')),
-                topic.subscribe(config.topics.identify, lang.hitch(this, 'showAttributes')),
-                topic.subscribe(config.topics.toast, lang.hitch(this, 'toast'))
+                topic.subscribe(config.topics.identify, lang.hitch(this, 'showAttributes'))
             );
         },
         startup: function () {
@@ -188,7 +197,10 @@ define([
             console.info('app/App::initMap', arguments);
 
             if (!this.digest) {
-                return this.toast('There was an issue logging in. Please try again later.');
+                return topic.publish(config.topics.toast, {
+                    message: 'There was an issue logging in. Please try again later.',
+                    type: 'danger'
+                });
             }
 
             var token = {
@@ -249,7 +261,12 @@ define([
                 this.map.on('load', function () {
                     this.setupConnections();
                 }).bind(this);
-            }));
+            }), function (error) {
+                topic.publish(config.topics.toast, {
+                    message: error.message || 'something went terribly wrong',
+                    type: 'danger'
+                });
+            });
         },
         showAttributes: function (props) {
             // summary:
@@ -423,7 +440,12 @@ define([
             }.bind(this));
 
             this.grid.on('click', lang.hitch(this, 'onGridClick', this.gridClickProps));
-            this.grid.on('dgrid-error', lang.hitch(this, 'toast'));
+            this.grid.on('dgrid-error', function (evt) {
+                topic.publish(config.topics.toast, {
+                    message: evt.error.message || 'something went terribly wrong',
+                    type: 'danger'
+                });
+            });
             this.grid.on('dgrid-error', lang.hitch(this.grid, 'destroy'));
             this.grid.set('collection', this.store);
         },
@@ -533,46 +555,11 @@ define([
                     buttonCss: 'btn btn-danger',
                     disabled: false
                 });
-                this.toast(error);
+                topic.publish(config.topics.toast, {
+                    message: error,
+                    type: 'danger'
+                });
             }));
-        },
-        toast: function (message) {
-            // summary:
-            //      toast a message
-            // click event
-            console.info('app/App:toast', arguments);
-
-            var fiveSeconds = 5000;
-            var toaster = document.getElementById('toaster-container');
-            var div = document.createElement('div');
-            div.innerHTML = message.error || message;
-            div.className = 'toaster-item alert alert-danger';
-
-            toaster.appendChild(div);
-
-            setTimeout(function () {
-                toaster.removeChild(div);
-            }, fiveSeconds);
-        },
-        toggleStatus: function (node, options) {
-            // summary:
-            //      global click handler for dgrid
-            // click event
-            console.info('app/App:toggleStatus', arguments);
-
-            // invert css and button text depending
-            node.className = options.buttonCss;
-            if (node.tagName === 'BUTTON') {
-                node.innerHTML = options.buttonText;
-            } else {
-                node.setAttribute('value', options.buttonText);
-            }
-
-            if (options.disabled) {
-                node.setAttribute('disabled', 'disabled');
-            } else {
-                node.removeAttribute('disabled');
-            }
         },
         onAiAdded: function (props) {
             // summary:
