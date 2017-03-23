@@ -1,0 +1,155 @@
+[
+  {
+    "parentGlobalId": "3473917f-831e-4ae2-b77a-6385fb6ff9fb",
+    "contentType": "application/pdf",
+    "name": "TEST.pdf",
+    "globalId": "3933d39a-d194-47ba-a7e5-53d23470d508",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/3555/attachments/1",
+    "attachmentId": 1,
+    "size": 91394
+  },
+  {
+    "parentGlobalId": "3dc60cb5-46cf-48d6-97e0-01a19c313349",
+    "contentType": "application/x-zip-compressed",
+    "name": "FY18_WarmSprings_bh_only_buf_dis.zip",
+    "globalId": "2ccf6c01-ed90-4e32-a811-ddf5671aa037",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/4952/attachments/11",
+    "attachmentId": 11,
+    "size": 46997
+  },
+  {
+    "parentGlobalId": "77e9c5c3-b473-4e60-8524-84bcf22e0c05",
+    "contentType": "application/pdf",
+    "name": "4217_2722301_10793ReillyIndustriesInspectionMemo.pdf",
+    "globalId": "6c5ff660-3ea3-4619-9f84-d79edb9cb2cd",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/4972/attachments/12",
+    "attachmentId": 12,
+    "size": 76257
+  },
+  {
+    "parentGlobalId": "77e9c5c3-b473-4e60-8524-84bcf22e0c05",
+    "contentType": "application/pdf",
+    "name": "4217_2722301_10793ReillyIndustriesInspectionMemo.pdf",
+    "globalId": "7e0c6981-587e-4891-9b0d-4e806b388d91",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/4972/attachments/13",
+    "attachmentId": 13,
+    "size": 76257
+  },
+  {
+    "parentGlobalId": "77e9c5c3-b473-4e60-8524-84bcf22e0c05",
+    "contentType": "application/pdf",
+    "name": "4217_2722303_ReillyIndustriesInc-ACEMemo.pdf",
+    "globalId": "a090f91c-b7ac-490d-8aae-c12931d48adf",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/4972/attachments/15",
+    "attachmentId": 15,
+    "size": 44594
+  },
+  {
+    "parentGlobalId": "77e9c5c3-b473-4e60-8524-84bcf22e0c05",
+    "contentType": "application/x-zip-compressed",
+    "name": "3234_Fixed.zip",
+    "globalId": "26c9939b-5dad-4a22-9133-72baa76e8425",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/4972/attachments/16",
+    "attachmentId": 16,
+    "size": 120048
+  },
+  {
+    "parentGlobalId": "3dc60cb5-46cf-48d6-97e0-01a19c313349",
+    "contentType": "image/gif",
+    "name": "1487194916277.gif",
+    "globalId": "70234e32-b0d2-4619-a4e9-ad49eaa9b1f9",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/4952/attachments/2017",
+    "attachmentId": 2017,
+    "size": 125927
+  },
+  {
+    "parentGlobalId": "1f5aff63-3358-41dd-b52e-c0d8b7bd7ad9",
+    "contentType": "application/pdf",
+    "name": "PM25.pdf",
+    "globalId": "dcf44298-4990-497b-8a6a-391412865a00",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/6791/attachments/2020",
+    "attachmentId": 2020,
+    "size": 6714134
+  },
+  {
+    "parentGlobalId": "039fe432-39a2-424e-9e7b-d0a984096ad4",
+    "contentType": "application/pdf",
+    "name": "6659_4_BrighamYoungUniversity-GoUtes.pdf",
+    "globalId": "6468b844-44f7-44f8-8685-eefdcaafdb3d",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/6648/attachments/2038",
+    "attachmentId": 2038,
+    "size": 33198
+  },
+  {
+    "parentGlobalId": "039fe432-39a2-424e-9e7b-d0a984096ad4",
+    "contentType": "application/pdf",
+    "name": "6659_2808961_BrighamYoungUniversityDryCleaner-InspectionMemo.pdf",
+    "globalId": "196d91c4-bc35-4a4e-8743-26d67e783f29",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/6648/attachments/2040",
+    "attachmentId": 2040,
+    "size": 625964
+  },
+  {
+    "parentGlobalId": "31b81c84-68ab-4f8f-b0a7-b9588e9eeb01",
+    "contentType": "application/pdf",
+    "name": "TEST_Permit.pdf",
+    "globalId": "9d0b5860-9f79-4a78-b8cb-5c616f98af09",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/371/attachments/2042",
+    "attachmentId": 2042,
+    "size": 91394
+  },
+  {
+    "parentGlobalId": "039fe432-39a2-424e-9e7b-d0a984096ad4",
+    "contentType": "application/pdf",
+    "name": "PM25.pdf",
+    "globalId": "e4f67588-0390-4a2e-941f-024d23b6ea51",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/6648/attachments/2044",
+    "attachmentId": 2044,
+    "size": 6714134
+  },
+  {
+    "parentGlobalId": "039fe432-39a2-424e-9e7b-d0a984096ad4",
+    "contentType": "text/plain",
+    "name": "warandpeace.txt",
+    "globalId": "6464ebef-4289-410c-a042-966a5c6fdbe0",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/6648/attachments/2045",
+    "attachmentId": 2045,
+    "size": 3406163
+  },
+  {
+    "parentGlobalId": "039fe432-39a2-424e-9e7b-d0a984096ad4",
+    "contentType": "application/pdf",
+    "name": "PM25.pdf",
+    "globalId": "94f834c4-8e3f-49bd-9faa-e5917fbe4900",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/6648/attachments/2046",
+    "attachmentId": 2046,
+    "size": 6714134
+  },
+  {
+    "parentGlobalId": "039fe432-39a2-424e-9e7b-d0a984096ad4",
+    "contentType": "application/pdf",
+    "name": "6659_1_Citizencomplaintdated4-21-2014.pdf",
+    "globalId": "3a63e68f-8d8e-48f2-95c0-4d1036eca90d",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/6648/attachments/2047",
+    "attachmentId": 2047,
+    "size": 33198
+  },
+  {
+    "parentGlobalId": "039fe432-39a2-424e-9e7b-d0a984096ad4",
+    "contentType": "application/pdf",
+    "name": "PM25.pdf",
+    "globalId": "9febdc22-9ea9-441c-8c61-4ad68d02c590",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/6648/attachments/2048",
+    "attachmentId": 2048,
+    "size": 6714134
+  },
+  {
+    "parentGlobalId": "039fe432-39a2-424e-9e7b-d0a984096ad4",
+    "contentType": "application/pdf",
+    "name": "PM25.pdf",
+    "globalId": "61563df0-b43e-4aac-ba88-d16a5a1b3efb",
+    "url": "https://services2.arcgis.com/NnxP4LZ3zX8wWmP9/ArcGIS/rest/services/2015_OGFacilities/FeatureServer/0/6648/attachments/2049",
+    "attachmentId": 2049,
+    "size": 6714134
+  }
+]
