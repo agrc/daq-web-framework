@@ -5,7 +5,7 @@ namespace daq_api.Models
 {
     public class EDocEntry
     {
-        private const string Separators = "__";
+        private const string Separators = "__x00-00x";
         private static readonly Regex StripNonAlphaNumeric = new Regex("[^a-zA-Z0-9-]");
         private readonly int _maxSize = 100 - Separators.Length;
 
@@ -84,7 +84,10 @@ namespace daq_api.Models
                 title = title.Substring(0, charactersAllowed);
             }
 
-            return string.Format("{0}_{1}_{2}{3}", facilityId, Id, title, extension);
+            var day = DateTime.Today.Day.ToString("d2");
+            var month = DateTime.Today.Month.ToString("d2");
+
+            return string.Format("x{4}-{5}x{0}_{1}_{2}{3}", facilityId, Id, title, extension, month, day);
         }
     }
 }

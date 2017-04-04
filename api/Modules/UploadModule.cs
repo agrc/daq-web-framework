@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Text.RegularExpressions;
 using daq_api.Contracts;
 using daq_api.Models;
 using daq_api.Models.RouteModels;
@@ -19,7 +20,6 @@ namespace daq_api.Modules
         public const int MaxUpload = 10485760;
         private const string AttachmentUrl = "/addAttachment";
         private const string DeleteAttachmentUrl = "/deleteAttachments";
-        public IEnumerable<MediaTypeFormatter> Formatters { get; set; }
 
         public UploadModule(IRepository repository, IShareMappable edocFolder, ArcOnlineHttpClient client)
         {
@@ -53,7 +53,7 @@ namespace daq_api.Modules
                         }
                         catch (ArgumentNullException)
                         {
-                           return Response.AsJson(new Errorable
+                            return Response.AsJson(new Errorable
                             {
                                 Error = new Error
                                 {
@@ -105,7 +105,7 @@ namespace daq_api.Modules
 
                     var url = string.Format("{0}/{1}{2}", model.ServiceUrl, model.FeatureId, DeleteAttachmentUrl);
                     var response = await client.DeleteDocument(url, formContent);
-                    
+
                     return Response.AsJson(response.Result);
                 }
             };
@@ -128,6 +128,35 @@ namespace daq_api.Modules
                 var extension = Path.GetExtension(attachment.Name);
                 var contentType = MimeTypeMap.GetMimeType(extension);
 
+                if (string.IsNullOrEmpty(extension))
+                {
+                    extension = "";
+                }
+
+                var filename = attachment.Name.Replace(extension, "");
+                var extLength = 0;
+
+                if (!string.IsNullOrEmpty(extension))
+                {
+                    extLength = extension.Length;
+                }
+
+                const int maxSize = 100;
+                var stripNonAlphaNumeric = new Regex("[^a-zA-Z0-9-]");
+                var charactersAllowed = maxSize - extLength;
+                var title = filename.Replace('/', '-');
+                title = stripNonAlphaNumeric.Replace(title, "");
+
+                if (title.Length > charactersAllowed)
+                {
+                    title = title.Substring(0, charactersAllowed);
+                }
+
+                var day = DateTime.Today.Day.ToString("d2");
+                var month = DateTime.Today.Month.ToString("d2");
+
+                var renamed = string.Format("x{0}-{1}x{2}{3}", month, day, title, extension);
+
                 using (var document = attachment.Value)
                 using (var formContent = new MultipartFormDataContent())
                 {
@@ -137,7 +166,7 @@ namespace daq_api.Modules
 
                         var streamContent = new StreamContent(document);
                         streamContent.Headers.Add("Content-Type", contentType);
-                        streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", attachment.Name));
+                        streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", renamed));
                         formContent.Add(streamContent, "file", attachment.Name);
                         formContent.Add(new StringContent("json"), "f");
                         formContent.Add(new StringContent(token), "token");
@@ -160,5 +189,7 @@ namespace daq_api.Modules
                 }
             };
         }
+
+        public IEnumerable<MediaTypeFormatter> Formatters { get; set; }
     }
 }
