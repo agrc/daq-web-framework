@@ -1,6 +1,6 @@
 {
     "name": "daq.app",
-    "version": "1.5.2",
+    "version": "1.6.0",
     "main": "main",
     "description": "daq web framework",
     "homepage": "http://gis.utah.gov",

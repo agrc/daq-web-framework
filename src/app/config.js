@@ -16,7 +16,7 @@ define([
     var config = {
         appName: 'daq-web',
         appId: 'Rngn0PfKFjvT2p26',
-        version: '1.5.2',
+        version: '1.6.0',
         maxResult: 1000,
         fields: {
             uniqueId: 'OBJECTID',
