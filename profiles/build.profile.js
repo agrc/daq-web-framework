@@ -92,6 +92,9 @@ var profile = {
         'extend-dojo': 1
     },
     userConfig: {
-        packages: ['app', 'agrc', 'dijit', 'dojox', 'esri', 'dgrid1']
+        packages: ['app', 'agrc', 'dijit', 'dojox', 'esri', 'dgrid1', {
+            name: 'toaster',
+            location: './toaster/dist'
+        }]
     }
 };
