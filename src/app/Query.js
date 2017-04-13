@@ -181,6 +181,15 @@ define([
 
             return str.replace(/([A-Z])/g, ' $1');
         },
+        _updateUiForSpatialRestriction: function () {
+            // summary:
+            //      handles the change event of the spatial select node
+            // param or return
+            console.log('app/App:_updateUiForSpatialRestriction', arguments);
+
+            var restriction = this.spatial.value;
+            console.debug(restriction);
+        },
         destroy: function () {
             // summary:
             //      overload destroy to clear selections
