@@ -17,9 +17,12 @@
     <label for="spatial-selector">Spatial Restriction</label>
     <select id="spatial-selector" class="form-control" data-dojo-attach-event="change:_updateUiForSpatialRestriction" data-dojo-attach-point="spatial">
       <option value="">Statewide
-      <option value="County">County
-      <option value="Shape">Rectangle
+      <option value="county">County
+      <option value="shape">Rectangle
     </select>
+  </div>
+  <div class="form-group" data-dojo-attach-point="restrictionParentNode">
+  </div>
   <div class="form-group text-center">
     <button class="btn btn-primary" data-dojo-attach-event="click:query">Query</button>
   </div>

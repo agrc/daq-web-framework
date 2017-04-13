@@ -1,7 +1,8 @@
 define([
-    'app/config',
-    'app/GraphicsController',
-    'app/MapController',
+    './config',
+    './County',
+    './GraphicsController',
+    './MapController',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -9,15 +10,17 @@ define([
     'dojo/dom-construct',
     'dojo/keys',
     'dojo/on',
-    'dojo/text!app/templates/Query.html',
+    'dojo/text!./templates/Query.html',
     'dojo/topic',
     'dojo/_base/declare',
     'dojo/_base/lang',
 
     'esri/layers/FeatureLayer',
-    'esri/tasks/query'
+    'esri/tasks/query',
+    'esri/geometry/Polygon'
 ], function (
     config,
+    County,
     GraphicsController,
     MapController,
 
@@ -33,7 +36,8 @@ define([
     lang,
 
     FeatureLayer,
-    Query
+    Query,
+    Polygon
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -110,6 +114,10 @@ define([
                 query: this.input.value
             });
             query.outFields = ['SHAPE'];
+            if (this.spatialRestriction) {
+                query.geometry = new Polygon(this.spatialRestriction);
+                query.spatialRelationship = Query.SPATIAL_REL_CONTAINS;
+            }
 
             this.activeLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW).then(
                 function (graphics) {
@@ -185,10 +193,37 @@ define([
             // summary:
             //      handles the change event of the spatial select node
             // param or return
-            console.log('app/App:_updateUiForSpatialRestriction', arguments);
+            console.info('app/App:_updateUiForSpatialRestriction', arguments);
 
             var restriction = this.spatial.value;
-            console.debug(restriction);
+            if (this.spatialEventRef) {
+                this.spatialEventRef.remove();
+                this.spatialRestriction = null;
+            }
+
+            domConstruct.empty(this.restrictionParentNode);
+
+            if (restriction === 'county') {
+                var select = domConstruct.toDom('<select id="restriction" class="form-control"></select>');
+
+                County.countyList().forEach(function (value) {
+                    select.appendChild(domConstruct.toDom('<option value="' +
+                        value + '">' + this._toProperCase(value)));
+                }, this);
+
+                this.spatialRestriction = County.getGeometryFor(select.options[select.selectedIndex].value);
+
+                this.spatialEventRef = on(select, 'change', lang.hitch(this, function () {
+                    this.spatialRestriction = County.getGeometryFor(select.value);
+                    console.debug(this.spatialRestriction);
+                }));
+
+                this.own(this.spatialEventRef);
+
+                console.debug(this.spatialRestriction);
+                this.restrictionParentNode.appendChild(domConstruct.toDom('<label for="restriction">County</label>'));
+                this.restrictionParentNode.appendChild(select);
+            }
         },
         destroy: function () {
             // summary:
