@@ -2,12 +2,14 @@ define([
     'esri/geometry/Multipoint',
     'esri/geometry/Point',
     'esri/graphic',
-    'esri/graphicsUtils'
+    'esri/graphicsUtils',
+    'esri/toolbars/draw'
 ], function (
     Multipoint,
     Point,
     Graphic,
-    graphicsUtils
+    graphicsUtils,
+    Draw
 ) {
     return {
         // description:
@@ -23,6 +25,8 @@ define([
         map: null,
 
         zoomLevel: 18,
+
+        toolbar: null,
 
 
         initialize: function (map) {
@@ -68,6 +72,30 @@ define([
             }
 
             return this._setExtent(graphic);
+        },
+        enableDrawing: function (callback) {
+            // summary:
+            //      turn on the drawing toolbar
+            // style the tool shape style
+            console.info('app/MapController:enableDrawing', arguments);
+
+            if (!this.toolbar) {
+                this.toolbar = new Draw(this.map);
+            }
+
+            this.toolbar.activate(Draw.EXTENT);
+            this.handles.push(this.toolbar.on('draw-end', callback));
+        },
+        disableDrawing: function () {
+            // summary:
+            //      turn on the drawing toolbar
+            console.info('app/MapController:disableDrawing', arguments);
+
+            if (!this.toolbar) {
+                return;
+            }
+
+            this.toolbar.deactivate();
         },
         _setExtent: function (graphic) {
             // summary:

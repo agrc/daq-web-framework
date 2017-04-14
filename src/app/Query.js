@@ -105,6 +105,7 @@ define([
 
             this.activeLayer = this.layers[this.layer.options[this.layer.selectedIndex].text];
             this.activeLayer.setSelectionSymbol(config.symbols.point);
+            // MapController.disableDrawing();
 
             var query = new Query();
             var queryInfo = config.queries[this.layer.value][this.type.value];
@@ -115,13 +116,19 @@ define([
             });
             query.outFields = ['SHAPE'];
             if (this.spatialRestriction) {
-                query.geometry = new Polygon(this.spatialRestriction);
+                if (this.spatialRestriction.type.toLowerCase() === 'extent') {
+                    query.geometry = this.spatialRestriction;
+                } else {
+                    query.geometry = new Polygon(this.spatialRestriction);
+                }
+
                 query.spatialRelationship = Query.SPATIAL_REL_CONTAINS;
             }
 
             this.activeLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW).then(
                 function (graphics) {
                     if (graphics && graphics.length > 0) {
+                        GraphicsController.removeGraphic();
                         MapController.zoom(graphics);
                         if (graphics.length === config.maxResult) {
                             topic.publish(config.topics.toast, {
@@ -201,6 +208,9 @@ define([
                 this.spatialRestriction = null;
             }
 
+            MapController.disableDrawing();
+            GraphicsController.removeGraphic();
+
             domConstruct.empty(this.restrictionParentNode);
 
             if (restriction === 'county') {
@@ -223,6 +233,11 @@ define([
                 console.debug(this.spatialRestriction);
                 this.restrictionParentNode.appendChild(domConstruct.toDom('<label for="restriction">County</label>'));
                 this.restrictionParentNode.appendChild(select);
+            } else if (restriction === 'shape') {
+                MapController.enableDrawing(function (evt) {
+                    this.spatialRestriction = evt.geometry;
+                    GraphicsController.highlight(evt);
+                }.bind(this));
             }
         },
         destroy: function () {
@@ -233,6 +248,9 @@ define([
             if (this.activeLayer) {
                 this.activeLayer.clearSelection();
             }
+
+            MapController.disableDrawing();
+            GraphicsController.removeGraphic();
 
             this.inherited(arguments);
         }

@@ -117,6 +117,7 @@ define([
 
             if (!symbol) {
                 switch (lang.getObject('geometry.type', false, graphic) || graphic[0].geometry.type) {
+                    case 'extent':
                     case 'polygon':
                         symbol = this.symbols.poly;
                         break;
