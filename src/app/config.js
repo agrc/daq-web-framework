@@ -21,7 +21,7 @@ define([
         fields: {
             uniqueId: 'OBJECTID',
             lock: 'AI_Number',
-            queryOne: 'CO_NAME',
+            operator: 'Operator_N',
             facilityId: 'facility_i'
         },
         queries: {

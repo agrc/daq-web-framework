@@ -601,7 +601,7 @@ define([
                 this.toolboxheader.innerHTML = 'Select Items with Query';
             } else if (targets.indexOf('buffer') > -1) {
                 this.activeTool = new Buffer({
-                    layers: this.map.graphicsLayerIds.map(function (id) {
+                    intersectLayers: this.map.graphicsLayerIds.map(function (id) {
                         return this.map.getLayer(id);
                     }, this).filter(function (layer) {
                         return layer.fields.some(function (field) {

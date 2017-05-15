@@ -52,7 +52,7 @@ define([
         subscriptions: null,
 
         // Properties to be sent into constructor
-        layers: null,
+        intersectLayers: null,
 
         postCreate: function () {
             // summary:
@@ -102,13 +102,13 @@ define([
 
             geometryEngineAsync.buffer(evt.mapPoint, this.buffer.value, 'meters', true)
                 .then(function getGraphicsFromLayers(geometry) {
-                    this.layers.forEach(function testGraphics(layer) {
+                    this.intersectLayers.forEach(function testGraphics(layer) {
                         layer.graphics.forEach(function testGeometry(graphic) {
                             if (geometryEngine.contains(geometry, graphic.geometry)) {
                                 data.push({
                                     ai: graphic.attributes[config.fields.lock],
                                     api: graphic.attributes.API,
-                                    company: graphic.attributes[config.fields.queryOne],
+                                    operator: graphic.attributes[config.fields.operator],
                                     id: graphic.attributes[config.fields.uniqueId],
                                     graphic: graphic
                                 });
@@ -140,8 +140,8 @@ define([
                             label: 'AI Number',
                             sortable: true
                         },
-                        company: {
-                            label: 'Owner',
+                        operator: {
+                            label: 'Operator Name',
                             sortable: true
                         },
                         id: {
