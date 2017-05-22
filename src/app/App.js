@@ -25,6 +25,7 @@ define([
     'dojo/dom-construct',
     'dojo/dom-style',
     'dojo/on',
+    'dojo/keys',
     'dojo/request/xhr',
     'dojo/text!./templates/App.html',
     'dojo/topic',
@@ -71,6 +72,7 @@ define([
     domConstruct,
     domStyle,
     on,
+    keys,
     xhr,
     template,
     topic,
@@ -173,6 +175,7 @@ define([
             }));
 
             this.own(
+                on(document, 'keydown', lang.hitch(this, 'keyboardShortcut')),
                 on(this.closeWindow, 'click', lang.hitch(this, 'close', this.infowindow)),
                 on(this.closeTool, 'click', lang.hitch(this, 'close', this.toolbox)),
                 topic.subscribe(config.topics.addAi, lang.hitch(this, 'onAiAdded')),
@@ -656,12 +659,28 @@ define([
             // summary:
             //      add an alias property to the layer for easier access
             // none
-            console.log('app/App::_applyAliasProperty', arguments);
+            console.info('app/App::_applyAliasProperty', arguments);
 
             Object.keys(lookup).forEach(function applyAlias(id) {
                 var layer = this.map.getLayer(id);
                 layer.aliases = lookup[id];
             }, this);
+        },
+        keyboardShortcut: function (evt) {
+            // summary:
+            //      description
+            // param or return
+            console.info('app/App:keyboardShortcut', arguments);
+
+            switch (evt.keyCode) {
+                case keys.ESCAPE: {
+                    this.close(this.infowindow);
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
         }
     });
 });
