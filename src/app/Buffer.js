@@ -110,7 +110,8 @@ define([
                                     api: graphic.attributes.API,
                                     operator: graphic.attributes[config.fields.operator],
                                     id: graphic.attributes[config.fields.uniqueId],
-                                    graphic: graphic
+                                    graphic: graphic,
+                                    url: layer.url
                                 });
                             }
                         });
@@ -158,7 +159,7 @@ define([
                         graphic: row.graphic,
                         attributes: row.graphic.attributes,
                         layerId: row.graphic.layerId,
-                        url: row.graphic.url
+                        url: row.url
                     };
 
                     topic.publish(config.topics.identify, props);
