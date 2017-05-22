@@ -13,7 +13,7 @@ namespace daq_api.Services
     public class ArcOnlineHttpClient
     {
         private const string TokenUrl = "https://www.arcgis.com/sharing/rest/oauth2/token/";
-        private const int oneHourBufferInSeconds = 3600;
+        private const int OneHourBufferInSeconds = 3600;
         private readonly HttpClient _client;
         private readonly IArcOnlineCredentials _credentials;
         private DateTime _expiresIn = DateTime.UtcNow;
@@ -186,7 +186,7 @@ namespace daq_api.Services
                     var tokenResponse = await response.Content.ReadAsAsync<OauthTokenResponse>(Formatters).ConfigureAwait(false);
 
                     var expiresInSeconds = tokenResponse.Expires_In;
-                    _expiresIn = DateTime.UtcNow + TimeSpan.FromSeconds(expiresInSeconds - oneHourBufferInSeconds);
+                    _expiresIn = DateTime.UtcNow + TimeSpan.FromSeconds(expiresInSeconds - OneHourBufferInSeconds);
 
                     return _currentToken = tokenResponse.Access_Token;
                 }

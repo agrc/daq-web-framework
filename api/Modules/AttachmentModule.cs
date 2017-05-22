@@ -2,30 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using daq_api.Contracts;
 using daq_api.Models;
 using daq_api.Services;
 using Nancy;
 
 namespace daq_api.Modules
 {
-    public class SearchModule : NancyModule
+    public class AttachmentModule : NancyModule
     {
-        public SearchModule(IRepository repo, ArcOnlineHttpClient client)
+        public AttachmentModule(ArcOnlineHttpClient client)
         {
-            Get["/search/{facilityNumber}/facility/{facilityId}/feature/{featureId}", true] = async (_, ctx) =>
+            Get["/attachment/{featureId}", true] = async (_, ctx) =>
             {
-                var facilityNumber = _.facilityNumber.ToString();
-                var facilityId = _.facilityId.ToString();
-
-                IEnumerable<EDocEntry> result = await repo.Get(facilityNumber).ConfigureAwait(false);
-
-                // we don't have any documents so exit quickly
-                if (!result.Any())
-                {
-                    return Response.AsJson(result);
-                }
-
                 var token = await client.GetToken().ConfigureAwait(false);
                 if (string.IsNullOrEmpty(token))
                 {
@@ -55,28 +43,24 @@ namespace daq_api.Modules
                 // we don't have attachments exit early
                 if (!response.Result.AttachmentGroups.Any() || !response.Result.AttachmentGroups[0].AttachmentInfos.Any())
                 {
-                    return Response.AsJson(result);
+                    return Response.AsJson(new string[0]);
                 }
 
-                var filenames = response.Result.AttachmentGroups[0].AttachmentInfos.ToDictionary(key => string.Format("{0}?{1}", key.Name, key.Id), value => value.Id);
-
-                return Response.AsJson(result.Select(mapped =>
+                queryParams = new[]
                 {
-                    var updated = new EDocEntry(mapped, facilityId);
-                    var uploads = filenames.Where(key =>
-                    {
-                        var name = key.Key.Split('?')[0];
-                        return string.Compare(name, updated.File, StringComparison.InvariantCultureIgnoreCase) == 0;
-                    }).ToList();
+                    new KeyValuePair<string, string>("token", token)
+                };
 
-                    updated.Uploaded = uploads.Any();
-                    if (updated.Uploaded)
-                    {
-                        updated.UploadId = uploads.First().Value;
-                    }
+                formUrl = new FormUrlEncodedContent(queryParams);
+                querystringContent = await formUrl.ReadAsStringAsync();
+                
+                var files = response.Result.AttachmentGroups[0].AttachmentInfos
+                    .Select(x => new {
+                        name = x.Name.Split('x')[2], 
+                        url = string.Format("{0}/{1}/attachments/{2}?{3}", Request.Query["url"], _.featureId.ToString(), x.Id, querystringContent)
+                    });
 
-                    return updated;
-                }));
+                return Response.AsJson(new[] {files});
             };
         }
     }

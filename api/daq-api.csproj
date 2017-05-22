@@ -132,6 +132,7 @@
     <Compile Include="Models\RouteModels\User.cs" />
     <Compile Include="Models\TokenResponse.cs" />
     <Compile Include="Models\UploadResponse.cs" />
+    <Compile Include="Modules\AttachmentModule.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Modules\SearchModule.cs" />
     <Compile Include="Modules\UploadModule.cs" />
