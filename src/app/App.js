@@ -307,6 +307,9 @@ define([
             this.gridClickProps = props;
 
             this.attributes = new Attributes(props).placeAt(this.infocontent, 'first');
+            this.assetViewer = new AssetViewer({
+                options: props
+            }).placeAt(this.attachmentContent, 'first');
 
             domClass.remove(this.infowindow, 'hide');
             domClass.remove(this.attributepanel, 'hide');
@@ -344,10 +347,6 @@ define([
 
             this.ai = new AiNumber(aiProps).placeAt(this.infocontent, 'after');
             this.ai.startup();
-
-            this.assetViewer = new AssetViewer({
-                options: props
-            }).placeAt(this.attachmentContent, 'first');
         },
         close: function (parent) {
             // summary:
