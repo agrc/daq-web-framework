@@ -1,1 +1,40 @@
-.asset-viewer {}
+.asset-viewer
+    #loader
+        height 10px
+        margin auto
+        position relative
+        width 84px
+
+    .loading
+        animation-direction normal
+        animation-duration 1.5s
+        animation-iteration-count infinite
+        animation-name bounce
+        background-color rgba(117, 82, 117, .58)
+        border-radius 7px
+        height 10px
+        position absolute
+        top 0
+        transform scale(.3)
+        width 10px
+
+    #dot_1
+        animation-delay .6s
+        left 0
+
+    #dot_2
+        animation-delay .75s
+        left 10px
+
+    #dot_3
+        animation-delay .9s
+        left 21px
+
+    @keyframes bounce
+        0%
+            transform scale(1)
+            background-color rgba(255, 0, 255, .45)
+
+        100%
+            transform scale(.3)
+            background-color rgb(255, 255, 255)

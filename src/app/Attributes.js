@@ -75,7 +75,6 @@ define([
             console.info('app/Attributes::buildAttributeTable', arguments);
 
             domConstruct.empty(this.container);
-            var columnSize = 12;
             if (!props.aliases) {
                 console.debug('no aliases defined. not showing any attributes');
 
@@ -83,7 +82,7 @@ define([
             }
 
             var length = props.aliases.length;
-            var size = this.breakpoints[length % columnSize];
+            var size = this.breakpoints[length % this.columns];
 
             var row;
             props.aliases.forEach(function (item, i) {

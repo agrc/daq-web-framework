@@ -3,6 +3,7 @@ define([
     'agrc/widgets/locate/ZoomToCoords',
 
     './AiNumber',
+    './AssetViewer',
     './Attributes',
     './Bookmark',
     './Buffer',
@@ -50,6 +51,7 @@ define([
     ZoomToCoords,
 
     AiNumber,
+    AssetViewer,
     Attributes,
     Bookmarks,
     Buffer,
@@ -167,10 +169,22 @@ define([
             GraphicsController.graphicsLayer = this.map.graphics;
             MapController.initialize(this.map);
             $('a[data-toggle="tab"]').on('shown.bs.tab', lang.hitch(this, function (e) {
-                if (e.target === this.edocsTab && !this.grid) {
+                if (e.target.hash === '#edocs') {
+                    if (this.grid) {
+                        return;
+                    }
+
                     this.initGrid();
                     this.grid.startup();
                     this.footer.startup();
+
+                    return;
+                }
+                if (e.target.hash === '#attachments') {
+                    this.assetViewer.startup();
+                    this.assetViewer.showAssets();
+
+                    return;
                 }
             }));
 
@@ -330,6 +344,10 @@ define([
 
             this.ai = new AiNumber(aiProps).placeAt(this.infocontent, 'after');
             this.ai.startup();
+
+            this.assetViewer = new AssetViewer({
+                options: props
+            }).placeAt(this.attachmentContent, 'first');
         },
         close: function (parent) {
             // summary:
@@ -342,6 +360,7 @@ define([
             if (parent === this.infowindow) {
                 if (this.ai) {
                     this.ai.destroy();
+                    this.ai = null;
                 }
                 if (this.grid) {
                     this.grid.destroy();
@@ -351,6 +370,11 @@ define([
                 }
                 if (this.attributes) {
                     this.attributes.destroy();
+                    this.attributes = null;
+                }
+                if (this.assetViewer) {
+                    this.assetViewer.destroy();
+                    this.assetViewer = null;
                 }
 
                 this.infocontent.innerHTML = '';
@@ -524,7 +548,11 @@ define([
                 handleAs: 'json'
             }).then(lang.hitch(this, function (json) {
                 if (json.error) {
-                    this.toast(json.error.messages || 'something went wrong');
+                    topic.publish(config.topics.toast, {
+                        message: json.error.messages || 'something went wrong',
+                        type: 'danger'
+                    });
+
                     ToggleButtonStatus.toggle(clicked, {
                         buttonText: 'error',
                         buttonCss: 'btn btn-danger',
@@ -546,6 +574,7 @@ define([
 
                     row.uploadId = json.addAttachmentResult.objectId;
                     this.store.put(row, { overwrite: true });
+                    topic.publish(config.topics.dirtyAssets);
                 } else if ('deleteAttachmentResult' in json && json.deleteAttachmentResult.success === true) {
                     ToggleButtonStatus.toggle(clicked, {
                         buttonText: 'add',
@@ -555,6 +584,7 @@ define([
 
                     row.uploadId = null;
                     this.store.put(row, { overwrite: true });
+                    topic.publish(config.topics.dirtyAssets);
                 }
             }), lang.hitch(this, function (error) {
                 ToggleButtonStatus.toggle(clicked, {

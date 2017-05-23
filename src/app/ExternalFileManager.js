@@ -34,16 +34,8 @@ define([
             //      Overrides method of same name in dijit._Widget.
             console.info('app/ExternalFileManager:postCreate', arguments);
 
-            // this.setupConnections();
-
             this.inherited(arguments);
         },
-        // setupConnections: function () {
-        //     // summary:
-        //     //      wire events, and such
-        //     console.info('app/ExternalFileManager:setupConnections', arguments);
-        //
-        // },
         addExternal: function (event) {
             // summary:
             //      description
@@ -95,6 +87,8 @@ define([
                     message: 'file saved successfully!',
                     type: 'success'
                 });
+
+                topic.publish(config.topics.dirtyAssets);
 
                 this.externalForm.reset();
             }.bind(this), function (error) {

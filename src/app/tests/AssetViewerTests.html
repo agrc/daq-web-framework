@@ -1,50 +1,65 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>AssetViewer Tests</title>
-
-    <!-- META TAGS -->
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="app/resources/App.css">
-    <style type='text/css'>
-        body {
-            padding: 50px;
-        }
-    </style>
-
-    <!-- JAVASCRIPT -->
-    <script type='text/javascript' src="../../dojo/dojo.js"></script>
-    <script type="text/javascript">
-        var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../';
-        var widgetUnderTest;
-
-        require({
-            baseUrl: baseUrl,
-            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle',
-            {
-                name: 'jquery',
-                location: 'jquery/dist',
-                main: 'jquery'
-            },{
-                name: 'bootstrap',
-                location: 'bootstrap',
-                main: 'dist/js/bootstrap'
-            }]
-        }, [
-            'app/AssetViewer',
-
-            'dojo/domReady!'
-        ], function(Module) {
-            widgetUnderTest = new Module({
-            }, 'node');
-
-            widgetUnderTest.startup();
-        });
-</script>
-</head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../resources/App.css">
+<title>AssetViewer Tests</title>
+<style type='text/css'>
+  body {
+      padding: 50px;
+  }
+</style>
+<script type='text/javascript' src="../../dojo/dojo.js"></script>
 <body>
-    <div id="node"></div>
+  <button id="load">show assets</button>
+  <button id="empty">no assets</button>
+  <div id="node"></div>
+  <script type="text/javascript">
+    var widgetUnderTest;
+
+    require({
+        baseUrl: '../../',
+        packages: ['app', 'esri', 'dojo', 'dijit', 'dstore', 'dgrid1', 'dojox']
+      }, [
+          'app/AssetViewer',
+
+          'dojo/domReady!'
+      ], function(Module) {
+          widgetUnderTest = new Module({}, 'node');
+
+          widgetUnderTest.startup();
+
+          function forEach(callback, instance) {
+            var data = [
+              [{
+                "name": "ad.png",
+                "url": "https://services2.arcgis.com/"
+              }, {
+                "name": "terrain.png",
+                "url": "https://services2.arcgis.com/"
+              }]
+            ];
+
+            for (var i = 0, l = data.length; i < l; i++){
+              callback.call(instance, data[i], i, data);
+            }
+          }
+
+          var button = document.getElementById('load');
+          button.addEventListener('click', function () {
+            var queryResult = {
+              forEach: forEach,
+              totalLength: 2
+            }
+            widgetUnderTest._displayItems(queryResult);
+          }.bind(this));
+
+          button = document.getElementById('empty');
+          button.addEventListener('click', function () {
+            var queryResult = {
+              totalLength: 0
+            }
+            widgetUnderTest._displayItems(queryResult);
+          }.bind(this));
+      });
+  </script>
 </body>
-</html>
