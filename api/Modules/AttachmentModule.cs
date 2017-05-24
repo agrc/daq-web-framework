@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using daq_api.Models;
@@ -53,15 +52,33 @@ namespace daq_api.Modules
 
                 formUrl = new FormUrlEncodedContent(queryParams);
                 querystringContent = await formUrl.ReadAsStringAsync();
-                
+
                 var files = response.Result.AttachmentGroups[0].AttachmentInfos
-                    .Select(x => new {
-                        name = x.Name.Split('x')[2], 
+                    .Select(x => new
+                    {
+                        name = GetDisplayName(x.Name),
                         url = string.Format("{0}/{1}/attachments/{2}?{3}", Request.Query["url"], _.featureId.ToString(), x.Id, querystringContent)
                     });
 
                 return Response.AsJson(new[] {files});
             };
+        }
+
+        private static string GetDisplayName(string filename)
+        {
+            if (!filename.StartsWith("x"))
+            {
+                return filename;
+            }
+
+            var parts = filename.Split('x');
+
+            if (parts.Length < 3 || parts[1].Length == 0)
+            {
+                return filename;
+            }
+
+            return parts[2];
         }
     }
 }
