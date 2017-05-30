@@ -531,13 +531,19 @@ define([
                               'uploadId={uploadId}&' +
                               'serviceUrl={url}';
 
-            var data = lang.replace(queryString, {
+            var queryData = {
                 edocId: row.id,
                 featureId: props.graphic.attributes[config.fields.uniqueId],
                 uploadId: row.uploadId,
                 facilityId: props.graphic.attributes[config.fields.facilityId],
                 url: props.url
-            });
+            };
+
+            if (Object.keys(props.graphic.attributes).indexOf(config.fields.facilityId) === -1) {
+                queryData.facilityId = 'permit';
+            }
+
+            var data = lang.replace(queryString, queryData);
 
             xhr(config.urls.webapi + '/upload', {
                 method: method,
