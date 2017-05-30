@@ -62,9 +62,11 @@ define([
                 },
                 handleAs: 'json'
             }).then(function (json) {
-                if (json.error) {
+                if (json.error || json.addAttachmentResult.error) {
                     topic.publish(config.topics.toast, {
-                        message: json.error.messages || 'something went wrong',
+                        message: json.error.messages ||
+                                 json.addAttachmentResult.error.description ||
+                                 'something went wrong',
                         type: 'danger'
                     });
 
