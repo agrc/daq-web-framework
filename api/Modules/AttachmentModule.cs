@@ -32,7 +32,7 @@ namespace daq_api.Modules
                     new KeyValuePair<string, string>("token", token)
                 };
 
-                const string attachmentUrl = "/queryAttachments";
+                const string attachmentUrl = "queryAttachments";
                 var formUrl = new FormUrlEncodedContent(queryParams);
                 var querystringContent = await formUrl.ReadAsStringAsync();
 
