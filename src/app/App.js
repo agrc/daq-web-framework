@@ -318,7 +318,9 @@ define([
 
             var edocTab = $('#attribute-tabs a[href="#edocs"]');
 
-            if (Object.keys(props.graphic.attributes).indexOf(config.fields.lock) === -1) {
+            config.fields.lock = this._findLockField(config.fields.locks, props.graphic.attributes);
+
+            if (!config.fields.lock) {
                 console.debug('layer does not have AI number. do not show ai widget.');
                 edocTab.prop('disabled', true).addClass('disabled-tab');
 
@@ -710,6 +712,21 @@ define([
                     break;
                 }
             }
+        },
+        _findLockField: function (lockFields, attributes) {
+            // summary:
+            //      return the string value of the lock field or null
+            // string or null
+            console.info('app/App:_findLockField', arguments);
+
+            var name = null;
+            lockFields.forEach(function (lock) {
+                if (Object.keys(attributes).indexOf(lock) > -1) {
+                    name = lock;
+                }
+            });
+
+            return name;
         }
     });
 });

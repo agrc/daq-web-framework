@@ -20,7 +20,8 @@ define([
         maxResult: 1000,
         fields: {
             uniqueId: 'OBJECTID',
-            lock: 'AI_Number',
+            locks: ['AI_Number', 'SITE_ID'],
+            lock: null,
             operator: 'Operator_N',
             facilityId: 'facility_i'
         },
