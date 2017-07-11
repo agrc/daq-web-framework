@@ -101,7 +101,7 @@ define([
                     lang.hitch(this, 'removeGraphic'))
             );
         },
-        highlight: function (graphic, symbol) {
+        highlight: function (graphic, symbol, additionalProps) {
             // summary:
             //      adds the clicked shape geometry to the graphics layer
             //      highlighting it
@@ -133,13 +133,16 @@ define([
                 this.graphic = [];
 
                 graphic.forEach(function (item) {
-                    var g = new Graphic(item.geometry, symbol);
+                    var g = new Graphic(item.geometry, symbol, item.attributes);
+                    lang.mixin(g, additionalProps);
 
                     this.graphic.push(g);
                     this.graphicsLayer.add(g);
                 }, this);
             } else {
                 this.graphic = new Graphic(graphic.geometry, symbol);
+                lang.mixin(this.graphic, additionalProps);
+
                 this.graphicsLayer.add(this.graphic);
             }
         },

@@ -144,14 +144,22 @@ define([
             //      Fires when
             console.info('app/App::setupConnections', arguments);
 
-            var featureLayers = this.map.graphicsLayerIds;
+            GraphicsController.graphicsLayer = this.map.graphics;
+
+            var featureLayers = this.map.graphicsLayerIds.concat(this.map.graphics.id);
             featureLayers.forEach(function (layerId) {
                 var layer = this.map.getLayer(layerId);
                 var clickHandler = lang.hitch(this, function (evt) {
+                    var id = layer.layerId;
+                    // both values can be 0 or undefined so...
+                    if (isNaN(id)) {
+                        id = evt.graphic.layerId;
+                    }
+
                     this.showAttributes({
                         graphic: evt.graphic,
-                        layerId: layer.layerId,
-                        url: layer.url
+                        layerId: id,
+                        url: layer.url || evt.graphic.url
                     });
                 });
 
@@ -166,8 +174,8 @@ define([
 
             this._applyAliasProperty(this.aliasLookup);
 
-            GraphicsController.graphicsLayer = this.map.graphics;
             MapController.initialize(this.map);
+
             $('a[data-toggle="tab"]').on('shown.bs.tab', lang.hitch(this, function (e) {
                 if (e.target.hash === '#edocs') {
                     if (this.grid) {
@@ -298,7 +306,7 @@ define([
             }
 
             props = {
-                aliases: props.graphic._layer.aliases || null, // eslint-disable-line
+                aliases: props.graphic._layer.aliases || props.graphic.aliases || null, // eslint-disable-line
                 layerId: props.layerId,
                 url: props.url,
                 graphic: props.graphic

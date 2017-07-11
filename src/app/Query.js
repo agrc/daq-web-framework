@@ -17,6 +17,7 @@ define([
 
     'esri/layers/FeatureLayer',
     'esri/tasks/query',
+    'esri/tasks/QueryTask',
     'esri/geometry/Polygon'
 ], function (
     config,
@@ -37,6 +38,7 @@ define([
 
     FeatureLayer,
     Query,
+    QueryTask,
     Polygon
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
@@ -104,8 +106,6 @@ define([
             console.info('app.Query:query', arguments);
 
             this.activeLayer = this.layers[this.layer.options[this.layer.selectedIndex].text];
-            this.activeLayer.setSelectionSymbol(config.symbols.point);
-            // MapController.disableDrawing();
 
             var query = new Query();
             var queryInfo = config.queries[this.layer.value][this.type.value];
@@ -114,7 +114,10 @@ define([
                 term: queryInfo.field,
                 query: this.input.value
             });
-            query.outFields = ['SHAPE'];
+            query.outFields = ['*'];
+            query.returnGeometry = true;
+            query.outSpatialReference = MapController.map.spatialReference;
+
             if (this.spatialRestriction) {
                 if (this.spatialRestriction.type.toLowerCase() === 'extent') {
                     query.geometry = this.spatialRestriction;
@@ -125,10 +128,16 @@ define([
                 query.spatialRelationship = Query.SPATIAL_REL_CONTAINS;
             }
 
-            this.activeLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW).then(
-                function (graphics) {
+            var queryTask = new QueryTask(this.activeLayer.url);
+            queryTask.execute(query, lang.hitch(this,
+                function (results) {
+                    var graphics = results.features;
                     if (graphics && graphics.length > 0) {
-                        GraphicsController.removeGraphic();
+                        GraphicsController.highlight(graphics, config.symbols.point, {
+                            layerId: this.activeLayer.layerId,
+                            url: this.activeLayer.url,
+                            aliases: this.activeLayer.aliases
+                        });
                         MapController.zoom(graphics);
                         if (graphics.length === config.maxResult) {
                             topic.publish(config.topics.toast, {
@@ -142,7 +151,7 @@ define([
                             type: 'info'
                         });
                     }
-                },
+                }),
                 function (err) {
                     topic.publish(config.topics.toast, {
                         message: (err.details[0] || err || '') +
