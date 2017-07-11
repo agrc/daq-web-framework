@@ -96,15 +96,15 @@ define([
         symbols: {
             point: new SimpleMarkerSymbol({
                 color: [1, 255, 12, 200], // eslint-disable-line no-magic-numbers
-                size: 7.5,
+                size: 25,
                 angle: 0,
                 xoffset: 0,
                 yoffset: 0,
                 type: 'esriSMS',
                 style: 'esriSMSCircle',
                 outline: {
-                    color: [0, 31, 63, 255], // eslint-disable-line no-magic-numbers
-                    width: 0.5,
+                    color: [255, 220, 0, 255], // eslint-disable-line no-magic-numbers
+                    width: 2,
                     type: 'esriSLS',
                     style: 'esriSLSSolid'
                 }
