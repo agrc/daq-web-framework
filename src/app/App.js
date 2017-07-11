@@ -653,7 +653,7 @@ define([
                         return this.map.getLayer(id);
                     }, this).filter(function (layer) {
                         return layer.fields.some(function (field) {
-                            return field.name === config.fields.lock;
+                            return config.fields.locks.indexOf(field.name) > -1;
                         });
                     })
                 }).placeAt(this.toolboxcontainer, 'after');

@@ -104,9 +104,10 @@ define([
                 .then(function getGraphicsFromLayers(geometry) {
                     this.intersectLayers.forEach(function testGraphics(layer) {
                         layer.graphics.forEach(function testGeometry(graphic) {
+                            var lock = this._findLockField(config.fields.locks, graphic.attributes);
                             if (geometryEngine.contains(geometry, graphic.geometry)) {
                                 data.push({
-                                    ai: graphic.attributes[config.fields.lock],
+                                    ai: graphic.attributes[lock],
                                     api: graphic.attributes.API,
                                     operator: graphic.attributes[config.fields.operator],
                                     id: graphic.attributes[config.fields.uniqueId],
@@ -114,8 +115,8 @@ define([
                                     url: layer.url
                                 });
                             }
-                        });
-                    });
+                        }, this);
+                    }, this);
 
                     this.store = new Memory({
                         data: data
@@ -181,6 +182,21 @@ define([
 
                 this.grid.startup();
             }
+        },
+        _findLockField: function (lockFields, attributes) {
+        // summary:
+        //      return the string value of the lock field or null
+        // string or null
+            console.info('app/Buffer:_findLockField', arguments);
+
+            var name = null;
+            lockFields.forEach(function (lock) {
+                if (Object.keys(attributes).indexOf(lock) > -1) {
+                    name = lock;
+                }
+            });
+
+            return name;
         },
         _destroy: function () {
             // summary:
