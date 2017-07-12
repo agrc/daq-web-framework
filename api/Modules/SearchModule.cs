@@ -6,6 +6,7 @@ using daq_api.Contracts;
 using daq_api.Models;
 using daq_api.Services;
 using Nancy;
+using Serilog;
 
 namespace daq_api.Modules
 {
@@ -15,6 +16,7 @@ namespace daq_api.Modules
         {
             Get["/search/{facilityNumber}/facility/{facilityId}/feature/{featureId}", true] = async (_, ctx) =>
             {
+                Log.Debug("Searching Edocs for attachments {FacilityNumber} {FacilityId} {FeatureId}", _);
                 var facilityNumber = _.facilityNumber.ToString();
                 var facilityId = _.facilityId.ToString();
 
@@ -23,12 +25,15 @@ namespace daq_api.Modules
                 // we don't have any documents so exit quickly
                 if (!result.Any())
                 {
+                    Log.Debug("No results for {FacilityNumber} {FacilityId} {FeatureId}", _);
+
                     return Response.AsJson(result);
                 }
 
                 var token = await client.GetToken().ConfigureAwait(false);
                 if (string.IsNullOrEmpty(token))
                 {
+                    Log.Warning("Token Expired");
                     return Response.AsJson(new Errorable
                     {
                         Error = new Error
@@ -55,6 +60,7 @@ namespace daq_api.Modules
                 // we don't have attachments exit early
                 if (!response.Result.AttachmentGroups.Any() || !response.Result.AttachmentGroups[0].AttachmentInfos.Any())
                 {
+                    Log.Debug("No attachments for {FacilityNumber} {FacilityId} {FeatureId}", _);
                     return Response.AsJson(result);
                 }
 

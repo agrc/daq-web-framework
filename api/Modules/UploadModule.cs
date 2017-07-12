@@ -12,6 +12,7 @@ using daq_api.Services;
 using MimeTypes;
 using Nancy;
 using Nancy.ModelBinding;
+using Serilog;
 
 namespace daq_api.Modules
 {
@@ -51,8 +52,9 @@ namespace daq_api.Modules
                             formContent.Add(new StringContent("json"), "f");
                             formContent.Add(new StringContent(token), "token");
                         }
-                        catch (ArgumentNullException)
+                        catch (ArgumentNullException ex)
                         {
+                            Log.Error(ex, "Token expired?");
                             return Response.AsJson(new Errorable
                             {
                                 Error = new Error
@@ -70,6 +72,7 @@ namespace daq_api.Modules
                 }
                 catch (Exception ex)
                 {
+                    Log.Error(ex, "Unknown error getting EDocs File");
                     return Response.AsJson(new Errorable
                     {
                         Error = new Error

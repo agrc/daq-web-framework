@@ -42,6 +42,7 @@ namespace daq_api.Modules
 
                 if (response.Result.Error != null)
                 {
+                    Log.Error("There was an issue getting attachments {@Error}", response.Result.Error);
 
                     return Response.AsJson(new Errorable
                     {
