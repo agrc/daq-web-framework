@@ -139,7 +139,7 @@ define([
         config.urls.webapi = '/daq';
         config.apiKey = 'AGRC-AC122FA9671436';
     } else {
-        // localhost
+        config.urls.webapi = 'http://localhost/daq';
         config.apiKey = 'AGRC-E5B94F99865799';
     }
 
