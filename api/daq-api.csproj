@@ -125,6 +125,7 @@
     <Compile Include="Models\Error.cs" />
     <Compile Include="Models\EDocEntry.cs" />
     <Compile Include="Models\Errorable.cs" />
+    <Compile Include="Models\GenericAttachment.cs" />
     <Compile Include="Models\OauthTokenResponse.cs" />
     <Compile Include="Models\RouteModels\RemoveAttachment.cs" />
     <Compile Include="Models\RouteModels\UploadAttachment.cs" />

@@ -10,9 +10,7 @@ define([
     'dojo/topic',
     'dojo/_base/declare',
     'dojo/_base/lang',
-
-    'dstore/Request',
-    'dstore/Cache'
+    'dojo/request/xhr'
 ], function (
     config,
 
@@ -25,9 +23,7 @@ define([
     topic,
     declare,
     lang,
-
-    Request,
-    Cache
+    xhr
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -59,20 +55,9 @@ define([
 
             this.inherited(arguments);
 
-            var RequestMemory = declare([Request, Cache], {
-                isValidFetchCache: true
-            });
-
-            this.store = new RequestMemory({
-                target: config.urls.webapi + '/attachment/' +
-                        this.options.graphic.attributes[config.fields.uniqueId] +
-                        '?url=' + encodeURIComponent(this.options.url),
-                useRangeHeaders: false,
-                headers: {
-                    'X-Requested-With': null,
-                    'Content-Type': 'text/plain'
-                }
-            });
+            this.url = config.urls.webapi + '/attachment/' +
+                       this.options.graphic.attributes[config.fields.uniqueId] +
+                       '?url=' + encodeURIComponent(this.options.url);
 
             this.setupConnections();
         },
@@ -99,7 +84,11 @@ define([
             // param or return
             console.info('app/AssetViewer:_populateCache', arguments);
 
-            return this.store.fetch();
+            var promise = xhr(this.url, {
+                handleAs: 'json'
+            });
+
+            return promise;
         },
         _invalidateCache: function () {
             // summary:
@@ -107,11 +96,11 @@ define([
             // param or return
             console.info('module.id:_invalidateCache', arguments);
 
-            if (!this.store) {
+            if (!this.attachments) {
                 return;
             }
 
-            this.store.invalidate();
+            this._populateCache();
         },
         _displayItems: function (result) {
             // summary:
@@ -119,39 +108,48 @@ define([
             // param or return
             console.info('app/AssetViewer:_displayItems', arguments);
 
-            var length = result.totalLength;
+            if (result.error) {
+                domConstruct.empty(this.container);
+
+                return topic.publish(config.topics.toast, {
+                    message: result.error.messages,
+                    type: 'danger'
+                });
+            }
+
+            var length = result.files.length;
             var size = this.breakpoints[length % this.columns];
 
             if (length === 0) {
                 domConstruct.create('p', {
                     className: 'row',
-                    innerHTML: 'No attachments added yet.'
+                    innerHTML: 'This feature does not have any attachments.'
                 }, this.container, 'only');
 
                 return;
             }
 
+            this.attachments = result.files;
+
             domConstruct.empty(this.container);
 
             var row;
-            result.forEach(function (assets) {
-                assets.forEach(function (item, i) {
-                    if (i * size % this.columns === 0) {
-                        row = domConstruct.create('div', {
-                            className: 'row'
-                        }, this.container, 'last');
-                    }
+            result.files.forEach(function (item, i) {
+                if (i * size % this.columns === 0) {
+                    row = domConstruct.create('div', {
+                        className: 'row'
+                    }, this.container, 'last');
+                }
 
-                    var cell = domConstruct.create('div', {
-                        className: 'form-group col-xs-6 col-sm-' + size + ' col-md-' + size
-                    }, row);
+                var cell = domConstruct.create('div', {
+                    className: 'form-group col-xs-6 col-sm-' + size + ' col-md-' + size
+                }, row);
 
-                    domConstruct.create('a', {
-                        href: item.url,
-                        target: '_blank',
-                        innerHTML: item.name
-                    }, cell);
-                }, this);
+                domConstruct.create('a', {
+                    href: item.url,
+                    target: '_blank',
+                    innerHTML: item.name
+                }, cell);
             }, this);
         }
     });
