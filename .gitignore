@@ -52,6 +52,7 @@ api/content/toaster/
 api/content/xstyle
 api/content/build-report.txt
 
+api/logs/daq.log-*.txt
 api/secrets.staging.config
 api/secrets.production.config
 api/connection.config

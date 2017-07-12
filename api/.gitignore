@@ -1,7 +1,3 @@
-api/connection.config
-api/secrets.development.config
-api/secrets.staging.config
-api/secrets.production.config
 *.pubxml
 
 ## Ignore Visual Studio temporary files, build results, and
