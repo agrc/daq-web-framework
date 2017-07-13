@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
@@ -22,7 +23,14 @@ namespace daq_api.Services
 
         public ArcOnlineHttpClient(IArcOnlineCredentials credentials)
         {
-            _client = new HttpClient();
+            var httpClientHandler = new HttpClientHandler();
+            if (httpClientHandler.SupportsAutomaticDecompression)
+            {
+                httpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            }
+
+            _client = new HttpClient(httpClientHandler);
+
             _credentials = credentials;
             Formatters = new List<MediaTypeFormatter>
             {
