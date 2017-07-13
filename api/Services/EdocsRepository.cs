@@ -27,20 +27,9 @@ namespace daq_api.Services
                     facility
                 });
 
-                return results; //.Select(mapped => new EDocEntry(mapped, facilityId)).ToList();
+                return results; 
             }
         }
-
-//        public IEnumerable<EDocEntry> Get(IEnumerable<int> ids)
-//        {
-//            using (var session = new SqlConnection(ConnectionString))
-//            {
-//                return session.Query<EDocEntry>("SELECT id, title, r_folder_path + '/' + object_name + '.' + i_full_format as path FROM Combined_DAQ where id IN @ids", new
-//                {
-//                    ids
-//                }).ToList();
-//            }
-//        }
 
         public EDocEntry Get(int id)
         {
