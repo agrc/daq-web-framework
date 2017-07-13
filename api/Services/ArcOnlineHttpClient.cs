@@ -43,6 +43,7 @@ namespace daq_api.Services
                     try
                     {
                         var result = await response.Content.ReadAsAsync<UploadResponse>(Formatters).ConfigureAwait(false);
+                        Log.Debug("{Action} response {@Response}", "upload", result);
 
                         return new ArcOnlineResponse<UploadResponse>(response, result);
                     }
@@ -93,6 +94,9 @@ namespace daq_api.Services
                         result.DeleteAttachmentResult = result.DeleteAttachmentResults.Single();
                         result.DeleteAttachmentResults = null;
 
+                        Log.Debug("{Action} response {@Response}", "delete", result);
+
+
                         return new ArcOnlineResponse<DeleteResponse>(response, result);
                     }
                     catch (Exception ex)
@@ -139,6 +143,7 @@ namespace daq_api.Services
                     try
                     {
                         var result = await response.Content.ReadAsAsync<AttachmentResponse>(Formatters).ConfigureAwait(false);
+                        Log.Debug("{Action} response {@Response}", "Get Attachment", result);
 
                         return new ArcOnlineResponse<AttachmentResponse>(response, result);
                     }

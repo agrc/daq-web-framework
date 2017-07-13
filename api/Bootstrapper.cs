@@ -46,7 +46,6 @@ namespace daq_api
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy(levelSwitch)
                 .WriteTo.RollingFile(dir)
-                .WriteTo.Console()
                 .WriteTo.Email(email, restrictedToMinimumLevel: LogEventLevel.Error)
                 .CreateLogger();
 
@@ -70,7 +69,7 @@ namespace daq_api
             StaticConfiguration.DisableErrorTraces = true;
 #endif
 
-            Log.Verbose("Logging initialized");
+            Log.Debug("Logging initialized");
             
             var folder = container.Resolve<IShareMappable>();
             var driveLetter = ConfigurationManager.AppSettings["share_drive_letter"];
