@@ -88,8 +88,8 @@ define([
             dirtyAssets: '6'
         },
         urls: {
-            webapi: 'http://localhost/daq',
-            webMap: '54525aa512544213adf194303769b643',
+            webapi: '',
+            webMap: '',
             agol: agol + '/sharing',
             agolHome: agol
         },
@@ -135,10 +135,16 @@ define([
         }
     };
 
-    if (has('agrc-build') === 'prod' || has('agrc-build') === 'stage') {
+    if (has('agrc-build') === 'prod') {
+        config.urls.webMap = '82390d3787af4ae98585f90ccea08485';
+        config.urls.webapi = '/daq';
+        config.apiKey = '';
+    } else if (has('agrc-build') === 'stage') {
+        config.urls.webMap = '54525aa512544213adf194303769b643';
         config.urls.webapi = '/daq';
         config.apiKey = 'AGRC-AC122FA9671436';
     } else {
+        config.urls.webMap = '54525aa512544213adf194303769b643';
         config.urls.webapi = 'http://localhost/daq';
         config.apiKey = 'AGRC-E5B94F99865799';
     }
