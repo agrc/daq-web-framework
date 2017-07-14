@@ -22,22 +22,7 @@ module.exports = function (grunt) {
         'src/app/package.json',
         'src/app/config.js'
     ];
-    var deployFiles = [
-        '**',
-        '!**/*.uncompressed.js',
-        '!**/*consoleStripped.js',
-        '!**/bootstrap/less/**',
-        '!**/bootstrap/test-infra/**',
-        '!**/tests/**',
-        '!build-report.txt',
-        '!components-jasmine/**',
-        '!favico.js/**',
-        '!jasmine-favicon-reporter/**',
-        '!jasmine-jsreporter/**',
-        '!stubmodule/**',
-        '!util/**'
-    ];
-    // Project configuration.
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         bump: {
@@ -51,19 +36,6 @@ module.exports = function (grunt) {
             build: ['dist'],
             deploy: ['deploy'],
             api: ['api/Content/**/*', '!api/Content/*.css']
-        },
-        compress: {
-            main: {
-                options: {
-                    archive: 'deploy/deploy.zip'
-                },
-                files: [{
-                    src: deployFiles,
-                    dest: './',
-                    cwd: 'dist/',
-                    expand: true
-                }]
-            }
         },
         connect: {
             uses_defaults: {} // eslint-disable-line camelcase
@@ -82,16 +54,11 @@ module.exports = function (grunt) {
             prod: {
                 options: {
                     // You can also specify options to be used in all your tasks
-                    profiles: ['profiles/prod.build.profile.js', 'profiles/build.profile.js']
+                    profiles: ['profiles/prod.build.profile.js', 'profiles/build.profile.js'],
+                    releaseDir: '../api/Content'
                 }
             },
             stage: {
-                options: {
-                    // You can also specify options to be used in all your tasks
-                    profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js']
-                }
-            },
-            api: {
                 options: {
                     // You can also specify options to be used in all your tasks
                     profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js'],
@@ -102,7 +69,6 @@ module.exports = function (grunt) {
                 // You can also specify options to be used in all your tasks
                 dojo: 'src/dojo/dojo.js',
                 load: 'build',
-                releaseDir: '../dist',
                 requires: ['src/app/packages.js', 'src/app/run.js'],
                 basePath: './src'
             }
@@ -158,15 +124,6 @@ module.exports = function (grunt) {
                 tasks: ['eslint:main', 'clean:build', 'newer:imagemin:main', 'stylus']
             }
         },
-        processhtml: {
-            options: {},
-            main: {
-                files: {
-                    'dist/index.html': ['src/index.html'],
-                    'dist/user_admin.html': ['src/user_admin.html']
-                }
-            }
-        },
         stylus: {
             main: {
                 options: {
@@ -198,15 +155,6 @@ module.exports = function (grunt) {
                         drop_console: false // eslint-disable-line camelcase
                     }
                 },
-                src: ['dist/dojo/dojo.js'],
-                dest: 'dist/dojo/dojo.js'
-            },
-            api: {
-                options: {
-                    compress: {
-                        drop_console: false // eslint-disable-line camelcase
-                    }
-                },
                 src: ['api/content/dojo/dojo.js'],
                 dest: 'api/content/dojo/dojo.js'
             },
@@ -216,9 +164,9 @@ module.exports = function (grunt) {
                 },
                 files: [{
                     expand: true,
-                    cwd: 'dist',
+                    cwd: 'api/content',
                     src: '**/*.js',
-                    dest: 'dist'
+                    dest: 'api/content'
                 }]
             }
         },
@@ -244,34 +192,15 @@ module.exports = function (grunt) {
         'watch'
     ]);
     grunt.registerTask('build-prod', [
+        'clean:api',
         'parallel:buildAssets',
         'dojo:prod',
-        'uglify:prod',
-        'copy:main',
-        'processhtml:main'
-    ]);
-    grunt.registerTask('deploy-prod', [
-        'clean:deploy',
-        'compress:main'
+        'uglify:prod'
     ]);
     grunt.registerTask('build-stage', [
         'clean:api',
         'parallel:buildAssets',
-        'dojo:api',
-        'uglify:api'
-    ]);
-    grunt.registerTask('deploy-stage', [
-        'clean:api',
-        'compress:main'
-    ]);
-    grunt.registerTask('sauce', [
-        'jasmine:main:build',
-        'connect',
-        'saucelabs-jasmine'
-    ]);
-    grunt.registerTask('travis', [
-        'verbosity:main',
-        'eslint:main',
-        'build-stage'
+        'dojo:stage',
+        'uglify:stage'
     ]);
 };

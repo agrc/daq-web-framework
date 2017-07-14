@@ -20,7 +20,6 @@
     "grunt": "^1.0.1",
     "grunt-bump": "^0.8.0",
     "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-compress": "^1.4.1",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-imagemin": "^1.0.0",
@@ -32,10 +31,7 @@
     "grunt-eslint": "^19.0.0",
     "grunt-newer": "^1.1.2",
     "grunt-parallel": "^0.5.1",
-    "grunt-processhtml": "^0.4.0",
-    "grunt-saucelabs": "^9.0.0",
     "grunt-ssh": "^0",
-    "grunt-verbosity": "^1.0.1",
     "load-grunt-tasks": "^3.5.1",
     "uglify-js": "^2.8.14"
   },
