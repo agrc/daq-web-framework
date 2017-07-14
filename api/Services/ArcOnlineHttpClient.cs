@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 using daq_api.Contracts;
 using daq_api.Formatters;
 using daq_api.Models;
+using daq_api.Models.WebMap;
 using Serilog;
 
 namespace daq_api.Services
 {
     public class ArcOnlineHttpClient
     {
-        private const string TokenUrl = "https://www.arcgis.com/sharing/rest/oauth2/token/";
+        private const string AgolUrl = "https://www.arcgis.com/sharing/rest/";
+        private const string TokenUrl = "oauth2/token/";
+        private const string AgolItemUrl = "content/items/";
         private const int OneHourBufferInSeconds = 3600;
         private readonly HttpClient _client;
         private readonly IArcOnlineCredentials _credentials;
@@ -188,6 +191,112 @@ namespace daq_api.Services
             }
         }
 
+        public async Task<WebMapJson> GetWebMapJsonFor(string webmap, string token)
+        {
+            if (string.IsNullOrEmpty(webmap))
+            {
+                Log.Error("Web Map Id cannot be empty when looking for a bookmark");
+
+                throw new ArgumentNullException(webmap, "Web Map Id cannot be empty when looking for a bookmark");
+            }
+
+            var queryParams = new[]
+                {
+                    new KeyValuePair<string, string>("f", "json"),
+                    new KeyValuePair<string, string>("token", token)
+                };
+
+            var formUrl = new FormUrlEncodedContent(queryParams);
+            var querystringContent = await formUrl.ReadAsStringAsync();
+
+            var url = AgolUrl + AgolItemUrl + webmap + "/data?" + querystringContent; 
+            try
+            {
+                using (var response = await _client.GetAsync(url).ConfigureAwait(false))
+                {
+                    try
+                    {
+                        var result = await response.Content.ReadAsAsync<WebMapJson>(Formatters).ConfigureAwait(false);
+                        Log.Debug("{Action} response {@Response}", "Get webmap json", result);
+
+                        return result;
+                    }
+                    catch (Exception ex)
+                    {
+                        var content = response.Content.ReadAsStringAsync().Result;
+                        Log.Error(ex, "Reading {Action} response {Url} {@Response}", "web map json", url, content);
+
+                        return new WebMapJson
+                        {
+                            Error = new Error
+                            {
+                                Details = new List<string>
+                                {
+                                    ex.Message,
+                                    content
+                                }
+                            }
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "{Action} webmap json for {Url}", "Fetching", url);
+
+                return new WebMapJson
+                {
+                    Error = new Error
+                    {
+                        Message = ex.Message
+                    }
+                };
+            }
+        }
+
+        public async Task<WebMapUpdateResponse> UpdateWebMapJsonFor(string webmap, MultipartFormDataContent formContent)
+        {
+            var url = AgolUrl + "content/users/woswald9/items/" + webmap + "/update";
+
+            try
+            {
+                using (var response = await _client.PostAsync(url, formContent).ConfigureAwait(false))
+                {
+                    try
+                    {
+                        var result = await response.Content.ReadAsAsync<WebMapUpdateResponse>(Formatters).ConfigureAwait(false);
+                        Log.Debug("{Action} response {@Response}", "Get webmap json", result);
+
+                        if (!result.Success)
+                        {
+                            Log.Warning("Bookmark not saved {@response}", result);
+                        }
+
+                        return result;
+                    }
+                    catch (Exception ex)
+                    {
+                        var content = response.Content.ReadAsStringAsync().Result;
+                        Log.Error(ex, "Reading {Action} response {Url} {@Response}", "web map json", url, content);
+
+                        return new WebMapUpdateResponse
+                        {
+                            Success = true
+                        };
+                    } 
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "{Action} webmap json for {Url} {@Payload}", "Updating", url, formContent);
+
+                return new WebMapUpdateResponse
+                {
+                    Success = false
+                };
+            }
+        }
+
         public async Task<string> GetToken()
         {
             Log.Verbose("GetToken");
@@ -228,7 +337,7 @@ namespace daq_api.Services
 
                 try
                 {
-                    var response = await _client.PostAsync(TokenUrl, formContent).ConfigureAwait(false);
+                    var response = await _client.PostAsync(AgolUrl + TokenUrl, formContent).ConfigureAwait(false);
                     var tokenResponse = await response.Content.ReadAsAsync<OauthTokenResponse>(Formatters).ConfigureAwait(false);
 
                     Log.Debug("Token service response {@Response}", tokenResponse);

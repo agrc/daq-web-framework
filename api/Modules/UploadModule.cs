@@ -95,8 +95,9 @@ namespace daq_api.Modules
                         formContent.Add(new StringContent(model.UploadId.ToString()), "attachmentIds");
                         formContent.Add(new StringContent(token), "token");
                     }
-                    catch (ArgumentNullException)
+                    catch (ArgumentNullException ex)
                     {
+                        Log.Error(ex, "Token expired?");
                         return Response.AsJson(new Errorable
                         {
                             Error = new Error

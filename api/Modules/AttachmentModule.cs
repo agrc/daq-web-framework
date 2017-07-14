@@ -17,6 +17,7 @@ namespace daq_api.Modules
                 var token = await client.GetToken().ConfigureAwait(false);
                 if (string.IsNullOrEmpty(token))
                 {
+                    Log.Warning("Token Expired");
                     return Response.AsJson(new Errorable
                     {
                         Error = new Error
