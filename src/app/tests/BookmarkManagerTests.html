@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../resources/App.css">
+<title>Bookmark Manager Tests</title>
+<style type='text/css'>
+  body {
+      padding: 50px;
+  }
+</style>
+<script type='text/javascript' src="../../dojo/dojo.js"></script>
+<body>
+  <div id="node"></div>
+  <script type="text/javascript">
+    var widgetUnderTest;
+
+    require({
+        baseUrl: '../../',
+        packages: ['app', 'esri', 'dojo', 'dijit', 'dstore', 'dgrid1', 'dojox']
+      }, [
+            'app/BookmarkManager',
+
+            'dojo/domReady!'
+        ], function(Module) {
+            var bookmarks =  [{
+              extent: {
+                spatialReference: {
+                  wkid: 102100,
+                  latestWkid: 3857
+                },
+                xmax: -12122354.184620311,
+                xmin: -12229060.276106462,
+                ymax: 4964785.711343598,
+                ymin: 4840499.103351854
+              },
+              name: 'Utah'
+            },
+            {
+              extent: {
+                spatialReference: {
+                  wkid: 102100,
+                  latestWkid: 3857
+                },
+                xmax: -12122354.184620311,
+                xmin: -12229060.276106462,
+                ymax: 4964785.711343598,
+                ymin: 4840499.103351854
+              },
+              name: 'sgourley-inspection super-long-thing'
+            }];
+
+            widgetUnderTest = new Module({
+              bookmarks: bookmarks
+            }, 'node');
+
+            widgetUnderTest.startup();
+        });
+</script>
+</head>
+<body>
+    <div id="node"></div>
+</body>
+</html>

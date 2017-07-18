@@ -85,7 +85,8 @@ define([
                 clear: '4'
             },
             identify: '5',
-            dirtyAssets: '6'
+            dirtyAssets: '6',
+            removeBookmark: '7'
         },
         urls: {
             webapi: '',

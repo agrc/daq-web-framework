@@ -1,0 +1,22 @@
+<div>
+  <div data-dojo-attach-point="list">
+  </div>
+  <div class="bookmark" data-dojo-attach-event="click:showForm">
+    <span class="glyphicon glyphicon-tags " aria-hidden="true"></span>
+    <span class="bookmark--item">Add Bookmark From Current Extent<span>
+  </div>
+  <div class="add-bookmark--container hidden" data-dojo-attach-point="createForm">
+    <h4>Create New Bookmark</h4>
+    <div class="form-group">
+      <label for="user-bookmark">For</label>
+      <input class="form-control" type="text" name="user-bookmark" placeholder="First Initital + Last Name" data-dojo-attach-point="userName"/>
+    </div>
+    <div class="form-group">
+      <label for="bookmark">Bookmark Name</label>
+      <input class="form-control" type="text" name="bookmark" placeholder="Description of Area" data-dojo-attach-point="bookmarkName"/>
+    </div>
+    <div class="form-group text-center">
+      <button class="btn btn-primary" data-dojo-attach-point="button" data-dojo-attach-event="click:save">Save</button>
+    </div>
+  </div>
+</div>

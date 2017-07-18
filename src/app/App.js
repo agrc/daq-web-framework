@@ -13,6 +13,8 @@ define([
     'agrc/widgets/locate/TRSsearch',
     'agrc/widgets/locate/ZoomToCoords',
 
+    'app/Bookmark',
+
     'dgrid1/extensions/SingleQuery',
     'dgrid1/Grid',
 
@@ -59,6 +61,8 @@ define([
 
     TRSsearch,
     ZoomToCoords,
+
+    Bookmark,
 
     SingleQuery,
     Grid,
@@ -690,6 +694,12 @@ define([
                     map: this.map,
                     bookmarks: this.bookmarks
                 }, wtfEsri);
+
+                new Bookmark({
+                    map: this.map,
+                    bookmarks: this.bookmarks
+                }).placeAt(this.toolboxcontainer, 'after');
+
                 this.toolboxheader.innerHTML = 'Zoom to Bookmarked Location';
             } else {
                 this.toolboxheader.innerHTML = 'Tool Container';
