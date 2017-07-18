@@ -1,18 +1,17 @@
 define([
-    'agrc/widgets/locate/TRSsearch',
-    'agrc/widgets/locate/ZoomToCoords',
-
     './AiNumber',
     './AssetViewer',
     './Attributes',
-    './Bookmark',
     './Buffer',
     './config',
     './GraphicsController',
     './GridFooter',
     './MapController',
-    './ToggleButtonStatus',
     './Query',
+    './ToggleButtonStatus',
+
+    'agrc/widgets/locate/TRSsearch',
+    'agrc/widgets/locate/ZoomToCoords',
 
     'dgrid1/extensions/SingleQuery',
     'dgrid1/Grid',
@@ -25,8 +24,8 @@ define([
     'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/dom-style',
-    'dojo/on',
     'dojo/keys',
+    'dojo/on',
     'dojo/request/xhr',
     'dojo/text!./templates/App.html',
     'dojo/topic',
@@ -37,6 +36,7 @@ define([
     'dstore/RequestMemory',
 
     'esri/arcgis/utils',
+    'esri/dijit/Bookmarks',
     'esri/dijit/LayerList',
     'esri/IdentityManager',
 
@@ -44,23 +44,21 @@ define([
 
     'toaster/Toaster',
 
-
     'bootstrap'
 ], function (
-    TRSsearch,
-    ZoomToCoords,
-
     AiNumber,
     AssetViewer,
     Attributes,
-    Bookmarks,
     Buffer,
     config,
     GraphicsController,
     GridFooter,
     MapController,
-    ToggleButtonStatus,
     Query,
+    ToggleButtonStatus,
+
+    TRSsearch,
+    ZoomToCoords,
 
     SingleQuery,
     Grid,
@@ -73,8 +71,8 @@ define([
     domClass,
     domConstruct,
     domStyle,
-    on,
     keys,
+    on,
     xhr,
     template,
     topic,
@@ -85,6 +83,7 @@ define([
     RequestMemory,
 
     utils,
+    Bookmarks,
     LayerList,
     esriId,
 
