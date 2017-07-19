@@ -235,7 +235,7 @@ define([
 
             var token = {
                 token: this.digest,
-                expires: 120000,
+                expires: 14400,
                 server: config.urls.agol,
                 userId: 'DAQ OAuth App',
                 ssl: false
