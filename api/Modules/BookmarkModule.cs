@@ -74,6 +74,12 @@ namespace daq_api.Modules
                 Log.Debug("Getting webmap json for {Id}", webmapid);
 
                 var webmap = await client.GetWebMapJsonFor(webmapid, token);
+
+                if (webmap.Error != null)
+                {
+                    return Response.AsJson(webmap.Error);
+                }
+
                 webmap.Bookmarks.Add(model);
 
                 Log.Debug("Updating webmap json for {Id}", webmapid);
