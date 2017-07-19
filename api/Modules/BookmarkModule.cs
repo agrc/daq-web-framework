@@ -88,7 +88,12 @@ namespace daq_api.Modules
                 {
                     try
                     {
-                        formContent.Add(new StringContent(JsonConvert.SerializeObject(webmap)), "text");
+                        formContent.Add(new StringContent(JsonConvert.SerializeObject(webmap, 
+                            Formatting.Indented, 
+                            new JsonSerializerSettings
+                            {
+                                ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+                            })), "text");
                         formContent.Add(new StringContent(token), "token");
                         formContent.Add(new StringContent("json"), "f");
                     }
