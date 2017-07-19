@@ -16,9 +16,11 @@ namespace daq_api.Services
     public class ArcOnlineHttpClient
     {
         private const string AgolUrl = "https://www.arcgis.com/sharing/rest/";
-        private const string TokenUrl = "oauth2/token/";
+        private const string OauthTokenUrl = "oauth2/token/";
+        private const string UserTokenUrl = "generateToken";
         private const string AgolItemUrl = "content/items/";
-        private const int OneHourBufferInSeconds = 3600;
+        private const int TenMinutesInSeconds = 600;
+        private const int TenMinuteBufferInMilliSeconds = 600000;
         private readonly HttpClient _client;
         private readonly IArcOnlineCredentials _credentials;
         private DateTime _expiresIn = DateTime.UtcNow;
@@ -146,7 +148,7 @@ namespace daq_api.Services
         public async Task<ArcOnlineResponse<AttachmentResponse>> GetAttachmentsFor(string url)
         {
             Log.Information("{Action} attachments for {Url}", "Fetching", url);
-            
+
             try
             {
                 using (var response = await _client.GetAsync(url).ConfigureAwait(false))
@@ -162,7 +164,7 @@ namespace daq_api.Services
                     {
                         var content = response.Content.ReadAsStringAsync().Result;
                         Log.Error(ex, "Reading {Action} response {Url} {@Response}", "attachment list", url, content);
-                        
+
                         return new ArcOnlineResponse<AttachmentResponse>(response, new AttachmentResponse
                         {
                             Error = new Error
@@ -201,15 +203,15 @@ namespace daq_api.Services
             }
 
             var queryParams = new[]
-                {
-                    new KeyValuePair<string, string>("f", "json"),
-                    new KeyValuePair<string, string>("token", token)
-                };
+            {
+                new KeyValuePair<string, string>("f", "json"),
+                new KeyValuePair<string, string>("token", token)
+            };
 
             var formUrl = new FormUrlEncodedContent(queryParams);
             var querystringContent = await formUrl.ReadAsStringAsync();
 
-            var url = AgolUrl + AgolItemUrl + webmap + "/data?" + querystringContent; 
+            var url = AgolUrl + AgolItemUrl + webmap + "/data?" + querystringContent;
             try
             {
                 using (var response = await _client.GetAsync(url).ConfigureAwait(false))
@@ -283,7 +285,7 @@ namespace daq_api.Services
                         {
                             Success = true
                         };
-                    } 
+                    }
                 }
             }
             catch (Exception ex)
@@ -297,7 +299,75 @@ namespace daq_api.Services
             }
         }
 
-        public async Task<string> GetToken()
+        public async Task<string> GetToken(bool oauth = false)
+        {
+            if (oauth)
+            {
+                return await GetOauthToken();
+            }
+
+            return await GetNamedUserToken();
+        }
+
+        public async Task<string> GetNamedUserToken()
+        {
+            Log.Verbose("GetToken");
+
+            if (!string.IsNullOrEmpty(_currentToken))
+            {
+                var utcNow = DateTime.UtcNow;
+
+                Log.Verbose("The time is {Now} and the token expires at {Expires}", utcNow, _expiresIn);
+
+                if (utcNow < _expiresIn)
+                {
+                    Log.Debug("The current token is still valid.");
+
+                    return _currentToken;
+                }
+
+                Log.Verbose("Requesting a new token");
+            }
+
+            Log.Debug("Requesting the first token");
+
+            using (var formContent = new MultipartFormDataContent())
+            {
+                try
+                {
+                    formContent.Add(new StringContent(_credentials.Username), "username");
+                    formContent.Add(new StringContent(_credentials.Password), "password");
+                    formContent.Add(new StringContent("requestip"), "client");
+                    formContent.Add(new StringContent("240"), "expiration");
+                    formContent.Add(new StringContent("json"), "f");
+                }
+                catch (ArgumentNullException ex)
+                {
+                    Log.Error(ex, "There was an issue creating the form content for {@User}", _credentials);
+                    return null;
+                }
+
+                try
+                {
+                    var response = await _client.PostAsync(AgolUrl + UserTokenUrl, formContent).ConfigureAwait(false);
+                    var tokenResponse = await response.Content.ReadAsAsync<NamedUserTokenResponse>(Formatters).ConfigureAwait(false);
+
+                    Log.Debug("Token service response {@Response}", tokenResponse);
+
+                    var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                    _expiresIn = epoch.AddMilliseconds(tokenResponse.Expires - TenMinuteBufferInMilliSeconds);
+
+                    return _currentToken = tokenResponse.Token;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Getting a token from {Url} {@Payload}", UserTokenUrl, formContent);
+                    return null;
+                }
+            }
+        }
+
+        public async Task<string> GetOauthToken()
         {
             Log.Verbose("GetToken");
 
@@ -325,8 +395,8 @@ namespace daq_api.Services
                 {
                     formContent.Add(new StringContent(_credentials.Username), "client_id");
                     formContent.Add(new StringContent(_credentials.Password), "client_secret");
-                    formContent.Add(new StringContent("2000"), "expiration");
                     formContent.Add(new StringContent("client_credentials"), "grant_type");
+                    formContent.Add(new StringContent("240"), "expiration");
                     formContent.Add(new StringContent("json"), "f");
                 }
                 catch (ArgumentNullException ex)
@@ -337,19 +407,19 @@ namespace daq_api.Services
 
                 try
                 {
-                    var response = await _client.PostAsync(AgolUrl + TokenUrl, formContent).ConfigureAwait(false);
+                    var response = await _client.PostAsync(AgolUrl + OauthTokenUrl, formContent).ConfigureAwait(false);
                     var tokenResponse = await response.Content.ReadAsAsync<OauthTokenResponse>(Formatters).ConfigureAwait(false);
 
                     Log.Debug("Token service response {@Response}", tokenResponse);
 
                     var expiresInSeconds = tokenResponse.Expires_In;
-                    _expiresIn = DateTime.UtcNow + TimeSpan.FromSeconds(expiresInSeconds - OneHourBufferInSeconds);
+                    _expiresIn = DateTime.UtcNow + TimeSpan.FromSeconds(expiresInSeconds - TenMinutesInSeconds);
 
                     return _currentToken = tokenResponse.Access_Token;
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Getting a token from {Url} {@Payload}", TokenUrl, formContent);
+                    Log.Error(ex, "Getting a token from {Url} {@Payload}", UserTokenUrl, formContent);
                     return null;
                 }
             }
