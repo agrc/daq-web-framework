@@ -118,6 +118,8 @@ define([
             if (graphic.geometry.type === 'multipoint') {
                 // graphic is a point geometry
                 extent = graphic.geometry.getExtent();
+            } else if (graphic.geometry.type === 'extent') {
+                extent = graphic.geometry;
             } else {
                 extent = graphicsUtils.graphicsExtent(graphic);
             }

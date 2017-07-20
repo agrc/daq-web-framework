@@ -2,6 +2,7 @@ define([
     './AiNumber',
     './AssetViewer',
     './Attributes',
+    './BookmarkManager',
     './Buffer',
     './config',
     './GraphicsController',
@@ -13,7 +14,6 @@ define([
     'agrc/widgets/locate/TRSsearch',
     'agrc/widgets/locate/ZoomToCoords',
 
-    'app/Bookmark',
 
     'dgrid1/extensions/SingleQuery',
     'dgrid1/Grid',
@@ -38,7 +38,6 @@ define([
     'dstore/RequestMemory',
 
     'esri/arcgis/utils',
-    'esri/dijit/Bookmarks',
     'esri/dijit/LayerList',
     'esri/IdentityManager',
 
@@ -51,6 +50,7 @@ define([
     AiNumber,
     AssetViewer,
     Attributes,
+    BookmarkManager,
     Buffer,
     config,
     GraphicsController,
@@ -62,7 +62,6 @@ define([
     TRSsearch,
     ZoomToCoords,
 
-    Bookmark,
 
     SingleQuery,
     Grid,
@@ -87,7 +86,6 @@ define([
     RequestMemory,
 
     utils,
-    Bookmarks,
     LayerList,
     esriId,
 
@@ -635,7 +633,14 @@ define([
             console.info('app/App:activateTool', arguments);
 
             if (this.activeTool) {
-                this.activeTool.destroy();
+                if (Array.isArray(this.activeTool)) {
+                    this.activeTool.forEach(function (tool) {
+                        tool.destroy();
+                    });
+                } else {
+                    this.activeTool.destroy();
+                }
+
                 this.activeTool = null;
             }
 
@@ -689,14 +694,7 @@ define([
                 }).placeAt(this.toolboxcontainer, 'after');
                 this.toolboxheader.innerHTML = 'Zoom to a Specific Coordinate';
             } else if (targets.indexOf('bookmark') > -1) {
-                var wtfEsri = domConstruct.place('<div></div>', this.toolboxcontainer, 'after');
-                this.activeTool = new Bookmarks({
-                    map: this.map,
-                    bookmarks: this.bookmarks
-                }, wtfEsri);
-
-                new Bookmark({
-                    map: this.map,
+                this.activeTool = new BookmarkManager({
                     bookmarks: this.bookmarks
                 }).placeAt(this.toolboxcontainer, 'after');
 
@@ -707,7 +705,13 @@ define([
                 return;
             }
 
-            this.activeTool.startup();
+            if (Array.isArray(this.activeTool)) {
+                this.activeTool.forEach(function (tool) {
+                    tool.startup();
+                });
+            } else {
+                this.activeTool.startup();
+            }
         },
         _applyAliasProperty: function (lookup) {
             // summary:
