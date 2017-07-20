@@ -40,7 +40,7 @@ define([
                 domConstruct.destroy(this.close);
             }
         },
-        activate: function () {
+        zoom: function () {
             //      zoom to the bookmark extent
             console.info('app/Bookmark::zoom', arguments);
 
