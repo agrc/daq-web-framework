@@ -1,13 +1,14 @@
 define([
     './Bookmark',
     './config',
+    './MapController',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
     'dojo/dom-class',
     'dojo/dom-construct',
-    'dojo/on',
+    'dojo/request/xhr',
     'dojo/text!./templates/BookmarkManager.html',
     'dojo/topic',
     'dojo/_base/declare',
@@ -15,13 +16,14 @@ define([
 ], function (
     Bookmark,
     config,
+    MapController,
 
     _TemplatedMixin,
     _WidgetBase,
 
     domClass,
     domConstruct,
-    on,
+    xhr,
     template,
     topic,
     declare,
@@ -34,6 +36,12 @@ define([
         baseClass: 'bookmark-manager',
 
         adminBookmarks: null,
+
+        urls: {
+            add: '/bookmarks/{webMap}/add',
+            remove: '/bookmarks/{webMap}/remove'
+        },
+
         // Properties to be sent into constructor
 
         postCreate: function () {
@@ -77,14 +85,45 @@ define([
             domClass.toggle(this.createForm, 'hidden');
             this.userName.focus();
         },
-        save: function () {
+        add: function () {
             // summary:
             //      send a request to the api to create a Bookmark
-            console.info('app/BookmarkManager:save', arguments);
+            console.info('app/BookmarkManager:add', arguments);
 
-            console.log(this.validate());
-            // if (this.validate()) {
-            // }
+            if (!this.validate()) {
+                return;
+            }
+
+            var url = config.urls.webapi + lang.replace(this.urls.add, config.urls);
+            xhr(url, {
+                method: 'post',
+                data: JSON.stringify({
+                    name: this.userName.value + '-' + this.bookmarkName.value,
+                    extent: MapController.map.extent.toJson()
+                }),
+                headers: {
+                    'X-Requested-With': null,
+                    'Content-Type': 'application/json'
+                },
+                handleAs: 'json'
+            }).then(lang.hitch(this, '_handleUpdate', 'add', null));
+        },
+        remove: function (widget) {
+            // summary:
+            //      send a request to the api to create a Bookmark
+            console.info('app/BookmarkManager:remove', arguments);
+
+            var url = config.urls.webapi + lang.replace(this.urls.remove, config.urls);
+            xhr(url, {
+                method: 'delete',
+                data: {
+                    name: widget.bookmark.name
+                },
+                headers: {
+                    'X-Requested-With': null
+                },
+                handleAs: 'json'
+            }).then(lang.hitch(this, '_handleUpdate', 'remove', widget));
         },
         validate: function () {
             // summary:
@@ -105,23 +144,47 @@ define([
 
             return goodData && !hasDuplicate;
         },
-        remove: function () {
-            // summary:
-            //      send a request to the api to create a Bookmark
-            console.info('app/BookmarkManager:remove', arguments);
-        },
         _displayMessage: function (show, message) {
             // summary:
             //      shows an error message
             // show - boolean value whether to show the message
             // message - string to show
-            console.log('app/BookmarkManager:_displayMessage', arguments);
+            console.info('app/BookmarkManager:_displayMessage', arguments);
 
             if (!show) {
                 return;
             }
 
             this.message = message;
+        },
+        _handleUpdate: function (update, widget, response) {
+            // summary:
+            //      runs after a bookmark request is responded to
+            // param or return
+            console.info('app/BookmarkManager:_handleUpdate:', arguments);
+
+            console.log(response);
+
+            if (update === 'remove' && widget) {
+                widget.delete();
+
+                return;
+            }
+
+            if (update === 'add') {
+                var props = {
+                    name: this.userName.value + '-' + this.bookmarkName.value,
+                    extent: MapController.map.extent
+                };
+
+                this.bookmarks.push(props);
+                this.list.appendChild(new Bookmark({
+                    bookmark: props,
+                    admin: false
+                }).domNode);
+
+                this.showForm();
+            }
         }
     });
 });

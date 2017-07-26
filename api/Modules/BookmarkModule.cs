@@ -113,7 +113,88 @@ namespace daq_api.Modules
 
                     if (result.Success)
                     {
-                        return HttpStatusCode.Created;
+                        return Response.AsJson(webmap.Bookmarks);
+                    }
+
+                    return result;
+                }
+            };
+
+            Delete["bookmarks/{webmapid}/remove", true] = async (_, ctx) =>
+            {
+                var model = this.Bind<Bookmark>();
+                if (string.IsNullOrEmpty(model.Name))
+                {
+                    Log.Warning("invalid bookmark");
+
+                    return Response.AsJson(new Errorable
+                    {
+                        Error = new Error
+                        {
+                            Message = "Your bookmark is missing an extent or a name."
+                        }
+                    });
+                }
+
+                var token = await client.GetToken().ConfigureAwait(false);
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    Log.Warning("Token Expired");
+
+                    return Response.AsJson(new Errorable
+                    {
+                        Error = new Error
+                        {
+                            Message = "Your arcgis online token expired. Please sign in again."
+                        }
+                    });
+                }
+
+                string webmapid = _.webmapid.ToString();
+                Log.Debug("Getting webmap json for {Id}", webmapid);
+
+                var webmap = await client.GetWebMapJsonFor(webmapid, token);
+
+                if (webmap.Error != null)
+                {
+                    return Response.AsJson(webmap.Error);
+                }
+
+                webmap.Bookmarks.RemoveAll(x => x.Name.ToLowerInvariant() == model.Name.ToLowerInvariant());
+
+                Log.Debug("Updating webmap json for {Id}", webmapid);
+
+                using (var formContent = new MultipartFormDataContent())
+                {
+                    try
+                    {
+                        formContent.Add(new StringContent(JsonConvert.SerializeObject(webmap,
+                            Formatting.Indented,
+                            new JsonSerializerSettings
+                            {
+                                ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+                            })), "text");
+                        formContent.Add(new StringContent(token), "token");
+                        formContent.Add(new StringContent("json"), "f");
+                    }
+                    catch (ArgumentNullException ex)
+                    {
+                        Log.Error(ex, "Token expired?");
+                        return Response.AsJson(new Errorable
+                        {
+                            Error = new Error
+                            {
+                                Message = "Your arcgis online token expired. Please sign in again."
+                            }
+                        });
+                    }
+
+                    var result = await client.UpdateWebMapJsonFor(webmapid, formContent);
+
+                    if (result.Success)
+                    {
+                        return Response.AsJson(webmap.Bookmarks);
                     }
 
                     return result;

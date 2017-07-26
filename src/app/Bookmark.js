@@ -5,6 +5,7 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
+    'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/text!./templates/Bookmark.html',
     'dojo/topic',
@@ -19,6 +20,7 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
+    domClass,
     domConstruct,
     template,
     topic,
@@ -38,6 +40,8 @@ define([
 
             if (this.admin === true) {
                 domConstruct.destroy(this.close);
+
+                return;
             }
         },
         zoom: function () {
@@ -51,7 +55,14 @@ define([
             //      catch the event to remove the bookmark
             console.info('app/Bookmark::remove', arguments);
 
-            topic.publish(config.topics.removeBookmark, this.name);
+            topic.publish(config.topics.removeBookmark, this);
+            domClass.add(this.close, 'hidden');
+        },
+        delete: function () {
+            // summary:
+            //      catch the event to remove the bookmark
+            console.info('app/Bookmark::_remove', arguments);
+
             this.destroy();
         }
     });
