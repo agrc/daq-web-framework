@@ -6,6 +6,7 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
+    'dojo/dom-attr',
     'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/request/xhr',
@@ -21,6 +22,7 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
+    domAttr,
     domClass,
     domConstruct,
     xhr,
@@ -54,17 +56,7 @@ define([
 
             this.setupConnections();
 
-            this.bookmarks.forEach(function populateBookmarks(bookmark) {
-                var props = {
-                    bookmark: bookmark
-                };
-
-                if (this.adminBookmarks.indexOf(bookmark.name.toLowerCase()) > -1) {
-                    props.admin = true;
-                }
-
-                this.list.appendChild(new Bookmark(props).domNode);
-            }, this);
+            this._rebuildBookmarks(this.bookmarks);
 
             this.inherited(arguments);
         },
@@ -93,6 +85,9 @@ define([
             if (!this.validate()) {
                 return;
             }
+
+            domClass.add(this.button, 'disabled');
+            domAttr.set(this.button, 'disabled', true);
 
             var url = config.urls.webapi + lang.replace(this.urls.add, config.urls);
             xhr(url, {
@@ -155,36 +150,51 @@ define([
                 return;
             }
 
-            this.message = message;
+            this.warning.innerHTML = message;
         },
         _handleUpdate: function (update, widget, response) {
             // summary:
             //      runs after a bookmark request is responded to
-            // param or return
             console.info('app/BookmarkManager:_handleUpdate:', arguments);
 
-            console.log(response);
+            domClass.remove(this.button, 'disabled');
+            domAttr.remove(this.button, 'disabled');
 
-            if (update === 'remove' && widget) {
-                widget.delete();
+            if (response.Error) {
+                this._displayMessage(true, response.messages, true);
+
+                if (update === 'remove') {
+                    domClass.remove(widget.close, 'hidden');
+                }
 
                 return;
             }
 
+            this.bookmarks = response;
+            this._rebuildBookmarks(this.bookmarks);
+
             if (update === 'add') {
-                var props = {
-                    name: this.userName.value + '-' + this.bookmarkName.value,
-                    extent: MapController.map.extent
-                };
-
-                this.bookmarks.push(props);
-                this.list.appendChild(new Bookmark({
-                    bookmark: props,
-                    admin: false
-                }).domNode);
-
                 this.showForm();
             }
+        },
+        _rebuildBookmarks: function (bookmarks) {
+            // summary:
+            //      recreates the bookmarks
+            console.info('app/BookmarkManager:_rebuildBookmarks', arguments);
+
+            domConstruct.empty(this.list);
+
+            bookmarks.forEach(function populateBookmarks(bookmark) {
+                var props = {
+                    bookmark: bookmark
+                };
+
+                if (this.adminBookmarks.indexOf(bookmark.name.toLowerCase()) > -1) {
+                    props.admin = true;
+                }
+
+                this.list.appendChild(new Bookmark(props).domNode);
+            }, this);
         }
     });
 });

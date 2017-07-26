@@ -40,6 +40,7 @@ define([
 
             if (this.admin === true) {
                 domConstruct.destroy(this.close);
+                domClass.replace(this.glyph, 'glyphicon-globe', 'glyphicon-user');
 
                 return;
             }
