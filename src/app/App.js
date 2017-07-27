@@ -235,8 +235,8 @@ define([
                 token: this.digest,
                 expires: 14400,
                 server: config.urls.agol,
-                userId: 'DAQ OAuth App',
-                ssl: false
+                userId: 'DAQ App',
+                ssl: true
             };
 
             esriId.registerToken(token);
