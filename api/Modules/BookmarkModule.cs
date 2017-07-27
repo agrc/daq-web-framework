@@ -161,7 +161,7 @@ namespace daq_api.Modules
                     return Response.AsJson(webmap.Error);
                 }
 
-                webmap.Bookmarks.RemoveAll(x => x.Name.ToLowerInvariant() == model.Name.ToLowerInvariant());
+                webmap.Bookmarks.RemoveAll(x => string.Equals(x.Name, model.Name, StringComparison.InvariantCultureIgnoreCase));
 
                 Log.Debug("Updating webmap json for {Id}", webmapid);
 

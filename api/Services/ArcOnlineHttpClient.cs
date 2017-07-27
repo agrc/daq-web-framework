@@ -337,9 +337,18 @@ namespace daq_api.Services
                 {
                     formContent.Add(new StringContent(_credentials.Username), "username");
                     formContent.Add(new StringContent(_credentials.Password), "password");
-                    formContent.Add(new StringContent("requestip"), "client");
-                    formContent.Add(new StringContent("240"), "expiration");
+                    formContent.Add(new StringContent("referer"), "client");
+#if DEBUG
+                    formContent.Add(new StringContent("http://localhost"), "referer");
+#elif STAGING
+                    formContent.Add(new StringContent("https://test.mapserv.utah.gov"), "referer");
+#else
+                    formContent.Add(new StringContent("https://complianceapp.utah.gov"), "referer");
+#endif
+                    formContent.Add(new StringContent("14400"), "expiration");
                     formContent.Add(new StringContent("json"), "f");
+
+                    Log.Verbose("token request information {@Content}", _credentials);
                 }
                 catch (ArgumentNullException ex)
                 {
