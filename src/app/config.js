@@ -16,7 +16,7 @@ define([
     var config = {
         appName: 'daq-web',
         appId: 'Rngn0PfKFjvT2p26',
-        version: '1.10.0',
+        version: '1.10.1',
         maxResult: 1000,
         fields: {
             uniqueId: 'OBJECTID',
@@ -90,7 +90,7 @@ define([
         },
         urls: {
             webapi: '',
-            webMap: '',
+            webMap: {},
             agol: agol + '/sharing',
             agolHome: agol
         },
@@ -137,15 +137,24 @@ define([
     };
 
     if (has('agrc-build') === 'prod') {
-        config.urls.webMap = '82390d3787af4ae98585f90ccea08485';
+        config.urls.webMap = {
+            desktop: '82390d3787af4ae98585f90ccea08485',
+            collector: 'bf8154cbecb24ea4916580c185277590'
+        };
         config.urls.webapi = '/daq';
-        config.apiKey = '';
+        config.apiKey = 'AGRC-4D020FEF882975';
     } else if (has('agrc-build') === 'stage') {
-        config.urls.webMap = '54525aa512544213adf194303769b643';
+        config.urls.webMap = {
+            desktop: '54525aa512544213adf194303769b643',
+            collector: 'df8947f4217149cabed0f346c8f53742'
+        };
         config.urls.webapi = '/daq';
         config.apiKey = 'AGRC-AC122FA9671436';
     } else {
-        config.urls.webMap = '54525aa512544213adf194303769b643';
+        config.urls.webMap = {
+            desktop: '54525aa512544213adf194303769b643',
+            collector: 'df8947f4217149cabed0f346c8f53742'
+        };
         config.urls.webapi = 'http://localhost/daq';
         config.apiKey = 'AGRC-E5B94F99865799';
     }

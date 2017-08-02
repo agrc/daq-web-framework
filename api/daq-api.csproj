@@ -564,6 +564,7 @@
     <Compile Include="Models\WebMap\Symbol.cs" />
     <Compile Include="Models\WebMap\TileInfo.cs" />
     <Compile Include="Models\WebMap\Viewing.cs" />
+    <Compile Include="Models\WebMap\WebMapIds.cs" />
     <Compile Include="Models\WebMap\WebMapJson.cs" />
     <Compile Include="Models\WebMap\WebMapUpdateResponse.cs" />
     <Compile Include="Models\WebMap\WmtsInfo.cs" />

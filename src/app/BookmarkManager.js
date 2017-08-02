@@ -40,8 +40,8 @@ define([
         adminBookmarks: null,
 
         urls: {
-            add: '/bookmarks/{webMap}/add',
-            remove: '/bookmarks/{webMap}/remove'
+            add: '/bookmarks/add',
+            remove: '/bookmarks/remove'
         },
 
         // Properties to be sent into constructor
@@ -86,15 +86,19 @@ define([
                 return;
             }
 
+            this._displayMessage(true, '');
+
             domClass.add(this.button, 'disabled');
             domAttr.set(this.button, 'disabled', true);
 
-            var url = config.urls.webapi + lang.replace(this.urls.add, config.urls);
+            var url = config.urls.webapi + this.urls.add;
             xhr(url, {
                 method: 'post',
                 data: JSON.stringify({
                     name: this.userName.value + '-' + this.bookmarkName.value,
-                    extent: MapController.map.extent.toJson()
+                    extent: MapController.map.extent.toJson(),
+                    desktopId: config.urls.webMap.desktop,
+                    collectorId: config.urls.webMap.collector
                 }),
                 headers: {
                     'X-Requested-With': null,
@@ -108,11 +112,15 @@ define([
             //      send a request to the api to create a Bookmark
             console.info('app/BookmarkManager:remove', arguments);
 
-            var url = config.urls.webapi + lang.replace(this.urls.remove, config.urls);
+            this._displayMessage(true, '');
+
+            var url = config.urls.webapi + this.urls.remove;
             xhr(url, {
                 method: 'delete',
                 data: {
-                    name: widget.bookmark.name
+                    name: widget.bookmark.name,
+                    desktopId: config.urls.webMap.desktop,
+                    collectorId: config.urls.webMap.collector
                 },
                 headers: {
                     'X-Requested-With': null
@@ -160,8 +168,8 @@ define([
             domClass.remove(this.button, 'disabled');
             domAttr.remove(this.button, 'disabled');
 
-            if (response.Error) {
-                this._displayMessage(true, response.messages, true);
+            if (response.error) {
+                this._displayMessage(true, response.error.message);
 
                 if (update === 'remove') {
                     domClass.remove(widget.close, 'hidden');

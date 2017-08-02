@@ -236,13 +236,13 @@ define([
                 expires: 14400,
                 server: config.urls.agol,
                 userId: 'DAQ App',
-                ssl: true
+                ssl: false
             };
 
             esriId.registerToken(token);
 
             utils.arcgisurl = config.urls.agol;
-            utils.createMap(config.urls.webMap, 'map-div', {
+            utils.createMap(config.urls.webMap.desktop, 'map-div', {
                 ignorePopups: true,
                 mapOptions: {
                     showAttribution: false
