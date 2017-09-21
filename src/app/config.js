@@ -141,7 +141,6 @@ define([
             desktop: '82390d3787af4ae98585f90ccea08485',
             collector: 'bf8154cbecb24ea4916580c185277590'
         };
-        config.urls.webapi = '/daq';
         config.apiKey = 'AGRC-4D020FEF882975';
     } else if (has('agrc-build') === 'stage') {
         config.urls.webMap = {
