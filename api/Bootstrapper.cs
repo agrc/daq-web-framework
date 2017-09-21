@@ -63,9 +63,10 @@ namespace daq_api
             container.Register<IShareMappable, DocumentumShare>().AsSingleton();
             container.Register<IRepository, EdocsRepository>().AsPerRequestSingleton();
 #else
-            levelSwitch.MinimumLevel = LogEventLevel.Debug
+            levelSwitch.MinimumLevel = LogEventLevel.Debug;
 
             container.Register<IShareMappable, DocumentumShare>().AsSingleton();
+            container.Register<IRepository, EdocsRepository>().AsPerRequestSingleton();
             StaticConfiguration.DisableErrorTraces = true;
 #endif
 

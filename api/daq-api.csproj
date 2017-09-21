@@ -516,7 +516,9 @@
     <Content Include="Content\esri\themes\calcite\icons\style.css" />
     <Content Include="Views\Changelog.html" />
     <Content Include="Views\index.html" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
@@ -586,7 +588,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="connection.config" />
+    <Content Include="connection.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="connection.template.config" />
     <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
@@ -601,8 +605,10 @@
     <Content Include="secrets.staging.config" />
     <Content Include="secrets.template.config" />
     <Content Include="secrets.development.config" />
+    <None Include="Properties\PublishProfiles\complianceapp.utah.gov.pubxml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Web.Staging.config">
       <DependentUpon>Web.config</DependentUpon>
