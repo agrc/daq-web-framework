@@ -16,11 +16,11 @@ define([
     var config = {
         appName: 'daq-web',
         appId: 'Rngn0PfKFjvT2p26',
-        version: '1.10.2',
+        version: '1.10.3',
         maxResult: 1000,
         fields: {
             uniqueId: 'OBJECTID',
-            locks: ['AI_Number', 'SITE_ID'],
+            locks: ['AI_Number'],
             lock: null,
             operator: 'Operator_N',
             facilityId: 'facility_i'
@@ -58,7 +58,7 @@ define([
                     type: 'number'
                 },
                 inspector: {
-                    field: 'Inspector',
+                    field: 'InspInit',
                     type: 'string'
                 }
             },
@@ -68,7 +68,7 @@ define([
                     type: 'string'
                 },
                 aiNumber: {
-                    field: 'SITE_ID',
+                    field: 'AI_Number',
                     type: 'number'
                 },
                 permitNumber: {
