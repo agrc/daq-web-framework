@@ -1,6 +1,6 @@
 {
   "name": "daq-web",
-  "version": "1.10.3",
+  "version": "1.10.4",
   "dependencies": {
     "agrc-jasmine-matchers": "~0.1.0",
     "bootstrap": "3.3.6",
