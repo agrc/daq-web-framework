@@ -36,8 +36,26 @@ namespace daq_api.Modules
 
                 try
                 {
-                    var token = await client.GetToken();
                     var file = edocFolder.GetPathFrom(edoc.Path);
+                    var fileInfo = new FileInfo(file);
+                    var byteCount = fileInfo.Length;
+
+                    if (byteCount > MaxUpload)
+                    {
+                        var readableSize = ReadableFileSizer.MakeReadable(byteCount);
+                        Log.Warning("{file} is larger than allowed upload. {size}", edoc.Path, readableSize);
+
+                        return Response.AsJson(new Errorable
+                        {
+                            Error = new Error
+                            {
+                                Message = $"This file is too large to be stored in ArcGIS Online. The file is around {readableSize} " +
+                                          $"and the allowable size is {ReadableFileSizer.MakeReadable(MaxUpload)}."
+                            }
+                        });
+                    }
+
+                    var token = await client.GetToken();
 
                     // upload to arcgis online
                     using (Stream document = File.OpenRead(file))
@@ -47,7 +65,7 @@ namespace daq_api.Modules
                         {
                             var streamContent = new StreamContent(document);
                             streamContent.Headers.Add("Content-Type", contentType);
-                            streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", edoc.File));
+                            streamContent.Headers.Add("Content-Disposition", $"form-data; name=\"file\"; filename=\"{edoc.File}\"");
                             formContent.Add(streamContent, "file", edoc.File);
                             formContent.Add(new StringContent("json"), "f");
                             formContent.Add(new StringContent(token), "token");
@@ -64,8 +82,8 @@ namespace daq_api.Modules
                             });
                         }
 
-                        var url = string.Format("{0}/{1}{2}", model.ServiceUrl, model.FeatureId, AttachmentUrl);
-                        var response = await client.UploadDocument(url, formContent);
+                        var url = $"{model.ServiceUrl}/{model.FeatureId}{AttachmentUrl}";
+                        var response = await client.UploadDocument(url, formContent).ConfigureAwait(false);
 
                         return Response.AsJson(response.Result);
                     }
@@ -77,7 +95,7 @@ namespace daq_api.Modules
                     {
                         Error = new Error
                         {
-                            Message = string.Format("Unknown error getting EDocs File. {0}", ex.Message)
+                            Message = $"Unknown error getting EDocs File. {ex.Message}"
                         }
                     });
                 }
@@ -107,7 +125,7 @@ namespace daq_api.Modules
                         });
                     }
 
-                    var url = string.Format("{0}/{1}{2}", model.ServiceUrl, model.FeatureId, DeleteAttachmentUrl);
+                    var url = $"{model.ServiceUrl}/{model.FeatureId}{DeleteAttachmentUrl}";
                     var response = await client.DeleteDocument(url, formContent);
 
                     return Response.AsJson(response.Result);
@@ -159,7 +177,7 @@ namespace daq_api.Modules
                 var day = DateTime.Today.Day.ToString("d2");
                 var month = DateTime.Today.Month.ToString("d2");
 
-                var renamed = string.Format("x{0}-{1}x{2}{3}", month, day, title, extension);
+                var renamed = $"x{month}-{day}x{title}{extension}";
 
                 using (var document = attachment.Value)
                 using (var formContent = new MultipartFormDataContent())
@@ -170,7 +188,7 @@ namespace daq_api.Modules
 
                         var streamContent = new StreamContent(document);
                         streamContent.Headers.Add("Content-Type", contentType);
-                        streamContent.Headers.Add("Content-Disposition", string.Format("form-data; name=\"file\"; filename=\"{0}\"", renamed));
+                        streamContent.Headers.Add("Content-Disposition", $"form-data; name=\"file\"; filename=\"{renamed}\"");
                         formContent.Add(streamContent, "file", attachment.Name);
                         formContent.Add(new StringContent("json"), "f");
                         formContent.Add(new StringContent(token), "token");
@@ -186,7 +204,7 @@ namespace daq_api.Modules
                         });
                     }
 
-                    var url = string.Format("{0}/{1}{2}", model.ServiceUrl, model.FeatureId, AttachmentUrl);
+                    var url = $"{model.ServiceUrl}/{model.FeatureId}{AttachmentUrl}";
                     var response = await client.UploadDocument(url, formContent);
 
                     return Response.AsJson(response.Result);
