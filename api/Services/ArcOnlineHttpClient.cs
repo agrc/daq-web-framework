@@ -43,7 +43,7 @@ namespace daq_api.Services
             };
         }
 
-        private IEnumerable<MediaTypeFormatter> Formatters { get; set; }
+        private IEnumerable<MediaTypeFormatter> Formatters { get; }
 
         public async Task<ArcOnlineResponse<UploadResponse>> UploadDocument(string url, MultipartFormDataContent formContent)
         {
@@ -53,6 +53,20 @@ namespace daq_api.Services
             {
                 using (var response = await _client.PostAsync(url, formContent).ConfigureAwait(false))
                 {
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        return new ArcOnlineResponse<UploadResponse>(response, new UploadResponse
+                        {
+                            Error = new Error
+                            {
+                                Details = new List<string>
+                                {
+                                    "This file is most likely too large to be stored in ArcGIS Online."
+                                }
+                            }
+                        });
+                    }
+
                     try
                     {
                         var result = await response.Content.ReadAsAsync<UploadResponse>(Formatters).ConfigureAwait(false);
