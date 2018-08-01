@@ -7,7 +7,7 @@ namespace daq_api.Models
     {
         private const string Separators = "__x00-00x";
         private static readonly Regex StripNonAlphaNumeric = new Regex("[^a-zA-Z0-9-]");
-        private readonly int _maxSize = 100 - Separators.Length;
+        private readonly int _maxSize = 95 - Separators.Length;
 
         public EDocEntry()
         {
