@@ -600,6 +600,7 @@
     <Content Include="secrets.staging.config" />
     <Content Include="secrets.template.config" />
     <Content Include="secrets.development.config" />
+    <None Include="Properties\PublishProfiles\172.16.77.69 %28Production%29.pubxml" />
     <None Include="Properties\PublishProfiles\complianceapp.utah.gov.pubxml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
