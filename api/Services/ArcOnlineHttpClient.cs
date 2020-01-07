@@ -34,7 +34,12 @@ namespace daq_api.Services
                 httpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
             }
 
-            _client = new HttpClient(httpClientHandler);
+            _client = new HttpClient(httpClientHandler)
+            {
+                Timeout = TimeSpan.FromMinutes(5)
+            };
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             _credentials = credentials;
             Formatters = new List<MediaTypeFormatter>
