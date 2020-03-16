@@ -124,6 +124,70 @@ module.exports = function (grunt) {
                 tasks: ['eslint:main', 'clean:build', 'newer:imagemin:main', 'stylus']
             }
         },
+        processhtml: {
+            options: {},
+            main: {
+                files: {
+                    'dist/index.html': ['src/index.html'],
+                    'dist/user_admin.html': ['src/user_admin.html']
+                }
+            }
+        },
+        'saucelabs-jasmine': {
+            all: {
+                options: sauceConfig
+            }
+        },
+        secrets: secrets,
+        sftp: {
+            stage: {
+                files: {
+                    './': 'deploy/deploy.zip'
+                },
+                options: {
+                    host: '<%= secrets.stage.host %>',
+                    username: '<%= secrets.stage.username %>',
+                    password: '<%= secrets.stage.password %>'
+                }
+            },
+            prod: {
+                files: {
+                    './': 'deploy/deploy.zip'
+                },
+                options: {
+                    host: '<%= secrets.prod.host %>',
+                    username: '<%= secrets.prod.username %>',
+                    password: '<%= secrets.prod.password %>',
+                    path: './upload/' + deployDir
+                }
+            },
+            options: {
+                path: './wwwroot/' + deployDir + '/',
+                srcBasePath: 'deploy/',
+                showProgress: true
+            }
+        },
+        sshexec: {
+            options: {
+
+            },
+            stage: {
+                command: ['cd wwwroot/' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
+                options: {
+                    host: '<%= secrets.stage.host %>',
+                    username: '<%= secrets.stage.username %>',
+                    password: '<%= secrets.stage.password %>'
+                }
+            },
+            prod: {
+                command: ['cd wwwroot/' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
+                options: {
+                    host: '<%= secrets.prod.host %>',
+                    username: '<%= secrets.prod.username %>',
+                    password: '<%= secrets.prod.password %>'
+                }
+            }
+        },
         stylus: {
             main: {
                 options: {
